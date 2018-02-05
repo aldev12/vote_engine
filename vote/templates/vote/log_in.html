@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Авторизация</title>
+</head>
+<body>
+<form action='{% url "competition_add" %}'>
+    <div>
+        <label>Имя пользователя </label>
+        <input type="text" id="login"/>
+    </div>
+    <div>
+        <label>Пароль</label>
+        <input type="password"/>
+    </div>
+    <div>
+        <input type="submit" value="Войти"/>
+    </div>
+</form>
+</body>
+</html>
