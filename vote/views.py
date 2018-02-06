@@ -1,6 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from vote.models import Competition, Participate
 from django.http import Http404
+from .forms import CompetitionForm
+from django.utils import timezone
 
 
 def competition_list(request):
@@ -10,7 +12,17 @@ def competition_list(request):
 
 def competition_add(request):
     if request.user.is_authenticated:
-        return render(request, "vote/competition_add.html")
+        if request.method == "POST":
+            form = CompetitionForm(request.POST)
+            if form.is_valid():
+                competition = form.save(commit=False)
+                competition.status = 1
+                competition.publish_date = timezone.now()
+                competition.save()
+                return redirect('competitions')
+        else:
+            form = CompetitionForm()
+            return render(request, "vote/competition_add.html", {'form': form})
     else:
         return render(request, "vote/log_in.html")
 

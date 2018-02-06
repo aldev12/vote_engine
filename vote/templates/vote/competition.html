@@ -1,17 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Конкурсы</title>
-</head>
-<body>
-<form action='{% url "competition_add" %}'>
-    <input type="submit" value="Создать конкурс" />
-</form>
-{% for competition in competitions  %}
-    <h2>
-        <a href='{% url "participates_in_competition" %}?competition={{ competition.title }}'>{{ competition.title }}</a>
-    </h2>
-{% endfor %}
-</body>
-</html>
+{% extends "vote/base.html" %}
+
+{% block title %}Конкурсы{% endblock %}
+
+{% block body %}
+    {% if user.is_authenticated %}
+    <a href='{% url "competition_add" %}'>Добавить</a>
+    {% endif %}
+    {% for competition in competitions  %}
+        <h2>
+            <a href='{% url "participates_in_competition" %}?competition={{ competition.title }}'>{{ competition.title }}</a>
+        </h2>
+    {% endfor %}
+{% endblock %}

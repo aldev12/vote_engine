@@ -113,6 +113,7 @@ LANGUAGE_CODE = "en"
 # Supported languages
 LANGUAGES = (
     ('en', _('English')),
+    ('ru', _('Russian')),
 )
 
 # A boolean that turns on/off debug mode. When set to ``True``, stack traces
@@ -127,7 +128,7 @@ SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
-USE_I18N = False
+USE_I18N = True
 
 AUTHENTICATION_BACKENDS = ("mezzanine.core.auth_backends.MezzanineBackend",)
 

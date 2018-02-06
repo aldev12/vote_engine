@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Новый конкурс</title>
-</head>
-<body>
-blabla add competition
-</body>
-</html>
+{% extends "vote/base.html" %}
+
+{% block title %}Новый конкурс{% endblock %}
+
+{% block body %}
+    <h1>Новый конкурс</h1>
+    <form method="post" class="post-form">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default">Сохранить</button>
+    </form>
+{% endblock %}
