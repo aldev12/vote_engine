@@ -1,5 +1,6 @@
 from django.db import models
-from mezzanine.pages.models import Page
+from mezzanine.pages.models import Page, RichText
+from mezzanine.core.fields import RichTextField
 from django.utils import timezone
 
 COMPETITION_TYPE = (
@@ -11,7 +12,18 @@ COMPETITION_TYPE = (
 
 
 class Competition(Page):
+    Survey_date = models.DateTimeField('опрос с', default=timezone.now() + timezone.timedelta(days=5))
     Type = models.IntegerField('тип конкурса', default=1, choices=COMPETITION_TYPE)
+    Rules = RichTextField('правила', max_length=2000)
+    Description = models.TextField('краткое описание', max_length=500)
+
+    class Meta:
+        verbose_name = 'конкурс'
+        verbose_name_plural = 'конкурсы'
+
+    @property
+    def type_str(self):
+        return dict(COMPETITION_TYPE)[self.Type]
 
 
 class Participate(Page):
@@ -19,12 +31,17 @@ class Participate(Page):
     competition_p = models.ForeignKey('Competition', verbose_name='конкурс',
                                       related_name='participates_competition',
                                       on_delete=models.CASCADE)
-    Content = models.FileField('файл', upload_to='documents/')
+    Content = models.FileField('файл', upload_to='documents/', blank=True)
+
+    class Meta:
+        verbose_name = 'заявка на конкурс'
+        verbose_name_plural = 'заявки на конкурс'
 
 
 class Poll(models.Model):
-    competition = models.ForeignKey('Competition', related_name='polls_competition')
+    user = models.ForeignKey('auth.User', related_name='polls_user')
     participate = models.ForeignKey('Participate', related_name='polls_participate')
 
     class Meta:
-        unique_together = ('competition', 'participate')
+        unique_together = ('user', 'participate')
+

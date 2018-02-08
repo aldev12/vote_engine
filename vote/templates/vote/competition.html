@@ -6,9 +6,22 @@
     {% if user.is_authenticated %}
     <a href='{% url "competition_add" %}'>Добавить</a>
     {% endif %}
+    <table>
+    <caption>Конкурсы</caption>
+    <tr><th>Название</th></tr>
     {% for competition in competitions  %}
-        <h2>
-            <a href='{% url "participates_in_competition" %}?competition={{ competition.title }}'>{{ competition.title }}</a>
-        </h2>
+        {% if competition.status == 2 %}
+        <tr>
+            <td>
+                <div>
+                    <a href='{% url "participates_in_competition" %}?competition={{ competition.title }}'>{{ competition.title }}</a>
+                </div>
+                <div>
+                    <a>{{ competition.type_str }}</a>
+                </div>
+            </td>
+        </tr>
+        {% endif %}
     {% endfor %}
+    </table>
 {% endblock %}
