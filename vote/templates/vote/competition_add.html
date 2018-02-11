@@ -2,7 +2,7 @@
 
 {% block title %}Новый конкурс{% endblock %}
 
-{% block body %}
+{% block content %}
     <h1>Новый конкурс</h1>
     <form method="post" class="post-form">{% csrf_token %}
         {{ form.as_p }}

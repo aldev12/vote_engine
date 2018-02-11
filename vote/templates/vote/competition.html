@@ -2,7 +2,7 @@
 
 {% block title %}Конкурсы{% endblock %}
 
-{% block body %}
+{% block content %}
     {% if user.is_authenticated %}
     <a href='{% url "competition_add" %}'>Добавить</a>
     {% endif %}
@@ -14,7 +14,8 @@
         <tr>
             <td>
                 <div>
-                    <a href='{% url "participates_in_competition" %}?competition={{ competition.title }}'>{{ competition.title }}</a>
+                    <a href='{% url "participates_in_competition" %}?competition={{ competition.title }}'
+                    >{{ competition.title }}</a>
                 </div>
                 <div>
                     <a>{{ competition.type_str }}</a>

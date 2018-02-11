@@ -29,6 +29,16 @@ def competition_add(request):
         return render(request, "vote/log_in.html")
 
 
+def about_participate(request):
+    participate = request.GET.get('participate', None)
+    try:
+        participate = Participate.objects.get(title=participate)
+    except Participate.DoesNotExist:
+        raise Http404
+    competition = participate.competition_p
+    return render(request, "vote/about_participate.html", {'participate': participate, 'competition': competition})
+
+
 def participate_add(request):
     competition = request.GET.get('competition', None)
     try:

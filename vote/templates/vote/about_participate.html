@@ -1,0 +1,18 @@
+{% extends "vote/base.html" %}
+
+{% block title %}{{ participate.title }}{% endblock %}
+
+{% block content %}
+    <h3>{{ participate.titles }}</h3>
+    <h3>{{ participate.Comment }}</h3>
+    <h3>{{ participate.publish_date }}</h3>
+    <h3>{{ participate.polls_participate.count }}</h3>
+    {% if competition.Type == 1 %}
+        <img src="{{ STATIC_URL }}media/{{ participate.Content }}" />
+    {% endif %}
+    {% if competition.Type == 3 %}
+        <video name='demo' controls autoplay width='50%' height='40%'>
+        <source src="{{ STATIC_URL }}media/{{ participate.Content }}" type="video/mp4"></source>
+        </video>
+    {% endif %}
+{% endblock %}

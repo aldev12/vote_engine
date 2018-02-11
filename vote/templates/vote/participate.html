@@ -2,7 +2,7 @@
 
 {% block title %}Участники{% endblock %}
 
-{% block body %}
+{% block content %}
     {% if user.is_authenticated %}
         <div>
         {% if add_member %}
@@ -13,20 +13,18 @@
         </div>
     {% endif %}
     <div>
-    <caption>{{ competition.title }}</caption>
-    </div>
-    <div>
     {% if message %}
         {{ message }}
     {% endif %}
     </div>
     <table>
-        <tr><th>Название</th><th>Количество голосов</th><th></th></tr>
+    <caption>{{ competition.title }}</caption>
+    <tr><th>Название</th><th>Количество голосов</th><th></th></tr>
     {% for participate in participates %}
         {% if participate.status == 2 %}
         <tr>
             <td>
-                    <a href=''>{{ participate.title }}</a>
+                    <a href='{% url 'about_participate' %}?participate={{ participate.title }}'>{{ participate.title }}</a>
             </td>
             <td>
                     <a>{{ participate.polls_participate.count }}</a>
