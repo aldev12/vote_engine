@@ -11,8 +11,13 @@
         <img src="{{ STATIC_URL }}media/{{ participate.Content }}" />
     {% endif %}
     {% if competition.Type == 3 %}
-        <video name='demo' controls autoplay width='50%' height='40%'>
+        <video name='video' controls width='50%' height='40%'>
         <source src="{{ STATIC_URL }}media/{{ participate.Content }}" type="video/mp4"></source>
         </video>
+    {% endif %}
+    {% if competition.Type == 4 %}
+        <audio name='audio' controls width='80%' height='20%'>
+        <source src="{{ STATIC_URL }}media/{{ participate.Content }}" type="audio/mp3"></source>
+        </audio>
     {% endif %}
 {% endblock %}
