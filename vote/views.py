@@ -8,8 +8,7 @@ from django.db import IntegrityError
 
 def competition_list(request):
     competitions = Competition.objects.all()
-    return render(request, "vote/competition.html", {'competitions': competitions,
-                                                     'COMPETITION_TYPE': dict(COMPETITION_TYPE)})
+    return render(request, "vote/competition.html", {'competitions': competitions})
 
 
 def competition_add(request):
@@ -74,7 +73,7 @@ def participates_in_competition(request):
             try:
                 poll.participate = Participate.objects.get(title=participate)
             except Participate.DoesNotExist:
-                pass
+                raise 404
             try:
                 poll.save()
             except IntegrityError:
