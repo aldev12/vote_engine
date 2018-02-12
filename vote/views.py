@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
-from vote.models import Competition, Participate, COMPETITION_TYPE, Poll
+from vote.models import Competition, Participate, Poll
 from django.http import Http404
 from .forms import CompetitionForm, ParticipateForm
 from django.utils import timezone
 from django.db import IntegrityError
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 
 
 def competition_list(request):
@@ -11,6 +13,7 @@ def competition_list(request):
     return render(request, "vote/competition.html", {'competitions': competitions})
 
 
+@login_required
 def competition_add(request):
     if request.user.is_authenticated:
         if request.method == "POST":
@@ -38,6 +41,7 @@ def about_participate(request):
     return render(request, "vote/about_participate.html", {'participate': participate, 'competition': competition})
 
 
+@login_required
 def participate_add(request):
     competition = request.GET.get('competition', None)
     try:
@@ -99,3 +103,12 @@ def participates_in_competition(request):
                                                      'competition': competition, 'vote_open': vote_open,
                                                      'message': message})
 
+
+def log_in(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        if user.is_active:
+            login(request, user)
+    return redirect('competitions')
