@@ -16,6 +16,9 @@ class Competition(Page):
     Type = models.IntegerField('тип конкурса', default=1, choices=COMPETITION_TYPE)
     Rules = RichTextField('правила', max_length=2000)
     Description = models.TextField('краткое описание', max_length=500)
+    Creator = models.ForeignKey('auth.User', verbose_name='автор',
+                                related_name='competition_user',
+                                on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'конкурс'
@@ -32,6 +35,9 @@ class Participate(Page):
                                       related_name='participates_competition',
                                       on_delete=models.CASCADE)
     Content = models.FileField('файл', upload_to='documents/', blank=True)
+    Creator = models.ForeignKey('auth.User', verbose_name='автор',
+                                related_name='participate_user',
+                                on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'заявка на конкурс'

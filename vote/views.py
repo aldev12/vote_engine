@@ -5,6 +5,7 @@ from .forms import CompetitionForm, ParticipateForm
 from django.utils import timezone
 from django.db import IntegrityError
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 
@@ -22,6 +23,7 @@ def competition_add(request):
                 competition = form.save(commit=False)
                 competition.status = 1
                 competition.publish_date = timezone.now()
+                competition.Creator = request.user
                 competition.save()
                 return redirect('competitions')
         else:
@@ -57,6 +59,7 @@ def participate_add(request):
                 participate.competition_p = competition
                 participate.status = 1
                 participate.publish_date = timezone.now()
+                participate.Creator = request.user
                 participate.save()
                 return redirect('competitions')
         else:
