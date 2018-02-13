@@ -24,7 +24,11 @@ def competition_add(request):
                 competition.status = 1
                 competition.publish_date = timezone.now()
                 competition.Creator = request.user
-                competition.save()
+                try:
+                    competition.save()
+                except IntegrityError:
+                    form.add_error('title', 'Конкурс с таким именем уже существует')
+                    return render(request, "vote/competition_add.html", {'form': form})
                 return redirect('competitions')
         else:
             form = CompetitionForm()
@@ -60,7 +64,11 @@ def participate_add(request):
                 participate.status = 1
                 participate.publish_date = timezone.now()
                 participate.Creator = request.user
-                participate.save()
+                try:
+                    participate.save()
+                except IntegrityError:
+                    form.add_error('title', 'Заявка на участие с таким именем уже существует')
+                    return render(request, "vote/participate_add.html", {'form': form})
                 return redirect('competitions')
         else:
             form = ParticipateForm()

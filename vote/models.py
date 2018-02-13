@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, IntegrityError
 from mezzanine.pages.models import Page, RichText
 from mezzanine.core.fields import RichTextField
 from django.utils import timezone
@@ -20,6 +20,11 @@ class Competition(Page):
                                 related_name='competition_user',
                                 on_delete=models.CASCADE)
 
+    def save(self):
+        if self.title and Competition.objects.filter(title=self.title).exists():
+            raise IntegrityError
+        super(Competition, self).save()
+
     class Meta:
         verbose_name = 'конкурс'
         verbose_name_plural = 'конкурсы'
@@ -38,6 +43,11 @@ class Participate(Page):
     Creator = models.ForeignKey('auth.User', verbose_name='автор',
                                 related_name='participate_user',
                                 on_delete=models.CASCADE)
+
+    def save(self):
+        if self.title and Participate.objects.filter(title=self.title).exists():
+            raise IntegrityError
+        super(Participate, self).save()
 
     class Meta:
         verbose_name = 'заявка на конкурс'
