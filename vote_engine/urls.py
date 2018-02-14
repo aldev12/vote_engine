@@ -36,8 +36,7 @@ urlpatterns += [
     # commented out like the others, so it's the default. You only need
     # one homepage pattern, so if you use a different one, comment this
     # one out.
-
-    url("^competition/", include("vote.urls")),
+    url("^", include("vote.urls")),
     url("^$", direct_to_template, {"template": "index.html"}, name="home"),
 
 

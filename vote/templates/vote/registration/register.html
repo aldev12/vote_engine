@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="{{ STATIC_URL }}/css/register.css" rel="stylesheet" type="text/css">
+    <title>Регистрация</title>
+</head>
+<body>
+   <div class="login-page">
+  <div class="form">
+    <form method="POST" class="register-form">
+        {% csrf_token %} {{ form.as_p }}
+
+      <button>Создать</button>
+      <p class="message">Уже зарегистрирован? <a href="/login/">Войти</a></p>
+    </form>
+  </div>
+</div>
+</body>
+<script>
+    $('.message a').click(function(){
+   $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+});
+</script>
+
+</html>
