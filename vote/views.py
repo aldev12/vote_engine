@@ -26,9 +26,9 @@ def competition_add(request):
                 competition = form.save(commit=False)
                 competition.status = 1
                 competition.publish_date = timezone.now()
-                competition.Creator = request.user
+                competition.creator = request.user
                 try:
-                    competition.save()
+                    competition.create_competition()
                 except IntegrityError:
                     form.add_error('title', 'Конкурс с таким именем уже существует')
                     return render(request, "vote/competition_add.html", {'form': form})
@@ -37,7 +37,7 @@ def competition_add(request):
             form = CompetitionForm()
             return render(request, "vote/competition_add.html", {'form': form})
     else:
-        return render(request, "vote/log_in.html")
+        return render(request, "vote/registration/login.html")
 
 
 def about_participate(request):
@@ -46,7 +46,7 @@ def about_participate(request):
         participate = Participate.objects.get(title=participate)
     except Participate.DoesNotExist:
         raise Http404
-    competition = participate.competition_p
+    competition = participate.competition_id
     return render(request, "vote/about_participate.html", {'participate': participate, 'competition': competition})
 
 
@@ -63,12 +63,12 @@ def participate_add(request):
             form = ParticipateForm(request.POST, request.FILES)
             if form.is_valid():
                 participate = form.save(commit=False)
-                participate.competition_p = competition
+                participate.competition_id = competition
                 participate.status = 1
                 participate.publish_date = timezone.now()
-                participate.Creator = request.user
+                participate.creator = request.user
                 try:
-                    participate.save()
+                    participate.create_participate()
                 except IntegrityError:
                     form.add_error('title', 'Заявка на участие с таким именем уже существует')
                     return render(request, "vote/participate_add.html", {'form': form})
@@ -101,18 +101,18 @@ def participates_in_competition(request):
     except Competition.DoesNotExist:
         raise Http404
     try:
-        if competition.expiry_date > timezone.now() < competition.Survey_date and competition.status == 2:
+        if competition.expiry_date > timezone.now() < competition.survey_date and competition.status == 2:
             add_member = True
         else:
             add_member = False
-        if competition.expiry_date > timezone.now() > competition.Survey_date and competition.status == 2:
+        if competition.expiry_date > timezone.now() > competition.survey_date and competition.status == 2:
             vote_open = True
         else:
             vote_open = False
     except TypeError:
         add_member = vote_open = False
 
-    participates = competition.participates_competition.all()
+    participates = competition.competition_participates.all()
     return render(request, "vote/participate.html", {'participates': participates, 'add_member': add_member,
                                                      'competition': competition, 'vote_open': vote_open,
                                                      'message': message})

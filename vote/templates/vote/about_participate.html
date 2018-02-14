@@ -4,20 +4,20 @@
 
 {% block content %}
     <h3>{{ participate.titles }}</h3>
-    <h3>{{ participate.Comment }}</h3>
+    <h3>{{ participate.comment }}</h3>
     <h3>{{ participate.publish_date }}</h3>
     <h3>{{ participate.polls_participate.count }}</h3>
-    {% if competition.Type == 1 %}
-        <img src="{{ STATIC_URL }}media/{{ participate.Content }}" />
+    {% if competition.comp_type == 1 %}
+        <img src="{{ STATIC_URL }}media/{{ participate.content }}" />
     {% endif %}
-    {% if competition.Type == 3 %}
+    {% if competition.comp_type == 3 %}
         <video name='video' controls width='50%' height='40%'>
-        <source src="{{ STATIC_URL }}media/{{ participate.Content }}" type="video/mp4"></source>
+        <source src="{{ STATIC_URL }}media/{{ participate.content }}" type="video/mp4"></source>
         </video>
     {% endif %}
-    {% if competition.Type == 4 %}
+    {% if competition.comp_type == 4 %}
         <audio name='audio' controls width='80%' height='20%'>
-        <source src="{{ STATIC_URL }}media/{{ participate.Content }}" type="audio/mp3"></source>
+        <source src="{{ STATIC_URL }}media/{{ participate.content }}" type="audio/mp3"></source>
         </audio>
     {% endif %}
 {% endblock %}
