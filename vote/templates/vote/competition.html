@@ -1,14 +1,19 @@
-{% extends "vote/base.html" %}
+{% extends "base.html" %}
 
-{% block title %}Конкурсы{% endblock %}
 
-{% block content %}
+{% block main %}
     {% if user.is_authenticated %}
+        <div class="breadcrumb pull-right">
     <a href='{% url "competition_add" %}'>Добавить</a>
+        </div>
     {% endif %}
-    <table>
+    <table class="table_vote">
     <caption>Конкурсы</caption>
-    <tr><th>Название</th></tr>
+    <tr>
+        <th>Название</th>queryset filter example
+        <th>Заявок</th>
+        <th>Голосов</th>
+    </tr>
     {% for competition in competitions  %}
         {% if competition.status == 2 %}
         <tr>
@@ -17,9 +22,15 @@
                     <a href='{% url "participates_in_competition" %}?competition={{ competition.title }}'
                     >{{ competition.title }}</a>
                 </div>
-                <div>
-                    <a>{{ competition.type_str }}</a>
+                <div class="text">
+                    <h6>{{ competition.type_str }}</h6>
                 </div>
+            </td>
+            <td>
+                {{ Vote.objects.participate.competition_id }}
+            </td>
+            <td>
+
             </td>
         </tr>
         {% endif %}

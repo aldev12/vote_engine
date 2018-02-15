@@ -1,6 +1,5 @@
 from django import forms
-
-from .models import Competition, Participate
+from .models import Competition, Participate, Profile
 
 
 class CompetitionForm(forms.ModelForm):
@@ -13,6 +12,12 @@ class ParticipateForm(forms.ModelForm):
     class Meta:
         model = Participate
         fields = ('title', 'comment', 'content')
+
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ('phone', 'location', 'birth_date')
 
 
 class UserRegistrationForm(forms.Form):

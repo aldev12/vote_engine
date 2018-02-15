@@ -1,15 +1,14 @@
-from django.shortcuts import render, redirect
-from vote.models import Competition, Participate, Vote
-from django.http import Http404
-from .forms import CompetitionForm, ParticipateForm
+from .forms import CompetitionForm, ParticipateForm, UserRegistrationForm, ProfileForm
+from django import forms
+from django.http import Http404, HttpResponseRedirect
 from django.utils import timezone
 from django.db import IntegrityError
+from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
-from django import forms
-from .forms import UserRegistrationForm
+from vote.models import Competition, Participate, Vote, Profile
 
 
 def competition_list(request):
@@ -77,7 +76,7 @@ def participate_add(request):
             form = ParticipateForm()
             return render(request, "vote/participate_add.html", {'form': form, 'competition': competition})
     else:
-        return render(request, "vote/log_in.html")
+        return render(request, "vote/registration/login.html")
 
 
 def participates_in_competition(request):
@@ -118,14 +117,29 @@ def participates_in_competition(request):
                                                      'message': message})
 
 
-def log_in(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(username=username, password=password)
-    if user is not None:
-        if user.is_active:
-            login(request, user)
-    return redirect('competitions')
+@login_required
+def profile(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            form = ProfileForm(request.POST)
+            if form.is_valid():
+                profile = Profile.objects.get(user=request.user)
+                profile_temp = form.save(commit=False)
+                profile.location = profile_temp.location
+                profile.phone = profile_temp.phone
+                profile.birth_date = profile_temp.birth_date
+                profile.save()
+                messages.add_message(request, messages.INFO, 'Изменения успешно сохранены')
+                return render(request, 'accounts/profile.html',
+                              {'form': form})
+            else:
+                return render(request, 'accounts/profile.html',
+                              {'form': form})
+        else:
+            form = ProfileForm()
+            return render(request, "accounts/profile.html", {'form': form})
+    else:
+        return render(request, "vote/registration/login.html")
 
 
 def register(request):

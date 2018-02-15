@@ -7,10 +7,10 @@ urlpatterns = [
     url('^competition_add/$', views.competition_add, name='competition_add'),
     url('^about_participate/$', views.about_participate, name='about_participate'),
     url('^participate_add/$', views.participate_add, name='participate_add'),
-#    url('^log_in/$', views.log_in, name='log_in'),
+    # url('^log_in/$', views.log_in, name='log_in'),
     url(r'^login/$', auth_views.login,
         {'template_name': 'vote/registration/login.html'}, name='login'),
-    url(r'^logout/$', auth_views.logout, name='logout'),
+    url(r'^logout/$', auth_views.logout, {'template_name': 'vote/registration/logout.html'}, name='logout'),
     url(r'^register/', views.register, name='register'),
     url('^$', views.competition_list, name='competitions'),
 ]

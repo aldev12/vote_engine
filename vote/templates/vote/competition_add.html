@@ -1,8 +1,6 @@
-{% extends "vote/base.html" %}
+{% extends "base.html" %}
 
-{% block title %}Новый конкурс{% endblock %}
-
-{% block content %}
+{% block main %}
     <h1>Новый конкурс</h1>
     <form method="post" class="post-form">{% csrf_token %}
         {{ form.as_p }}

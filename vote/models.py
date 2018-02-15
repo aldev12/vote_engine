@@ -19,8 +19,8 @@ class Profile(models.Model):
     """Расширили стандартную пользовательскую модель"""
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone = models.CharField('номер телефона', max_length=15, null=True, blank=True)
-    location = models.CharField(max_length=30, blank=True)
-    birth_date = models.DateField(null=True, blank=True)
+    location = models.CharField('город', max_length=30, blank=True)
+    birth_date = models.DateField('дата рождения', null=True, blank=True)
 
     class Meta:
         verbose_name = 'Профиль'
@@ -89,7 +89,7 @@ class Participate(Page):
 
 class Vote(models.Model):
     """Абстрактная модель 'Голос' разрешающая МtM между 'Пользователем' и 'Заявкой' """
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_votes', verbose_name='пользователь')
+    user = models.ForeignKey(User, related_name='user_votes', verbose_name='пользователь', on_delete=models.CASCADE)
     participate = models.ForeignKey('Participate', related_name='participate_votes', verbose_name='заявка')
 
     class Meta:

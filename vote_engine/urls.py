@@ -7,6 +7,7 @@ from django.views.i18n import set_language
 
 from mezzanine.core.views import direct_to_template
 from mezzanine.conf import settings
+from vote.views import profile
 
 
 admin.autodiscover()
@@ -36,6 +37,8 @@ urlpatterns += [
     # commented out like the others, so it's the default. You only need
     # one homepage pattern, so if you use a different one, comment this
     # one out.
+
+    url('^ru/accounts/profile/$', profile, name='profile_vote'),
     url("^", include("vote.urls")),
     url("^$", direct_to_template, {"template": "index.html"}, name="home"),
 

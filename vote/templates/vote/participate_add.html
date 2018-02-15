@@ -1,8 +1,6 @@
-{% extends "vote/base.html" %}
+{% extends "base.html" %}
 
-{% block title %}Заявка на конкурс{% endblock %}
-
-{% block content %}
+{% block main %}
     <h1>Заявка на конкурс '{{ competition.title }}'</h1>
     <form method="post" enctype="multipart/form-data" class="post-form">{% csrf_token %}
         {{ form.as_p }}
