@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <link href="{{ STATIC_URL }}css/login.css" rel="stylesheet" type="text/css">
-    <title>Вход</title>
-</head>
-<body>
-   <div class="login-page">
-  <div class="form">
+{% extends "base.html" %}
+
+{% block title %}Вход{% endblock %}
+
+{% block main %}
     <form method="POST" class="login-form">
         {% csrf_token %}
       <input type="text" name="username" placeholder="ник"/>
@@ -14,7 +10,4 @@
       <button type="submit">Войти</button>
       <p class="message">Не зарегистрирован? <a href="/register/">Создай аккаунт</a></p>
     </form>
-  </div>
-</div>
-</body>
-</html>
+{% endblock %}
