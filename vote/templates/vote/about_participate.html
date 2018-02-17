@@ -3,15 +3,14 @@
 {% block title %}{{ participate.title }}{% endblock %}
 
 {% block main %}
-    <h3>{{ participate.titles }}</h3>
     <h3>{{ participate.comment }}</h3>
     <h3>{{ participate.publish_date }}</h3>
     <h3>{{ participate.polls_participate.count }}</h3>
     {% if competition.comp_type == 1 %}
-        <img src="{{ STATIC_URL }}media/{{ participate.content }}" />
+        <img src="{{ STATIC_URL }}media/{{ participate.content }}"  width='80%' height='20%'/>
     {% endif %}
     {% if competition.comp_type == 3 %}
-        <video name='video' controls width='50%' height='40%'>
+        <video name='video' controls width='80%' height='20%'>
         <source src="{{ STATIC_URL }}media/{{ participate.content }}" type="video/mp4"></source>
         </video>
     {% endif %}

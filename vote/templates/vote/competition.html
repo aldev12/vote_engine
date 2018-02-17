@@ -10,7 +10,7 @@
     <table class="table_vote">
     <caption>Конкурсы</caption>
     <tr>
-        <th>Название</th>queryset filter example
+        <th>Название</th>
         <th>Заявок</th>
         <th>Голосов</th>
     </tr>
@@ -27,10 +27,10 @@
                 </div>
             </td>
             <td>
-                {{ Vote.objects.participate.competition_id }}
+                {{ competition.competition_participates.count }}
             </td>
             <td>
-
+                {{ Competition.objects.competition_participates.participate_votes.count }}
             </td>
         </tr>
         {% endif %}
