@@ -11,6 +11,7 @@
     <caption>Конкурсы</caption>
     <tr>
         <th>Название</th>
+        <th>Просмотров</th>
         <th>Заявок</th>
         <th>Голосов</th>
     </tr>
@@ -25,6 +26,9 @@
                 <div class="text">
                     <h6>{{ competition.type_str }}</h6>
                 </div>
+            </td>
+            <td>
+                {{ competition.hit_count.hits }}
             </td>
             <td>
                 {{ competition.count_participate }}
@@ -57,4 +61,7 @@
     {% endif %}
     </div>
     {% endblock %}
+
+
+
 {% endblock %}

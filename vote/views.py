@@ -11,13 +11,21 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from vote.models import Competition, Participate, Vote, Profile
+from hitcount.views import HitCountDetailView
+from hitcount.models import HitCount
+from hitcount.views import HitCountMixin
+
+
+class PostCountHitDetailView(HitCountDetailView):
+    model = Competition
+    count_hit = True
 
 
 def competition_list(request):
     competitions_list = Competition.objects. \
         annotate(count_vote=Count('competition_participates__participate_votes')). \
-        annotate(count_participate=Count('competition_participates', distinct=True)).\
-        values('title', 'status', 'count_participate', 'count_vote')
+        annotate(count_participate=Count('competition_participates', distinct=True)) # .\
+        # values('hit_count', 'title', 'status', 'count_participate', 'count_vote')
     paginator = Paginator(competitions_list, 5)
 
     page = request.GET.get('page')
@@ -134,6 +142,10 @@ def participates_in_competition(request):
         participates = paginator.page(1)
     except EmptyPage:
         participates = page.page(paginator.num_pages)
+
+    hit_count = HitCount.objects.get_for_object(competition)
+
+    hit_count_response = HitCountMixin.hit_count(request, hit_count)
     return render(request, "vote/participate.html", {'participates': participates, 'add_member': add_member,
                                                      'competition': competition, 'vote_open': vote_open,
                                                      'message': message})

@@ -5,6 +5,8 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.contrib.contenttypes.fields import GenericRelation
+from hitcount.models import HitCountMixin, HitCount
 
 
 COMPETITION_TYPE = (
@@ -42,7 +44,7 @@ def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
 
 
-class Competition(Page):
+class Competition(Page, HitCountMixin):
     """Модель конкурса"""
     survey_date = models.DateTimeField('опрос с', default=timezone.now() + timezone.timedelta(days=5))
     comp_type = models.IntegerField('тип конкурса', default=1, choices=COMPETITION_TYPE)
@@ -51,6 +53,9 @@ class Competition(Page):
     creator = models.ForeignKey(User, verbose_name='автор',
                                 related_name='competition_user',
                                 on_delete=models.CASCADE)
+    hit_count_generic = GenericRelation(
+        HitCount, object_id_field='page_ptr_id',
+        related_query_name='hit_count_generic_relation')
 
     def create_competition(self):
         if self.title and Competition.objects.filter(title=self.title).exists():
