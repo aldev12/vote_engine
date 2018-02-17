@@ -27,13 +27,34 @@
                 </div>
             </td>
             <td>
-                {{ competition.competition_participates.count }}
+                {{ competition.count_participate }}
             </td>
             <td>
-                {{ Competition.objects.competition_participates.participate_votes.count }}
+                {{ competition.count_vote }}
             </td>
         </tr>
         {% endif %}
     {% endfor %}
     </table>
+    {% block Page_menu %}
+
+        <div class="pagination">
+
+    {% if competitions.has_previous %}
+        <a href="?page={{ competitions.previous_page_number }}">←</a>
+    {% endif %}
+
+    {% for num in competitions.paginator.page_range %}
+        {% if num == competitions.number %}
+            <span class="current"><b>{{ num }}</b></span>
+        {% else %}
+            <a href="?page={{ num }}"> {{ num }}</a>
+        {% endif %}
+    {% endfor %}
+
+    {% if article_list.has_next %}
+        <a href="?page={{ article_list.next_page_number }}">→</a>
+    {% endif %}
+    </div>
+    {% endblock %}
 {% endblock %}

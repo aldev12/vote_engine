@@ -3,7 +3,9 @@ from django import forms
 from django.http import Http404, HttpResponseRedirect
 from django.utils import timezone
 from django.db import IntegrityError
+from django.db.models import Count
 from django.shortcuts import render, redirect
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
@@ -12,7 +14,19 @@ from vote.models import Competition, Participate, Vote, Profile
 
 
 def competition_list(request):
-    competitions = Competition.objects.all()
+    competitions_list = Competition.objects. \
+        annotate(count_vote=Count('competition_participates__participate_votes')). \
+        annotate(count_participate=Count('competition_participates', distinct=True)).\
+        values('title', 'status', 'count_participate', 'count_vote')
+    paginator = Paginator(competitions_list, 5)
+
+    page = request.GET.get('page')
+    try:
+        competitions = paginator.page(page)
+    except PageNotAnInteger:
+        competitions = paginator.page(1)
+    except EmptyPage:
+        competitions = page.page(paginator.num_pages)
     return render(request, "vote/competition.html", {'competitions': competitions})
 
 
@@ -111,7 +125,15 @@ def participates_in_competition(request):
     except TypeError:
         add_member = vote_open = False
 
-    participates = competition.competition_participates.all()
+    participates_list = competition.competition_participates.all()
+    paginator = Paginator(participates_list, 5)
+    page = request.GET.get('page')
+    try:
+        participates = paginator.page(page)
+    except PageNotAnInteger:
+        participates = paginator.page(1)
+    except EmptyPage:
+        participates = page.page(paginator.num_pages)
     return render(request, "vote/participate.html", {'participates': participates, 'add_member': add_member,
                                                      'competition': competition, 'vote_open': vote_open,
                                                      'message': message})
