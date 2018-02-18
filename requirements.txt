@@ -6,6 +6,7 @@ chardet==3.0.4
 Django==1.10.8
 django-annoying==0.10.4
 django-contrib-comments==1.8.0
+django-hitcount==1.2.4
 django-simplepagination==0.0.1
 filebrowser-safe==0.4.7
 future==0.16.0
@@ -13,10 +14,10 @@ grappelli-safe==0.4.7
 html5lib==1.0.1
 idna==2.6
 Mezzanine==4.2.3
+mezzanine-theme-moderna==0.2
 oauthlib==2.0.6
 Pillow==5.0.0
-pkg-resources==0.0.0
-pytz==2018.3
+pytz==2017.3
 requests==2.18.4
 requests-oauthlib==0.8.0
 six==1.11.0

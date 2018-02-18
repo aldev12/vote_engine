@@ -54,11 +54,11 @@ class Competition(Page, HitCountMixin):
                                 related_name='competition_user',
                                 on_delete=models.CASCADE)
     hit_count_generic = GenericRelation(
-        HitCount, object_id_field='page_ptr_id',
+        HitCount, object_id_field='object_pk',
         related_query_name='hit_count_generic_relation')
 
-    def create_competition(self):
-        if self.title and Competition.objects.filter(title=self.title).exists():
+    def save(self):
+        if self.pk and self.title and Competition.objects.filter(title=self.title).exists():
             raise IntegrityError
         super(Competition, self).save()
 
