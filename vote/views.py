@@ -85,6 +85,7 @@ def participate_add(request):
             if form.is_valid():
                 participate = form.save(commit=False)
                 participate.competition_id = competition
+                participate.parent = competition
                 participate.status = 1
                 participate.publish_date = timezone.now()
                 participate.creator = request.user
