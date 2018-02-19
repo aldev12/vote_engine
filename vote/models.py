@@ -57,7 +57,7 @@ class Competition(Page, HitCountMixin):
         HitCount, object_id_field='object_pk',
         related_query_name='hit_count_generic_relation')
 
-    def save(self):
+    def create_competition(self):
         if self.pk and self.title and Competition.objects.filter(title=self.title).exists():
             raise IntegrityError
         super(Competition, self).save()
