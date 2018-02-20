@@ -223,6 +223,7 @@ TEMPLATES = [
                 "django.template.context_processors.tz",
                 "mezzanine.conf.context_processors.settings",
                 "mezzanine.pages.context_processors.page",
+                "vote.page_processors.competition_add"
             ],
             "builtins": [
                 "mezzanine.template.loader_tags",

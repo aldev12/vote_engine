@@ -7,6 +7,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.contenttypes.fields import GenericRelation
 from hitcount.models import HitCountMixin, HitCount
+from django import forms
 
 
 COMPETITION_TYPE = (
@@ -58,7 +59,7 @@ class Competition(Page, HitCountMixin):
         related_query_name='hit_count_generic_relation')
 
     def create_competition(self):
-        if self.pk and self.title and Competition.objects.filter(title=self.title).exists():
+        if self.title and Competition.objects.filter(title=self.title).exists():
             raise IntegrityError
         super(Competition, self).save()
 
