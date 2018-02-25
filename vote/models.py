@@ -73,7 +73,7 @@ class Participate(Page):
     competition_id = models.ForeignKey('Competition', verbose_name='конкурс',
                                        related_name='competition_participates',
                                        on_delete=models.CASCADE)
-    content = models.FileField('файл', upload_to='documents/', blank=True)
+    content = models.FileField('файл', upload_to='uploads/', blank=True)
     creator = models.ForeignKey(User, verbose_name='автор',
                                 related_name='user_participates',
                                 on_delete=models.CASCADE)
