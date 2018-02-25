@@ -58,11 +58,6 @@ class Competition(Page, HitCountMixin):
         HitCount, object_id_field='object_pk',
         related_query_name='hit_count_generic_relation')
 
-    def create_competition(self):
-        if self.title and Competition.objects.filter(title=self.title).exists():
-            raise IntegrityError
-        super(Competition, self).save()
-
     class Meta:
         verbose_name = 'конкурс'
         verbose_name_plural = 'конкурсы'
@@ -82,11 +77,6 @@ class Participate(Page):
     creator = models.ForeignKey(User, verbose_name='автор',
                                 related_name='user_participates',
                                 on_delete=models.CASCADE)
-
-    def create_participate(self):
-        if self.title and Participate.objects.filter(title=self.title).exists():
-            raise IntegrityError
-        super(Participate, self).save()
 
     class Meta:
         verbose_name = 'заявка на конкурс'

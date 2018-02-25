@@ -38,27 +38,49 @@ def competition_list(request):
     return render(request, "vote/competition.html", {'competitions': competitions})
 
 
-@login_required
+@login_required(login_url="vote/registration/login.html")
 def competition_add(request):
-    if request.user.is_authenticated:
-        if request.method == "POST":
-            form = CompetitionForm(request.POST)
-            if form.is_valid():
-                competition = form.save(commit=False)
-                competition.status = 1
-                competition.publish_date = timezone.now()
-                competition.creator = request.user
+    competition_id = request.GET.get('competition_id', None)
+    if request.method == "POST":
+        form = CompetitionForm(request.POST)
+        if form.is_valid():
+            competition = form.save(commit=False)
+            competition.status = 0
+            competition.publish_date = timezone.now()
+            competition.creator = request.user
+            if competition_id:
                 try:
-                    competition.create_competition()
-                except IntegrityError:
-                    form.add_error('title', 'Конкурс с таким именем уже существует')
-                    return render(request, "vote/competition_add.html", {'form': form})
+                    competition_edit = Competition.objects.get(id=competition_id)
+                    if competition_edit.creator != request.user or competition_edit.status == 2:
+                        raise Http404
+                    competition_edit.title = competition.title
+                    competition_edit.comp_type = competition.comp_type
+                    competition_edit.rules = competition.rules
+                    competition_edit.short_description = competition.short_description
+                    competition_edit.expiry_date = competition.expiry_date
+                    competition_edit.survey_date = competition.survey_date
+                    competition_edit.status = competition.status
+                    competition_edit.publish_date = competition.publish_date
+                    competition_edit.save()
+                    messages.add_message(request, messages.INFO,
+                                         'Конкурс %s изменен, ожидайте проверки администратором' % competition.title)
+                    return redirect('profile_vote')
+                except Competition.DoesNotExist:
+                    Http404
+            else:
+                competition.save()
+                messages.add_message(request, messages.INFO,
+                                     'Конкурс %s создан, ожидайте проверки администратором' % competition.title)
                 return redirect('competitions')
-        else:
-            form = CompetitionForm()
-            return render(request, "vote/competition_add.html", {'form': form})
+    if competition_id:
+        try:
+            competition = Competition.objects.get(id=competition_id)
+        except Competition.DoesNotExist:
+            Http404
+        form = CompetitionForm(instance=competition)
     else:
-        return render(request, "vote/registration/login.html")
+        form = CompetitionForm()
+    return render(request, "vote/competition_add.html", {'form': form})
 
 
 def about_participate(request):
@@ -71,11 +93,12 @@ def about_participate(request):
     return render(request, "vote/about_participate.html", {'participate': participate, 'competition': competition})
 
 
-@login_required
+@login_required(login_url="vote/registration/login.html")
 def participate_add(request):
-    competition = request.GET.get('competition', None)
+    participate_id = request.GET.get('participate_id', None)
+    competition_id = request.GET.get('competition_id', None)
     try:
-        competition = Competition.objects.get(title=competition)
+        competition = Competition.objects.get(id=competition_id)
     except Competition.DoesNotExist:
         raise Http404
 
@@ -86,40 +109,62 @@ def participate_add(request):
                 participate = form.save(commit=False)
                 participate.competition_id = competition
                 participate.parent = competition
-                participate.status = 1
+                participate.status = 0
                 participate.publish_date = timezone.now()
                 participate.creator = request.user
-                try:
-                    participate.create_participate()
-                except IntegrityError:
-                    form.add_error('title', 'Заявка на участие с таким именем уже существует')
-                    return render(request, "vote/participate_add.html", {'form': form})
-                return redirect('competitions')
+                if participate_id:
+                    try:
+                        participate_edit = Participate.objects.get(id=participate_id)
+                        if participate_edit.creator != request.user or participate_edit.status == 2:
+                            raise Http404
+                        participate_edit.title = participate.title
+                        participate_edit.comment = participate.comment
+                        participate_edit.content = participate.content
+                        participate_edit.status = participate.status
+                        participate_edit.publish_date = participate.publish_date
+                        participate_edit.save()
+                        messages.add_message(request, messages.INFO,
+                                             'Заявка %s изменена, ожидайте проверки администратором' % competition.title)
+                        return redirect('profile_vote')
+                    except Competition.DoesNotExist:
+                        Http404
+                else:
+                    participate.save()
+                    messages.add_message(request, messages.INFO,
+                                         'Заявка %s создана, ожидайте проверки администратором' % competition.title)
+                    return redirect('competitions')
         else:
-            form = ParticipateForm()
+
+            if participate_id:
+                try:
+                    participate = Participate.objects.get(id=participate_id)
+                except Participate.DoesNotExist:
+                    Http404
+                form = ParticipateForm(instance=participate)
+            else:
+                form = ParticipateForm()
             return render(request, "vote/participate_add.html", {'form': form, 'competition': competition})
     else:
         return render(request, "vote/registration/login.html")
 
 
 def participates_in_competition(request):
-    message = None
-    competition = request.GET.get('competition', None)
+    competition_id = request.GET.get('competition_id', None)
     if request.user.is_authenticated:
         participate = request.GET.get('vote', None)
         if participate:
             vote = Vote()
             vote.user = request.user
             try:
-                vote.participate = Participate.objects.get(title=participate)
+                vote.participate = Participate.objects.get(id=participate)
             except Participate.DoesNotExist:
                 raise 404
             try:
                 vote.save()
             except IntegrityError:
-                message = 'Вы уже голосовали за %s' % participate
+                messages.add_message(request, messages.INFO, 'Вы уже голосовали за %s' % vote.participate.title)
     try:
-        competition = Competition.objects.get(title=competition)
+        competition = Competition.objects.get(id=competition_id)
     except Competition.DoesNotExist:
         raise Http404
     try:
@@ -145,36 +190,32 @@ def participates_in_competition(request):
         participates = page.page(paginator.num_pages)
 
     hit_count = HitCount.objects.get_for_object(competition)
-
     hit_count_response = HitCountMixin.hit_count(request, hit_count)
     return render(request, "vote/participate.html", {'participates': participates, 'add_member': add_member,
-                                                     'competition': competition, 'vote_open': vote_open,
-                                                     'message': message})
+                                                     'competition': competition, 'vote_open': vote_open})
 
 
-@login_required
+@login_required(login_url="vote/registration/login.html")
 def profile(request):
-    if request.user.is_authenticated:
-        if request.method == "POST":
-            form = ProfileForm(request.POST)
-            if form.is_valid():
-                profile = Profile.objects.get(user=request.user)
-                profile_temp = form.save(commit=False)
-                profile.location = profile_temp.location
-                profile.phone = profile_temp.phone
-                profile.birth_date = profile_temp.birth_date
-                profile.save()
-                messages.add_message(request, messages.INFO, 'Изменения успешно сохранены')
-                return render(request, 'accounts/profile.html',
-                              {'form': form})
-            else:
-                return render(request, 'accounts/profile.html',
-                              {'form': form})
-        else:
-            form = ProfileForm()
-            return render(request, "accounts/profile.html", {'form': form})
+    if request.method == "POST":
+        form = ProfileForm(request.POST)
+        if form.is_valid():
+            profile = Profile.objects.get(user=request.user)
+            profile_temp = form.save(commit=False)
+            profile.location = profile_temp.location
+            profile.phone = profile_temp.phone
+            profile.birth_date = profile_temp.birth_date
+            profile.save()
+            messages.add_message(request, messages.INFO, 'Изменения успешно сохранены')
+            return render(request, 'accounts/profile.html',
+                          {'form': form})
     else:
-        return render(request, "vote/registration/login.html")
+        form = ProfileForm(instance=Profile.objects.get(user=request.user))
+    competitions = Competition.objects.filter(creator=request.user).all()
+    participates = Participate.objects.filter(creator=request.user).all()
+    return render(request, "accounts/profile.html", {'form': form,
+                                                     'competitions': competitions,
+                                                     'participates': participates})
 
 
 def register(request):

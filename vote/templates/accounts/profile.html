@@ -3,6 +3,8 @@
 {% block title %}Профиль{% endblock %}
 
 {% block main %}
+    <div class="row">
+    <div class="col-sm-6">
     {% if messages %}
     <ul class="messages">
         {% for message in messages %}
@@ -12,7 +14,57 @@
     {% endif %}
     <form method="POST" class="register-form">
         {% csrf_token %} {{ form.as_p }}
-
       <button>Сохранить</button>
     </form>
+    </div>
+    <div class="col-sm-6">
+    <table class="table_vote">
+    <caption>Мои конкурсы</caption>
+        {% for competition in competitions %}
+            <tr>
+            <td>
+            {{ competition.type_str }}
+            </td>
+            <td>
+            {{ competition.title }}
+            </td>
+            <td>
+                {% if competition.status == 1 %}
+                <a href = '{% url "competition_add" %}?competition_id={{ competition.id }}'>Отклонен</a>
+                {% elif competition.status == 0 %}
+                <a href = '{% url "competition_add" %}?competition_id={{ competition.id }}'>На рассмотрении</a>
+                {% else %}
+                Опубликован
+                {% endif %}
+            </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <table class="table_vote">
+    <caption>Мои заявки</caption>
+        {% for participate in participates %}
+            <tr>
+            <td>
+                {{ participate.parent }}
+            </td>
+            <td>
+                {{ participate.title }}
+            </td>
+            <td>
+                {{ participate.status_str }}
+            </td>
+            <td>
+                {% if participate.status == 1 %}
+                <a href = '{% url "participate_add" %}?competition_id={{ participate.competition_id.id }}&participate_id={{ participate.id }}'>Отклонена</a>
+                {% elif participate.status == 0 %}
+                <a href = '{% url "participate_add" %}?competition_id={{ participate.competition_id.id }}&participate_id={{ participate.id }}'>На рассмотрении</a>
+                {% else %}
+                Опубликована
+                {% endif %}
+            </td>
+            </tr>
+        {% endfor %}
+    </table>
+    </div>
+    </div>
 {% endblock %}

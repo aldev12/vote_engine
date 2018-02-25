@@ -4,8 +4,9 @@
   border-right: 3px solid #3c3f41;
   border-bottom: 3px solid #3c3f41;
   font-family: "Lucida Grande", sans-serif;
-    width: 100%;
- }
+  width: 100%;
+  margin-top: 5px;
+}
 .table_vote caption {
   background: #3c3f41;
   border-top-left-radius: 10px;

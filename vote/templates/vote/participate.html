@@ -6,17 +6,12 @@
     {% if user.is_authenticated %}
         <div>
         {% if add_member %}
-            <a href='{% url "participate_add" %}?competition={{ competition.title }}'>Подать заявку</a>
+            <a href='{% url "participate_add" %}?competition_id={{ competition.id }}'>Подать заявку</a>
         {% else %}
             <h4 >Прием заявок закончен</h4>
         {% endif %}
         </div>
     {% endif %}
-    <div>
-    {% if message %}
-        {{ message }}
-    {% endif %}
-    </div>
     <table class="table_vote">
     <caption>{{ competition.title }}</caption>
     <tr><th>Название</th><th>Количество голосов</th><th></th></tr>
@@ -31,7 +26,7 @@
             </td>
             <td>
                 {% if vote_open and user.is_authenticated %}
-                    <input  onclick="location.href='{% url 'participates_in_competition' %}?competition={{ competition.title }}&vote={{ participate.title }}'" type="submit" class="default" name="_vote" value="Проголосовать" />
+                    <input  onclick="location.href='{% url 'participates_in_competition' %}?competition_id={{ competition.id }}&vote={{ participate.id }}'" type="submit" class="default" name="_vote" value="Проголосовать" />
                 {% else %}
                     {% if not vote_open and not add_member %}
                         <a>Конкурс завершен</a>
