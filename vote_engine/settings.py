@@ -32,6 +32,9 @@ ADMIN_MENU_ORDER = (
     ("Users", ("auth.User", "auth.Group",)),
 )
 
+ADMIN_REMOVAL = (
+    'mezzanine.generic.models.ThreadedComment',
+)
 
 # A three item sequence, each containing a sequence of template tags
 # used to render the admin dashboard.
@@ -222,8 +225,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.template.context_processors.tz",
                 "mezzanine.conf.context_processors.settings",
-                "mezzanine.pages.context_processors.page",
-                "vote.page_processors.competition_add"
+                "mezzanine.pages.context_processors.page"
             ],
             "builtins": [
                 "mezzanine.template.loader_tags",
