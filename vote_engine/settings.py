@@ -32,6 +32,8 @@ ADMIN_MENU_ORDER = (
     ("Users", ("auth.User", "auth.Group",)),
 )
 
+LOGIN_URL = '/login/'
+
 ADMIN_REMOVAL = (
     'mezzanine.generic.models.ThreadedComment',
 )

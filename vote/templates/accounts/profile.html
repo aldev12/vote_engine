@@ -30,9 +30,9 @@
             </td>
             <td>
                 {% if competition.status == 1 %}
-                <a href = '{% url "competition_add" %}?competition_id={{ competition.id }}'>Отклонен</a>
+                <a href = '{% url "competition_edit" %}?competition_id={{ competition.id }}'>Отклонен</a>
                 {% elif competition.status == 0 %}
-                <a href = '{% url "competition_add" %}?competition_id={{ competition.id }}'>На рассмотрении</a>
+                <a href = '{% url "competition_edit" %}?competition_id={{ competition.id }}'>На рассмотрении</a>
                 {% else %}
                 Опубликован
                 {% endif %}
@@ -55,9 +55,9 @@
             </td>
             <td>
                 {% if participate.status == 1 %}
-                <a href = '{% url "participate_add" %}?competition_id={{ participate.competition_id.id }}&participate_id={{ participate.id }}'>Отклонена</a>
+                <a href = '{% url "participate_edit" %}?competition_id={{ participate.competition_id.id }}&participate_id={{ participate.id }}'>Отклонена</a>
                 {% elif participate.status == 0 %}
-                <a href = '{% url "participate_add" %}?competition_id={{ participate.competition_id.id }}&participate_id={{ participate.id }}'>На рассмотрении</a>
+                <a href = '{% url "participate_edit" %}?competition_id={{ participate.competition_id.id }}&participate_id={{ participate.id }}'>На рассмотрении</a>
                 {% else %}
                 Опубликована
                 {% endif %}

@@ -19,7 +19,7 @@
         {% if participate.status == 2 %}
         <tr>
             <td>
-                    <a href='{% url 'about_participate' %}?participate={{ participate.title }}'>{{ participate.title }}</a>
+                    <a href='{% url 'about_participate' %}?participate_id={{ participate.id }}'>{{ participate.title }}</a>
             </td>
             <td>
                     {{ participate.participate_votes.count }}
