@@ -17,17 +17,15 @@
     <tr><th>Название</th><th>Количество голосов</th><th></th></tr>
     {% for participate in participates %}
         {% if participate.status == 2 %}
-        <tr class="clickable-row" data-href='{% url 'about_participate' %}?participate_id={{ participate.id }}'>
+        <tr class="clickable-row" data-href='{% url 'about_participate' participate_id=participate.id %}'>
             <td>
-                    <a href='{% url 'about_participate' %}?participate_id={{ participate.id }}'>{{ participate.title }}</a>
+                    <a href='{% url 'about_participate' participate_id=participate.id %}'>{{ participate.title }}</a>
             </td>
             <td>
                     {{ participate.participate_votes.count }}
             </td>
             <td>
                 {% if vote_open and user.is_authenticated %}
-                  <!--  <input  onclick="location.href='% url 'participates_in_competition' %}?competition_id={ competition.id }}&vote={ participate.id }}'" type="submit" class="default" name="_vote" value="Проголосовать"/>
-                  -->
                     <input type="submit" class="default" id="vote" participate_id="{{ participate.id }}" value="Проголосовать" />
                 {% else %}
                     {% if not vote_open and not add_member %}

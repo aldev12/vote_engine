@@ -85,14 +85,12 @@ def competition_edit(request):
     return render(request, "vote/competition_add.html", {'form': form})
 
 
-def about_competition(request):
-    competition_id = request.GET.get('competition_id', 0)
+def about_competition(request, competition_id):
     competition = get_object_or_404(Competition, id=competition_id)
     return render(request, "vote/about_competition.html", {'competition': competition})
 
 
-def about_participate(request):
-    participate_id = request.GET.get('participate_id', 0)
+def about_participate(request, participate_id):
     participate = get_object_or_404(Participate, id=participate_id)
     return render(request, "vote/about_participate.html", {'participate': participate,
                                                            'competition': participate.competition_id})
