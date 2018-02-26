@@ -26,7 +26,9 @@
             </td>
             <td>
                 {% if vote_open and user.is_authenticated %}
-                    <input  onclick="location.href='{% url 'participates_in_competition' %}?competition_id={{ competition.id }}&vote={{ participate.id }}'" type="submit" class="default" name="_vote" value="Проголосовать" />
+                  <!--  <input  onclick="location.href='% url 'participates_in_competition' %}?competition_id={ competition.id }}&vote={ participate.id }}'" type="submit" class="default" name="_vote" value="Проголосовать"/>
+                  -->
+                    <input type="submit" class="default" id="vote" participate_id="{{ participate.id }}" value="Проголосовать" />
                 {% else %}
                     {% if not vote_open and not add_member %}
                         <a>Конкурс завершен</a>
@@ -59,5 +61,30 @@
     {% endif %}
     </div>
     {% endblock %}
+
+<script type="text/javascript">
+   $(function() {
+      $("#vote").click(function() {
+         $.get("/vote/"+ $(this).attr('participate_id') , function(data) {
+             var button = document.createElement("button");
+             button.classList.add("close");
+             button.type = "button";
+             button.textContent = "×";
+             button.setAttribute("data-dismiss", "alert");
+             button.setAttribute("aria-hidden", "true");
+             var div2 = document.createElement("div");
+             div2.classList.add("alert", "alert-dismissable", "alert-info");
+             div2.setAttribute("data-alert", "alert");
+             var div1 = document.createElement("div");
+             div1.classList.add("messages");
+             div2.textContent = data;
+             var articles = document.getElementsByClassName('container');
+             div2.appendChild(button);
+             div1.appendChild(div2);
+             articles[1].appendChild(div1);
+         });
+      });
+    });
+</script>
 
 {% endblock %}

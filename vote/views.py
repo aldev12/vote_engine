@@ -1,6 +1,6 @@
 from .forms import CompetitionForm, ParticipateForm, UserRegistrationForm, ProfileForm
 from django import forms
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.utils import timezone
 from django.db import IntegrityError
 from django.db.models import Count
@@ -49,7 +49,7 @@ def competition_add(request):
             competition.publish_date = timezone.now()
             competition.creator = request.user
             competition.save()
-            messages.add_message(request, messages.INFO,
+            messages.add_message(request, messages.SUCCESS,
                                  'Конкурс %s создан, ожидайте проверки администратором' % competition.title)
             return redirect('competitions')
     else:
@@ -76,7 +76,7 @@ def competition_edit(request):
                     survey_date=competition.survey_date,
                     status=competition.status,
                     publish_date=competition.publish_date):
-                messages.add_message(request, messages.INFO,
+                messages.add_message(request, messages.SUCCESS,
                                      'Конкурс %s изменен, ожидайте проверки администратором' % competition.title)
             return redirect('profile_vote')
     else:
@@ -107,7 +107,7 @@ def participate_add(request):
             participate.publish_date = timezone.now()
             participate.creator = request.user
             participate.save()
-            messages.add_message(request, messages.INFO,
+            messages.add_message(request, messages.SUCCESS,
                                  'Заявка %s создана, ожидайте проверки администратором' % competition.title)
             return redirect('competitions')
     else:
@@ -135,7 +135,7 @@ def participate_edit(request):
                     content=participate.content,
                     status=participate.status,
                     publish_date=participate.publish_date):
-                messages.add_message(request, messages.INFO,
+                messages.add_message(request, messages.SUCCESS,
                                      'Заявка %s изменена, ожидайте проверки администратором' % competition.title)
             return redirect('profile_vote')
     else:
@@ -144,18 +144,23 @@ def participate_edit(request):
     return render(request, "vote/participate_edit.html", {'form': form, 'competition': competition})
 
 
+@login_required
+def vote(request, participate_id):
+    if request.is_ajax():
+        participate = get_object_or_404(Participate, id=participate_id)
+        try:
+            Vote.objects.create(user=request.user,
+                                participate=participate)
+        except IntegrityError:
+            message = 'Вы уже голосовали за %s' % participate.title
+        else:
+            message = 'Вы проголосовали за %s' % participate.title
+        return HttpResponse(message)
+
+
 def participates_in_competition(request):
     competition_id = request.GET.get('competition_id', 0)
-    if request.user.is_authenticated:
-        participate_id = request.GET.get('vote', 0)
-        if participate_id != 0:
-            vote = Vote()
-            vote.user = request.user
-            vote.participate = get_object_or_404(Participate, id=participate_id)
-            try:
-                vote.save()
-            except IntegrityError:
-                messages.add_message(request, messages.ERROR, 'Вы уже голосовали за %s' % vote.participate.title)
+
     competition = get_object_or_404(Competition, id=competition_id)
     try:
         if competition.expiry_date > timezone.now() < competition.survey_date and competition.status == 2:
@@ -196,7 +201,7 @@ def profile(request):
             profile.phone = profile_temp.phone
             profile.birth_date = profile_temp.birth_date
             profile.save()
-            messages.add_message(request, messages.INFO, 'Изменения успешно сохранены')
+            messages.add_message(request, messages.SUCCESS, 'Изменения успешно сохранены')
             return render(request, 'accounts/profile.html',
                           {'form': form})
     else:

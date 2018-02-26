@@ -11,6 +11,7 @@ urlpatterns = [
     url('^about_participate/$', views.about_participate, name='about_participate'),
     url('^participate_add/$', views.participate_add, name='participate_add'),
     url('^participate_edit/$', views.participate_edit, name='participate_edit'),
+    url('^vote/(\d)$', views.vote, name='vote'),
     # url('^log_in/$', views.log_in, name='log_in'),
     url(r'^login/$', auth_views.login,
         {'template_name': 'vote/registration/login.html'}, name='login'),
