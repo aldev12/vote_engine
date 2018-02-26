@@ -17,7 +17,7 @@
     <tr><th>Название</th><th>Количество голосов</th><th></th></tr>
     {% for participate in participates %}
         {% if participate.status == 2 %}
-        <tr>
+        <tr class="clickable-row" data-href='{% url 'about_participate' %}?participate_id={{ participate.id }}'>
             <td>
                     <a href='{% url 'about_participate' %}?participate_id={{ participate.id }}'>{{ participate.title }}</a>
             </td>

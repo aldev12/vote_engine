@@ -3,7 +3,9 @@
 {% block title %}{{ competition.title }}{% endblock %}
 
 {% block main %}
-    <h3>{{ competition.status }}</h3>
+    <h3>{{ competition.type_str }}</h3>
+    <h4>{{ competition.rules }}</h4>
+    <h4>{{ competition.short_description }}</h4>
     <h3>{{ competition.publish_date }}</h3>
     <h3>{{ competition.expiry_date }}</h3>
 {% endblock %}

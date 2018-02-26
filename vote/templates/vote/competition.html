@@ -17,10 +17,10 @@
     </tr>
     {% for competition in competitions  %}
         {% if competition.status == 2 %}
-        <tr>
+        <tr class="clickable-row" data-href='{% url "participates_in_competition" %}?competition_id={{ competition.id }}'>
             <td>
                 <div>
-                    <a href='{% url "participates_in_competition" %}?competition_id={{ competition.id }}'
+                    <a href='{% url "about_competition" %}?competition_id={{ competition.id }}'
                     >{{ competition.title }}</a>
                 </div>
                 <div class="text">

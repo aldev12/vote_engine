@@ -9,6 +9,7 @@ urlpatterns = [
     url('^competition_add/$', views.competition_add, name='competition_add'),
     url('^competition_edit/$', views.competition_edit, name='competition_edit'),
     url('^about_participate/$', views.about_participate, name='about_participate'),
+    url('^about_competition/$', views.about_competition, name='about_competition'),
     url('^participate_add/$', views.participate_add, name='participate_add'),
     url('^participate_edit/$', views.participate_edit, name='participate_edit'),
     url('^vote/(\d)$', views.vote, name='vote'),
