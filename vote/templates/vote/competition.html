@@ -17,7 +17,7 @@
     </tr>
     {% for competition in competitions  %}
         {% if competition.status == 2 %}
-        <tr class="clickable-row" data-href='{% url "participates_in_competition" %}?competition_id={{ competition.id }}'>
+        <tr onclick="table_click('{% url "participates_in_competition" %}?competition_id={{ competition.id }}')">
             <td>
                 <div>
                     <a href='{% url "about_competition" competition_id=competition.id %}'

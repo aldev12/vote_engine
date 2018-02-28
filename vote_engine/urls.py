@@ -5,6 +5,7 @@ from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 from django.views.i18n import set_language
 
+from mezzanine.pages import views as pages_view
 from mezzanine.core.views import direct_to_template
 from mezzanine.conf import settings
 from vote.views import profile
@@ -58,6 +59,7 @@ urlpatterns += [
     # should be used if you want to customize the homepage's template.
     # NOTE: Don't forget to import the view function too!
 
+    url(r'^$', pages_view.page, {'slug': '/'}, name='home'),
     url(r'^', include('mezzanine.urls')),
     # HOMEPAGE FOR A BLOG-ONLY SITE
     # -----------------------------

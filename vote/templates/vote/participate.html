@@ -17,16 +17,16 @@
     <tr><th>Название</th><th>Количество голосов</th><th></th></tr>
     {% for participate in participates %}
         {% if participate.status == 2 %}
-        <tr class="clickable-row" data-href='{% url 'about_participate' participate_id=participate.id %}'>
-            <td>
-                    <a href='{% url 'about_participate' participate_id=participate.id %}'>{{ participate.title }}</a>
+        <tr >
+            <td onclick="table_click('{{ participate.id }}')">
+                    <a href='{% url 'about_participate' participate.id %}'>{{ participate.title }}</a>
             </td>
-            <td>
+            <td onclick="table_click('{{ participate.id }}')">
                     {{ participate.participate_votes.count }}
             </td>
             <td>
                 {% if vote_open and user.is_authenticated %}
-                    <input type="submit" class="default" id="vote" participate_id="{{ participate.id }}" value="Проголосовать" />
+                    <input type="submit" onclick="vote({{ participate.id }})" class="btn-default" id="vote" value="Проголосовать" />
                 {% else %}
                     {% if not vote_open and not add_member %}
                         <a>Конкурс завершен</a>
@@ -59,30 +59,5 @@
     {% endif %}
     </div>
     {% endblock %}
-
-<script type="text/javascript">
-   $(function() {
-      $("#vote").click(function() {
-         $.get("/vote/"+ $(this).attr('participate_id') , function(data) {
-             var button = document.createElement("button");
-             button.classList.add("close");
-             button.type = "button";
-             button.textContent = "×";
-             button.setAttribute("data-dismiss", "alert");
-             button.setAttribute("aria-hidden", "true");
-             var div2 = document.createElement("div");
-             div2.classList.add("alert", "alert-dismissable", "alert-info");
-             div2.setAttribute("data-alert", "alert");
-             var div1 = document.createElement("div");
-             div1.classList.add("messages");
-             div2.textContent = data;
-             var articles = document.getElementsByClassName('container');
-             div2.appendChild(button);
-             div1.appendChild(div2);
-             articles[1].appendChild(div1);
-         });
-      });
-    });
-</script>
 
 {% endblock %}
