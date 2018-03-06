@@ -1,11 +1,20 @@
 {% extends "base.html" %}
 
-{% block title %}{{ competition.title }}{% endblock %}
-
 {% block main %}
-    <h3>{{ competition.type_str }}</h3>
-    <h4>{{ competition.rules }}</h4>
-    <h4>{{ competition.short_description }}</h4>
-    <h3>{{ competition.publish_date }}</h3>
-    <h3>{{ competition.expiry_date }}</h3>
+    <div class="col-sm-6" style="align-content: right; text-align: center">
+    <label><h2>{{ competition.type_str }} {{ competition.title }}</h2></label>
+    </div>
+    <div class="col-sm-6" style="align-content: left; text-align: left">
+        <ul>
+        <li>Дата публикации: {{ competition.publish_date|date:"d.m.Y"  }}</li>
+        <li>Опрос с: {{ competition.expiry_date|date:"d.m.Y" }}</li>
+        <li>Результаты с: {{ competition.expiry_date|date:"d.m.Y" }}</li>
+        </ul>
+    </div>
+    <div>
+    <label><h3>Правила</h3></br><h4>{{ competition.rules|safe }}</h4></label>
+    </div>
+    <div>
+        <label><h3>Описание</h3></br><h4>{{ competition.short_description }}</h4></label>
+    </div>
 {% endblock %}

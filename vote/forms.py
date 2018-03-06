@@ -2,6 +2,7 @@ from django import forms
 from .models import Competition, Participate, Profile
 
 
+
 class CompetitionForm(forms.ModelForm, forms.Field):
     class Meta:
         model = Competition

@@ -9,7 +9,6 @@ from django.contrib.contenttypes.fields import GenericRelation
 from hitcount.models import HitCountMixin, HitCount
 from django import forms
 
-
 COMPETITION_TYPE = (
     (1, 'Фотоконкурс'),
     (2, 'Литературный конкурс'),
