@@ -1,47 +1,30 @@
 {% extends "base.html" %}
 
-{% block title %}Профиль{% endblock %}
-
 {% block main %}
-    <div class="row">
-    <div class="col-sm-6">
-    {% if messages %}
-    <ul class="messages">
+
+<div class="tabs">
+    <input id="tab1" type="radio" name="tabs" checked>
+    <label for="tab1" title="Профиль">Профиль</label>
+    <input id="tab2" type="radio" name="tabs">
+    <label for="tab2" title="Мои заявки">Мои заявки</label>
+    <section id="content-tab1">
+        {% if messages %}
+        <ul class="messages">
         {% for message in messages %}
-         <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
         {% endfor %}
-    </ul>
-    {% endif %}
-    <form method="POST" class="register-form">
+        </ul>
+        {% endif %}
+        <form method="POST" class="register-form">
         {% csrf_token %} {{ form.as_p }}
-      <button>Сохранить</button>
-    </form>
-    </div>
-    <div class="col-sm-6">
-    <table class="table_vote">
-    <caption>Мои конкурсы</caption>
-        {% for competition in competitions %}
-            <tr>
-            <td>
-            {{ competition.type_str }}
-            </td>
-            <td>
-            {{ competition.title }}
-            </td>
-            <td>
-                {% if competition.status == 1 %}
-                <a href = '{% url "competition_edit" %}?competition_id={{ competition.id }}'>Отклонен</a>
-                {% elif competition.status == 0 %}
-                <a href = '{% url "competition_edit" %}?competition_id={{ competition.id }}'>На рассмотрении</a>
-                {% else %}
-                Опубликован
-                {% endif %}
-            </td>
-            </tr>
-        {% endfor %}
-    </table>
-    <table class="table_vote">
-    <caption>Мои заявки</caption>
+        <button class="btn btn-default">Сохранить</button>
+        </form>
+    </section>
+    <section id="content-tab2">
+        <table class="table_vote">
+        <th>Конкурс</th>
+        <th>Заявка</th>
+        <th>Статус</th>
         {% for participate in participates %}
             <tr>
             <td>
@@ -49,9 +32,6 @@
             </td>
             <td>
                 {{ participate.title }}
-            </td>
-            <td>
-                {{ participate.status_str }}
             </td>
             <td>
                 {% if participate.status == 1 %}
@@ -64,7 +44,11 @@
             </td>
             </tr>
         {% endfor %}
-    </table>
-    </div>
+        </table>
+    </section>
+</div>
+
+
+
     </div>
 {% endblock %}

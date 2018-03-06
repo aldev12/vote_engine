@@ -17,6 +17,7 @@ function vote(participate_id) {
          div1.appendChild(div2);
          articles[1].appendChild(div1);
      });
+
 }
 
 function table_click(param) {

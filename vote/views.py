@@ -17,6 +17,13 @@ from hitcount.views import HitCountMixin
 
 CONTENT_COUNT_IN_PAGE = 10
 
+PARTICIPATE_VIEW = {
+    1: 'vote/participate/photo.html',
+    2: 'vote/participate/liter.html',
+    3: 'vote/participate/video.html',
+    4: 'vote/participate/audio.html'
+}
+
 
 class PostCountHitDetailView(HitCountDetailView):
     model = Competition
@@ -92,8 +99,8 @@ def about_competition(request, competition_id):
 
 def about_participate(request, participate_id):
     participate = get_object_or_404(Participate, id=participate_id)
-    return render(request, "vote/about_participate.html", {'participate': participate,
-                                                           'competition': participate.competition_id})
+    return render(request, PARTICIPATE_VIEW[participate.competition_id.comp_type],
+                  {'participate': participate, 'competition': participate.competition_id})
 
 
 @login_required
@@ -205,15 +212,9 @@ def profile(request):
             profile.birth_date = profile_temp.birth_date
             profile.save()
             messages.add_message(request, messages.SUCCESS, 'Изменения успешно сохранены')
-            return render(request, 'accounts/profile.html',
-                          {'form': form})
-    else:
-        form = ProfileForm(instance=Profile.objects.get(user=request.user))
-    competitions = Competition.objects.filter(creator=request.user).all()
+    form = ProfileForm(instance=Profile.objects.get(user=request.user))
     participates = Participate.objects.filter(creator=request.user).all()
-    return render(request, "accounts/profile.html", {'form': form,
-                                                     'competitions': competitions,
-                                                     'participates': participates})
+    return render(request, "accounts/profile.html", {'form': form, 'participates': participates})
 
 
 def register(request):

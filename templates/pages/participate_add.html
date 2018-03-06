@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <h1>Заявка на конкурс '{{ competition.title }}'</h1>
+    <form method="post" enctype="multipart/form-data" class="post-form">{% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Сохранить" class="default" name="_save" />
+    </form>
+{% endblock %}

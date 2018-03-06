@@ -17,7 +17,9 @@
 
 
 {% compress css %}
-<link href="/static/css/vote_table.css" rel="stylesheet" type="text/css">
+ <link href="/static/css/tabs.css" rel="stylesheet" type="text/css">
+    <link href="/static/css/vote_table.css" rel="stylesheet" type="text/css">
+
 <script src="/static/js/vote.js"></script>
 <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
 <link rel="stylesheet" href="{% static "css/mezzanine.css" %}">
@@ -129,13 +131,14 @@
                     <h1>{% block title %}{% endblock %}</h1>
 
                 </div>
-                <div class="col-sm-6">
-                    <ul class="breadcrumb pull-right">
-                        {% spaceless %}
-							{% block breadcrumb_menu %}{% page_menu "pages/menus/breadcrumb.html" %}{% endblock %}
-						{% endspaceless %}
-                    </ul>
-                </div>
+
+{#                <div class="col-sm-6">#}
+{#                    <ul class="breadcrumb pull-right">#}
+{#                        {% spaceless %}#}
+{#							{% block breadcrumb_menu %}{% page_menu "pages/menus/breadcrumb.html" %}{% endblock %}#}
+{#						{% endspaceless %}#}
+{#                    </ul>#}
+{#                </div>#}
             </div>
         </div>
    </section>

@@ -2,11 +2,6 @@
 
 
 {% block main %}
-    {% if user.is_authenticated %}
-        <div class="breadcrumb pull-right">
-    <a href='{% url "competition_add" %}'>Добавить</a>
-        </div>
-    {% endif %}
     <table class="table_vote">
     <caption>Конкурсы</caption>
     <tr>

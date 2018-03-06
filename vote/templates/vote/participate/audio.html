@@ -1,0 +1,7 @@
+{% extends "vote/participate/base_participate.html" %}
+
+{% block content_participate %}
+        <audio name='audio' controls width='80%' height='20%'>
+        <source src="{{ STATIC_URL }}media/{{ participate.content }}" type="audio/mp3"></source>
+        </audio>
+{% endblock %}
