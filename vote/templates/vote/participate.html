@@ -1,19 +1,17 @@
 {% extends "base.html" %}
 
-{% block title %}Участники{% endblock %}
-
 {% block main %}
     {% if user.is_authenticated %}
         <div>
         {% if add_member %}
-            <a href='{% url "participate_add" %}?competition_id={{ competition.id }}'>Подать заявку</a>
+            <a href='{% url "participate_add" %}?competition_id={{ competition.id }}'>Принять участие в конкурсе</a>
         {% else %}
-            <h4 >Прием заявок закончен</h4>
+            <label><h4 >Прием заявок закончен</h4></label>
         {% endif %}
         </div>
     {% endif %}
     <table class="table_vote">
-    <caption>{{ competition.title }}</caption>
+    <caption>Участники конкурса"{{ competition.title }}"</caption>
     <tr><th>Название</th><th>Количество голосов</th><th></th></tr>
     {% for participate in participates %}
         {% if participate.status == 2 %}

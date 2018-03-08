@@ -5,8 +5,12 @@
 <div class="tabs">
     <input id="tab1" type="radio" name="tabs" checked>
     <label for="tab1" title="Профиль">Профиль</label>
+
     <input id="tab2" type="radio" name="tabs">
-    <label for="tab2" title="Мои заявки">Мои заявки</label>
+    <label for="tab2" title="Мои конкурсы">Мои конкурсы</label>
+
+    <input id="tab3" type="radio" name="tabs">
+    <label for="tab3" title="Мои заявки">Мои заявки</label>
     <section id="content-tab1">
         {% if messages %}
         <ul class="messages">
@@ -20,7 +24,32 @@
         <button class="btn btn-default">Сохранить</button>
         </form>
     </section>
+
     <section id="content-tab2">
+        <table class="table_vote">
+            {% for competition in competitions %}
+            <tr>
+            <td>
+            {{ competition.type_str }}
+            </td>
+            <td>
+            {{ competition.title }}
+            </td>
+            <td>
+                {% if competition.status == 1 %}
+                <a href = '{% url "competition_add" %}?competition_id={{ competition.id }}'>Отклонен</a>
+                {% elif competition.status == 0 %}
+                <a href = '{% url "competition_add" %}?competition_id={{ competition.id }}'>На рассмотрении</a>
+                {% else %}
+                Опубликован
+                {% endif %}
+            </td>
+            </tr>
+        {% endfor %}
+        </table>
+    </section>
+
+    <section id="content-tab3">
         <table class="table_vote">
         <th>Конкурс</th>
         <th>Заявка</th>
@@ -47,8 +76,4 @@
         </table>
     </section>
 </div>
-
-
-
-    </div>
 {% endblock %}

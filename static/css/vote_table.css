@@ -1,13 +1,9 @@
 /*//////////////////////////////////////////////////////////////////
 [ FONT ]*/
-
-
 @font-face {
   font-family: OpenSans-Regular;
   src: url('../fonts/OpenSans/OpenSans-Regular.ttf');
 }
-
-
 /*//////////////////////////////////////////////////////////////////
 [ RESTYLE TAG ]*/
 * {
@@ -104,18 +100,6 @@ button:hover {
 iframe {
 	border: none !important;
 }
-
-
-
-
-/*//////////////////////////////////////////////////////////////////
-[ Utiliti ]*/
-
-
-
-
-
-
 /*//////////////////////////////////////////////////////////////////
 [ Table ]*/
 
@@ -200,7 +184,7 @@ tbody tr:nth-child(even) {
   background-color: #f5f5f5;
 }
 
-tbody tr, caption, label{
+tbody tr, caption, label, h1, h2, h3, h4, h5, h6, b {
   font-family: OpenSans-Regular;
   color: #808080;
   line-height: 1.2;

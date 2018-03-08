@@ -213,8 +213,10 @@ def profile(request):
             profile.save()
             messages.add_message(request, messages.SUCCESS, 'Изменения успешно сохранены')
     form = ProfileForm(instance=Profile.objects.get(user=request.user))
+    competitions = Competition.objects.filter(creator=request.user).all()
     participates = Participate.objects.filter(creator=request.user).all()
-    return render(request, "accounts/profile.html", {'form': form, 'participates': participates})
+    return render(request, "accounts/profile.html", {'form': form, 'participates': participates,
+                                                     'competitions': competitions})
 
 
 def register(request):
