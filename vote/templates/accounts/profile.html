@@ -12,13 +12,6 @@
     <input id="tab3" type="radio" name="tabs">
     <label for="tab3" title="Мои заявки">Мои заявки</label>
     <section id="content-tab1">
-        {% if messages %}
-        <ul class="messages">
-        {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-        </ul>
-        {% endif %}
         <form method="POST" class="register-form">
         {% csrf_token %} {{ form.as_p }}
         <button class="btn btn-default">Сохранить</button>
@@ -27,8 +20,12 @@
 
     <section id="content-tab2">
         <table class="table_vote">
+        <th>Тип конкурса</th>
+        <th>Конкурс</th>
+        <th>Статус</th>
+
             {% for competition in competitions %}
-            <tr>
+            <tr onclick="table_click('{% url "participate_manage" %}?competition_id={{ competition.id }}')">
             <td>
             {{ competition.type_str }}
             </td>
@@ -37,9 +34,9 @@
             </td>
             <td>
                 {% if competition.status == 1 %}
-                <a href = '{% url "competition_add" %}?competition_id={{ competition.id }}'>Отклонен</a>
+                <a href = '{% url "competition_edit" %}?competition_id={{ competition.id }}'>Отклонен</a>
                 {% elif competition.status == 0 %}
-                <a href = '{% url "competition_add" %}?competition_id={{ competition.id }}'>На рассмотрении</a>
+                <a href = '{% url "competition_edit" %}?competition_id={{ competition.id }}'>На рассмотрении</a>
                 {% else %}
                 Опубликован
                 {% endif %}
@@ -64,9 +61,9 @@
             </td>
             <td>
                 {% if participate.status == 1 %}
-                <a href = '{% url "participate_edit" %}?competition_id={{ participate.competition_id.id }}&participate_id={{ participate.id }}'>Отклонена</a>
+                <a href = '{% url "participate_edit" %}?participate_id={{ participate.id }}'>Отклонена</a>
                 {% elif participate.status == 0 %}
-                <a href = '{% url "participate_edit" %}?competition_id={{ participate.competition_id.id }}&participate_id={{ participate.id }}'>На рассмотрении</a>
+                <a href = '{% url "participate_edit" %}?participate_id={{ participate.id }}'>На рассмотрении</a>
                 {% else %}
                 Опубликована
                 {% endif %}

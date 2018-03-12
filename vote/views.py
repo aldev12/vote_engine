@@ -3,7 +3,7 @@ from django import forms
 from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.utils import timezone
 from django.db import IntegrityError
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
@@ -14,8 +14,9 @@ from vote.models import Competition, Participate, Vote, Profile
 from hitcount.views import HitCountDetailView
 from hitcount.models import HitCount
 from hitcount.views import HitCountMixin
+from django.db.models import Q
 
-CONTENT_COUNT_IN_PAGE = 10
+CONTENT_COUNT_IN_PAGE = 5
 
 PARTICIPATE_VIEW = {
     1: 'vote/participate/photo.html',
@@ -31,10 +32,10 @@ class PostCountHitDetailView(HitCountDetailView):
 
 
 def competition_list(request):
-    competitions_list = Competition.objects. \
+    competitions_list = Competition.objects.filter(status=2). \
         annotate(count_vote=Count('competition_participates__participate_votes')). \
         annotate(count_participate=Count('competition_participates', distinct=True)) # .\
-        # values('hit_count', 'title', 'status', 'count_participate', 'count_vote')
+        # values('Participate_name', 'title', 'status', 'count_participate', 'count_vote')
     paginator = Paginator(competitions_list, CONTENT_COUNT_IN_PAGE)
     page = request.GET.get('page')
     try:
@@ -67,6 +68,9 @@ def competition_add(request):
 @login_required
 def competition_edit(request):
     competition_id = request.GET.get('competition_id', 0)
+    competition = get_object_or_404(Competition, id=competition_id)
+    if request.user != competition.creator:
+        raise Http404
     if request.method == "POST":
         form = CompetitionForm(request.POST)
         if form.is_valid():
@@ -89,7 +93,32 @@ def competition_edit(request):
     else:
         competition = get_object_or_404(Competition, id=competition_id)
         form = CompetitionForm(instance=competition)
-    return render(request, "vote/competition_add.html", {'form': form})
+    return render(request, "vote/competition_edit.html", {'form': form})
+
+
+@login_required
+def competition_delete(request, competition_id):
+    competition = get_object_or_404(Competition, id=competition_id)
+    if competition.creator == request.user and competition.status != 2:
+        competition.delete()
+        messages.add_message(request, messages.SUCCESS, 'Конкурс %s удален' % competition.title)
+    else:
+        messages.add_message(request, messages.WARNING, 'Нет прав на удаление, либо конкурс %s уже опубликован'
+                             % competition.title)
+    return redirect('profile_vote')
+
+
+@login_required
+def participate_delete(request, participate_id):
+    participate = get_object_or_404(Participate, id=participate_id)
+    if request.user in {participate.competition_id.creator, participate.creator} and participate.status != 2:
+            participate.delete()
+            messages.add_message(request, messages.SUCCESS, 'Заявка %s на конкурс %s удалена'
+                                 % (participate.title, participate.competition_id.title))
+    else:
+        messages.add_message(request, messages.WARNING, 'Нет прав на удаление, либо заявка %s уже опубликована'
+                             % participate.title)
+    return redirect('profile_vote')
 
 
 def about_competition(request, competition_id):
@@ -107,7 +136,6 @@ def about_participate(request, participate_id):
 def participate_add(request):
     competition_id = request.GET.get('competition_id', 0)
     competition = get_object_or_404(Competition, id=competition_id)
-
     if request.method == "POST":
         form = ParticipateForm(request.POST, request.FILES)
         if form.is_valid():
@@ -123,14 +151,18 @@ def participate_add(request):
             return redirect('competitions')
     else:
         form = ParticipateForm()
+    if competition.comp_type == 2:
+        form.fields['content'].widget = forms.HiddenInput()
     return render(request, "vote/participate_add.html", {'form': form, 'competition': competition})
 
 
 @login_required
 def participate_edit(request):
     participate_id = request.GET.get('participate_id', 0)
-    competition_id = request.GET.get('competition_id', 0)
-    competition = get_object_or_404(Competition, id=competition_id)
+    participate = get_object_or_404(Participate, id=participate_id)
+    competition = get_object_or_404(Competition, id=participate.competition_id_id)
+    if request.user not in [participate.creator, competition.creator]:
+        raise Http404
     if request.method == "POST":
         form = ParticipateForm(request.POST, request.FILES)
         if form.is_valid():
@@ -152,6 +184,8 @@ def participate_edit(request):
     else:
         participate = get_object_or_404(Participate, id=participate_id)
         form = ParticipateForm(instance=participate)
+        if participate.competition_id.comp_type == 2:
+            form.fields['content'].widget = forms.HiddenInput()
     return render(request, "vote/participate_edit.html", {'form': form, 'competition': competition})
 
 
@@ -184,7 +218,7 @@ def participates_in_competition(request):
     except TypeError:
         add_member = vote_open = False
 
-    participates_list = competition.competition_participates.all()
+    participates_list = competition.competition_participates.filter(status=2).all()
     paginator = Paginator(participates_list, CONTENT_COUNT_IN_PAGE)
     page = request.GET.get('page')
     try:
@@ -198,6 +232,28 @@ def participates_in_competition(request):
     HitCountMixin.hit_count(request, hit_count)
     return render(request, "vote/participate.html", {'participates': participates, 'add_member': add_member,
                                                      'competition': competition, 'vote_open': vote_open})
+
+
+@login_required
+def participate_manage(request):
+    competition_id = request.GET.get('competition_id', 0)
+    competition = get_object_or_404(Competition, id=competition_id)
+    if competition.creator != request.user:
+        raise Http404
+    participates_list = competition.competition_participates.all()
+
+    paginator = Paginator(participates_list, CONTENT_COUNT_IN_PAGE)
+    page = request.GET.get('page')
+    try:
+        participates = paginator.page(page)
+    except PageNotAnInteger:
+        participates = paginator.page(1)
+    except EmptyPage:
+        participates = page.page(paginator.num_pages)
+
+    hit_count = HitCount.objects.get_for_object(competition)
+    HitCountMixin.hit_count(request, hit_count)
+    return render(request, "vote/participate_manage.html", {'participates': participates, 'competition': competition})
 
 
 @login_required

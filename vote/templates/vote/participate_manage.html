@@ -1,17 +1,5 @@
 {% extends "vote/participate_base.html" %}
 
-{% block add_participate %}
-    {% if user.is_authenticated %}
-        <div>
-        {% if add_member %}
-            <a href='{% url "participate_add" %}?competition_id={{ competition.id }}'>Принять участие в конкурсе</a>
-        {% else %}
-            <label><h4 >Прием заявок закончен</h4></label>
-        {% endif %}
-        </div>
-    {% endif %}
-{% endblock %}
-
 
 {% block table_participates %}
 <table class="table_vote">
@@ -19,11 +7,11 @@
 <tr><th>Название</th><th>Количество голосов</th><th></th></tr>
 {% for participate in participates %}
     <tr >
-        <td onclick="table_click('{{ participate.id }}')">
-                <a href='{% url 'about_participate' participate.id %}'>{{ participate.title }}</a>
+        <td>
+            <a href = '{% url "participate_edit" %}?participate_id={{ participate.id }}'>{{ participate.title }}</a>
         </td>
-        <td onclick="table_click('{{ participate.id }}')">
-                {{ participate.participate_votes.count }}
+        <td>
+            {{ participate.participate_votes.count }}
         </td>
         <td>
         {% if vote_open and user.is_authenticated %}

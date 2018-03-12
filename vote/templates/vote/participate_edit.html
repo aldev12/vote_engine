@@ -1,1 +1,6 @@
 {% extends "vote/participate_add.html" %}
+
+{% block delete_button %}
+        <a type="submit" class="save btn btn-danger"
+           href='{% url "participate_delete" participate_id=request.GET.participate_id %}'>Удалить</a>
+{% endblock %}

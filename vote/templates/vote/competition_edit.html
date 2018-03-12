@@ -1,1 +1,6 @@
 {% extends "vote/competition_add.html" %}
+
+{% block delete_button %}
+        <a type="submit" class="save btn btn-danger"
+           href='{% url "competition_delete" competition_id=request.GET.competition_id %}'>Удалить</a>
+{% endblock %}

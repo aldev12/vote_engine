@@ -2,66 +2,60 @@
 
 
 {% block main %}
-         {% if user.is_authenticated %}
-         <div class="breadcrumb pull-right">
-     <a href='{% url "competition_add" %}'>Добавить конкурс</a>
-         </div>
-     {% endif %}
-    <table class="table_vote">
-    <caption>Конкурсы</caption>
-    <tr>
-        <th>Название</th>
-        <th>Просмотров</th>
-        <th>Заявок</th>
-        <th>Голосов</th>
-    </tr>
-    {% for competition in competitions  %}
-        {% if competition.status == 2 %}
-        <tr onclick="table_click('{% url "participates_in_competition" %}?competition_id={{ competition.id }}')">
-            <td>
-                <div>
-                    <a href='{% url "about_competition" competition_id=competition.id %}'
-                    >{{ competition.title }}</a>
+
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Конкурсы
+            {% if user.is_authenticated %}
+                <div class="pull-right">
+                    <a href='{% url "competition_add" %}'>
+                        <span class="glyphicon glyphicon-plus" style="margin: 5px"></span>Добавить конкурс
+                    </a>
                 </div>
-                <div class="text">
-                    <h6>{{ competition.type_str }}</h6>
-                </div>
-            </td>
-            <td>
-                {{ competition.hit_count.hits }}
-            </td>
-            <td>
-                {{ competition.count_participate }}
-            </td>
-            <td>
-                {{ competition.count_vote }}
-            </td>
-        </tr>
-        {% endif %}
-    {% endfor %}
-    </table>
-    {% block Page_menu %}
+            {% endif %}
+        </div>
 
-        <div class="pagination">
-
-    {% if competitions.has_previous %}
-        <a href="?page={{ competitions.previous_page_number }}">←</a>
-    {% endif %}
-
-    {% for num in competitions.paginator.page_range %}
-        {% if num == competitions.number %}
-            <span class="current"><b>{{ num }}</b></span>
-        {% else %}
-            <a href="?page={{ num }}"> {{ num }}</a>
-        {% endif %}
-    {% endfor %}
-
-    {% if article_list.has_next %}
-        <a href="?page={{ article_list.next_page_number }}">→</a>
-    {% endif %}
+        <table class="table">
+            <tr>
+                <th>Название</th>
+                <th>Просмотров</th>
+                <th>Заявок</th>
+                <th>Голосов</th>
+            </tr>
+            {% for competition in competitions  %}
+                <tr onclick="table_click('{% url "participates_in_competition" %}?competition_id={{ competition.id }}')">
+                    <td>
+                        <div>
+                            <a href='{% url "about_competition" competition_id=competition.id %}'>
+                                {{ competition.title }}
+                            </a>
+                        </div>
+                        <div class="text"> <h6>{{ competition.type_str }}</h6> </div>
+                    </td>
+                    <td> <span class="badge"> {{ competition.hit_count.hits }} </span></td>
+                    <td> <span class="badge"> {{ competition.count_participate }} </span></td>
+                    <td> <span class="badge"> {{ competition.count_vote }} </span></td>
+                </tr>
+            {% endfor %}
+        </table>
     </div>
+
+    {% block Page_menu %}
+        <ul class="pagination">
+            {% if competitions.has_previous %}
+                <li><a href="?page={{ competitions.previous_page_number }}">&laquo;</a></li>
+            {% endif %}
+            {% for num in competitions.paginator.page_range %}
+                {% if num == competitions.number %}
+                    <li class="active"><a>{{ num }}</a></li>
+                {% else %}
+                    <li><a href="?page={{ num }}"> {{ num }}</a></li>
+                {% endif %}
+            {% endfor %}
+            {% if competitions.has_next %}
+                <li><a href="?page={{ competitions.next_page_number }}">&raquo;</a></li>
+            {% endif %}
+        </ul>
     {% endblock %}
-
-
 
 {% endblock %}
