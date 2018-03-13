@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <div class="panel">
+    {% block title %}<h1>Заявка на конкурс '{{ competition.title }}'</h1>{% endblock %}
+    <form method="post" enctype="multipart/form-data" class="post-form">{% csrf_token %}
+        <div class="container">
+            {{ form.non_field_errors }}
+            <table class="table">
+                {% for field in form %}
+                    <tr>
+                        <td>
+                            <div class="fieldWrapper">
+                                <label for="{{ field.id_for_label }}">{{ field.label_tag }}</label>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="fieldWrapper">
+                                {{ field.errors }}
+                                {{ field }}
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <button type="submit" class="btn btn-default btn-sm">Сохранить</button>
+            <div class="pull-right">
+                {% block delete_button %}
+                {% endblock %}
+            </div>
+        </div>
+    </form>
+    </div>
+{% endblock %}

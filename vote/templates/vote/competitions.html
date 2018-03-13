@@ -31,33 +31,36 @@
         <div class="panel-heading">Конкурсы
             {% if user.is_authenticated %}
                 <div class="pull-right">
-                    <a href='{% url "competition_add" %}' type="button" class="btn btn-default btn-xs">
-                        <span class="glyphicon glyphicon-plus" ></span>&nbsp;Создать конкурс
+                    <a href='{% url "competition_add" %}' type="button" class="btn btn-info btn-xs">
+                        <span class="glyphicon glyphicon-plus" ></span>&nbsp;Добавить конкурс
                     </a>
                 </div>
             {% endif %}
         </div>
 
-        <table class="table">
+        <table class="table table-hover">
             <tr>
                 <th>Название</th>
+                <th>Тип конкурса</th>
                 <th>Просмотров</th>
                 <th>Заявок</th>
                 <th>Голосов</th>
+                <th>Автор</th>
             </tr>
             {% for competition in competitions  %}
                 <tr onclick="table_click('{% url "participates_in_competition" %}?competition_id={{ competition.id }}')">
                     <td>
-                        <div>
-                            <a href='{% url "participates_in_competition" %}?competition_id={{ competition.id }}'>
-                                {{ competition.title }}
-                            </a>
-                        </div>
-                        <div class="text"> <h6>{{ competition.type_str }}</h6> </div>
+{#                        <div>#}
+{#                            <a href='{% url "participates_in_competition" %}?competition_id={{ competition.id }}'>#}
+                                <p class="text-info"><strong>{{ competition.title }}</strong></p>
+{#                            </a>#}
+{#                        </div>#}
                     </td>
+                    <td>{{ competition.type_str }}</td>
                     <td> <span class="badge"> {{ competition.hit_count.hits }} </span></td>
                     <td> <span class="badge"> {{ competition.count_participate }} </span></td>
                     <td> <span class="badge"> {{ competition.count_vote }} </span></td>
+                    <td>{{ competition.creator }}</td>
                 </tr>
             {% endfor %}
         </table>

@@ -14,7 +14,6 @@ from vote.models import Competition, Participate, Vote, Profile
 from hitcount.views import HitCountDetailView
 from hitcount.models import HitCount
 from hitcount.views import HitCountMixin
-from django.db.models import Q
 
 CONTENT_COUNT_IN_PAGE = 5
 
@@ -44,7 +43,7 @@ def competition_list(request):
         competitions = paginator.page(1)
     except EmptyPage:
         competitions = page.page(paginator.num_pages)
-    return render(request, "vote/competition.html", {'competitions': competitions})
+    return render(request, "vote/competitions.html", {'competitions': competitions})
 
 
 @login_required
@@ -230,8 +229,8 @@ def participates_in_competition(request):
 
     hit_count = HitCount.objects.get_for_object(competition)
     HitCountMixin.hit_count(request, hit_count)
-    return render(request, "vote/participate.html", {'participates': participates, 'add_member': add_member,
-                                                     'competition': competition, 'vote_open': vote_open})
+    return render(request, "vote/participates.html", {'participates': participates, 'add_member': add_member,
+                                                      'competition': competition, 'vote_open': vote_open})
 
 
 @login_required
