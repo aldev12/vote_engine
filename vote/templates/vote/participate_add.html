@@ -6,47 +6,60 @@
         <div class="container">
             {{ form.non_field_errors }}
         <table class="table">
-        <tr>
-            <td>
-                <div class="fieldWrapper">
-                    {{ form.title.errors }}
-                    <label for="{{ form.title.id_for_label }}">Заголовок:</label>
-                </div>
-            </td>
-            <td>
-                <div class="fieldWrapper">
-                {{ form.title }}
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <div class="fieldWrapper">
-                    {{ form.comment.errors }}
-                    <label for="{{ form.comment.id_for_label }}">Описание:</label>
-                </div>
-            </td>
-            <td>
-                <div class="fieldWrapper">
-                    {{ form.comment }}
-                </div>
-                </td>
-        </tr>
-            {% if competition.comp_type != 1 %}
-        <tr>
-            <td>
-            <div class="fieldWrapper">
-                {{ form.content.errors }}
-                <label for="{{ form.content.id_for_label }}">Файл:</label>
-            </div>
-            </td>
-                <td>
-            <div class="fieldWrapper">
-                {{ form.content }}
-            </div>
-            </td>
-        </tr>
-            {% endif %}
+            {% for field in form %}
+                <tr>
+                    <td>
+                        <div class="fieldWrapper">
+                            <label for="{{ field.id_for_label }}">{{ field.label_tag }}</label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="fieldWrapper">
+                            {{ field.errors }}
+                            {{ field }}
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+{#        <tr>#}
+{#            <td>#}
+{#                <div class="fieldWrapper">#}
+{#                    <label for="{{ form.title.id_for_label }}">Заголовок:</label>#}
+{#                </div>#}
+{#            </td>#}
+{#            <td>#}
+{#                <div class="fieldWrapper">#}
+{#                    {{ form.title.errors }}#}
+{#                {{ form.title }}#}
+{#                </div>#}
+{#            </td>#}
+{#        </tr>#}
+{#        <tr>#}
+{#            <td>#}
+{#                <div class="fieldWrapper">#}
+{#                    <label for="{{ form.comment.id_for_label }}">Описание:</label>#}
+{#                </div>#}
+{#            </td>#}
+{#            <td>#}
+{#                <div class="fieldWrapper">#}
+{#                    {{ form.comment.errors }}#}
+{#                    {{ form.comment }}#}
+{#                </div>#}
+{#                </td>#}
+{#        </tr>#}
+{#        <tr>#}
+{#            <td>#}
+{#            <div class="fieldWrapper">#}
+{#                <label for="{{ form.content.id_for_label }}">Файл:</label>#}
+{#            </div>#}
+{#            </td>#}
+{#                <td>#}
+{#            <div class="fieldWrapper">#}
+{#                {{ form.content.errors }}#}
+{#                {{ form.content }}#}
+{#            </div>#}
+{#            </td>#}
+{#        </tr>#}
 
         </table>
             <button type="submit" class="btn btn-default btn-sm">Сохранить</button>
