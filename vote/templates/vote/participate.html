@@ -1,40 +1,58 @@
 {% extends "vote/participate_base.html" %}
 
-{% block add_participate %}
-    {% if user.is_authenticated %}
-        <div>
-        {% if add_member %}
-            <a href='{% url "participate_add" %}?competition_id={{ competition.id }}'>Принять участие в конкурсе</a>
+    {% block add_participate %}
+    <div class="jumbotron">
+        <h2>{{ competition.type_str }}:&nbsp;{{ competition.title }}</h2>
+        <p>{{ competition.short_description }}</p>
+        <p>Автор:&nbsp;{{ competition.creator }}</p>
+        <p>
+        {% if vote_open and user.is_authenticated %}
+            <a href='{% url "participate_add" %}?competition_id={{ competition.id }}' type="button" class="btn btn-info btn-mini" data-toggle="offcanvas">
+{#            <span class="glyphicon glyphicon-plus"></span>&nbsp;#}
+            Принять участие в конкурсе
+            </a>
         {% else %}
-            <label><h4 >Прием заявок закончен</h4></label>
+            {% if not vote_open and not add_member %}
+                <p>Конкурс завершен</p>
+            {% endif %}
         {% endif %}
-        </div>
-    {% endif %}
-{% endblock %}
+
+
+        </p>
+    </div>
+    {% endblock %}
 
 
 {% block table_participates %}
-<table class="table_vote">
-<caption>Участники конкурса"{{ competition.title }}"</caption>
-<tr><th>Название</th><th>Количество голосов</th><th></th></tr>
-{% for participate in participates %}
-    <tr >
-        <td onclick="table_click('{{ participate.id }}')">
-                <a href='{% url 'about_participate' participate.id %}'>{{ participate.title }}</a>
-        </td>
-        <td onclick="table_click('{{ participate.id }}')">
-                {{ participate.participate_votes.count }}
-        </td>
-        <td>
-        {% if vote_open and user.is_authenticated %}
-            <input type="submit" onclick="vote({{ participate.id }})" class="btn-default" id="vote" value="Проголосовать" />
-        {% else %}
-            {% if not vote_open and not add_member %}
-                <a>Конкурс завершен</a>
-            {% endif %}
-        {% endif %}
-        </td>
-    </tr>
-{% endfor %}
-</table>
+
+        <div class="row">
+    {% for participate in participates  %}
+            <div class="col-1 col-sm-6 col-lg-3 col-md-4 col-xs-12 panel panel-default" style="height: 260px">
+            <div class="input-group">
+                <h2>{{ participate.title }}</h2>
+                <span class="input-group-btn">
+
+                    {% if vote_open and user.is_authenticated %}
+                        <button class="btn btn-default" type="button" onclick="vote({{ participate.id }})">
+                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                        </button>
+                    {% else %}
+                        {% if not vote_open and not add_member %}
+                            <button class="btn btn-default" disabled type="button">
+                            <span class="glyphicon glyphicon-lock"></span>
+                            </button>
+                        {% endif %}
+                    {% endif %}
+
+                </span>
+            </div>
+                <p>{{ participate.comment|slice:":250" }}...</p>
+                <a>
+                    <span class="badge pull-right">Голосов:&nbsp;{{ participate.participate_votes.count }}</span>
+                </a>
+            <p><a class="btn btn-default" href='{% url 'about_participate' participate.id %}' role="button">Подробнее &raquo;</a></p>
+            </div><!--/span-->
+    {% endfor %}
+
+        </div><!--/row-->
 {% endblock %}

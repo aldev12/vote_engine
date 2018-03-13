@@ -20,7 +20,7 @@ urlpatterns = [
     url('^participate_edit/$', views.participate_edit, name='participate_edit'),
     url('^participate_delete/(?P<participate_id>[0-9]+)$', views.participate_delete, name='participate_delete'),
 
-    url('^vote/(\d)$', views.vote, name='vote'),
+    url('^vote/(\d{1,9})$', views.vote, name='vote'),
 
     # url('^log_in/$', views.log_in, name='log_in'),
     url(r'^login/$', auth_views.login,

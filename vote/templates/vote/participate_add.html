@@ -3,9 +3,57 @@
 {% block main %}
     <h1>Заявка на конкурс '{{ competition.title }}'</h1>
     <form method="post" enctype="multipart/form-data" class="post-form">{% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Сохранить" class="default" name="_save" />
+        <div class="container">
+            {{ form.non_field_errors }}
+        <table class="table">
+        <tr>
+            <td>
+                <div class="fieldWrapper">
+                    {{ form.title.errors }}
+                    <label for="{{ form.title.id_for_label }}">Заголовок:</label>
+                </div>
+            </td>
+            <td>
+                <div class="fieldWrapper">
+                {{ form.title }}
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="fieldWrapper">
+                    {{ form.comment.errors }}
+                    <label for="{{ form.comment.id_for_label }}">Описание:</label>
+                </div>
+            </td>
+            <td>
+                <div class="fieldWrapper">
+                    {{ form.comment }}
+                </div>
+                </td>
+        </tr>
+            {% if competition.comp_type != 1 %}
+        <tr>
+            <td>
+            <div class="fieldWrapper">
+                {{ form.content.errors }}
+                <label for="{{ form.content.id_for_label }}">Файл:</label>
+            </div>
+            </td>
+                <td>
+            <div class="fieldWrapper">
+                {{ form.content }}
+            </div>
+            </td>
+        </tr>
+            {% endif %}
+
+        </table>
+            <button type="submit" class="btn btn-default btn-sm">Сохранить</button>
+                <div class="pull-right">
+                {% block delete_button %}
+                {% endblock %}
+                </div>
+        </div>
     </form>
-    {% block delete_button %}
-    {% endblock %}
 {% endblock %}

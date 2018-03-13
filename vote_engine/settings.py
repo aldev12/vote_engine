@@ -26,6 +26,8 @@ from django.utils.translation import ugettext_lazy as _
 #     ("Users", ("auth.User", "auth.Group",)),
 # )
 
+SITE_TITLE = "Конкурсы"
+
 ADMIN_MENU_ORDER = (
     ("Content", ("pages.Page", "blog.BlogPost", "generic.ThreadedComment", (_("Media Library"), "media-library"),)),
     ("Site", ("sites.Site", "redirects.Redirect", "conf.Setting")),
@@ -195,6 +197,7 @@ STATIC_URL = "/static/"
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
 STATIC_ROOT = os.path.join(PROJECT_ROOT, STATIC_URL.strip("/"))
+
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.

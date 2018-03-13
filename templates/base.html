@@ -9,11 +9,15 @@
     <meta name="description" content="">
     <meta name="author" content="">
       <link rel="shortcut icon" href="{% static "img/favicon.ico" %}">
-    <title>Off Canvas Template for Bootstrap</title>
+        <title>{% block meta_title %}{% endblock %}{% if settings.SITE_TITLE %} | {{ settings.SITE_TITLE }}{% endif %}</title>
 
     <!-- Bootstrap core CSS -->
 
-      <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+{#      <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">#}
+      <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+      <link href="/static/css/sticky-footer.css" rel="stylesheet">
+      <link href="/static/css/tabs.css" rel="stylesheet">
+
     <!-- Custom styles for this template -->
     <link href='/static/css/offcanvas.css' rel="stylesheet">
 
@@ -52,31 +56,45 @@
       </div><!-- /.container -->
     </div><!-- /.navbar -->
 
-    <div class="container">
 
-      <div class="row row-offcanvas row-offcanvas-right">
-        <div class="col-xs-12 col-sm-12">
-        {% block body %}
+    <div class="container">
+    <div id="message_container">
+    {% nevercache %}
+        {% if messages %}
+            {% for message in messages %}
+                    <div class="alert alert-dismissable alert-{{ message.tags }}" data-alert="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        {{ message }}
+                    </div>
+            {% endfor %}
+        {% endif %}
+    {% endnevercache %}
+    </div>
+
+
+      <div class="row row-offcanvas row-offcanvas-right panel">
+        <div class="col-xs-12 col-sm-12 ">
+            {% block main %}
+            {% endblock %}
         </div><!--/span-->
 
       </div><!--/row-->
-
       <hr>
-
-      <footer>
-        <p>&copy; Company 2014</p>
-      </footer>
-
     </div><!--/.container-->
 
-
+<div id="footer">
+      <div class="container">
+        <p class="text-muted">Place sticky footer content here.</p>
+      </div>
+    </div>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="offcanvas.js"></script>
-
+    <script src="/static/js/offcanvas.js"></script>
+    <script src="/static/js/vote.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
     <script src="{% static "js/bootstrap.min.js" %}"></script>
   </body>
 </html>

@@ -2,7 +2,10 @@
 
 
 {% block table_participates %}
-<table class="table_vote">
+
+
+
+<table class="table">
 <caption>Участники конкурса"{{ competition.title }}"</caption>
 <tr><th>Название</th><th>Количество голосов</th><th></th></tr>
 {% for participate in participates %}
@@ -18,7 +21,7 @@
             <input type="submit" onclick="vote({{ participate.id }})" class="btn-default" id="vote" value="Проголосовать" />
         {% else %}
             {% if not vote_open and not add_member %}
-                <a>Конкурс завершен</a>
+                <p>Конкурс завершен</p>
             {% endif %}
         {% endif %}
         </td>

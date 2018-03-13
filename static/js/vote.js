@@ -12,10 +12,10 @@ function vote(participate_id) {
          var div1 = document.createElement("div");
          div1.classList.add("messages");
          div2.textContent = data;
-         var articles = document.getElementsByClassName('container');
+         var articles = document.getElementById('message_container');
          div2.appendChild(button);
          div1.appendChild(div2);
-         articles[1].appendChild(div1);
+         articles.appendChild(div1);
      });
 
 }
