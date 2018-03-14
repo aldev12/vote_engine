@@ -183,8 +183,6 @@ def participate_edit(request):
     else:
         participate = get_object_or_404(Participate, id=participate_id)
         form = ParticipateForm(instance=participate)
-        if participate.competition_id.comp_type == 2:
-            form.fields['content'].widget = forms.HiddenInput()
     return render(request, "vote/participate_edit.html", {'form': form, 'competition': competition})
 
 
@@ -229,8 +227,11 @@ def participates_in_competition(request):
 
     hit_count = HitCount.objects.get_for_object(competition)
     HitCountMixin.hit_count(request, hit_count)
+
+    competition_form = CompetitionForm(instance=competition)
     return render(request, "vote/participates.html", {'participates': participates, 'add_member': add_member,
-                                                      'competition': competition, 'vote_open': vote_open})
+                                                      'competition': competition,
+                                                      'competition_form': competition_form, 'vote_open': vote_open})
 
 
 @login_required

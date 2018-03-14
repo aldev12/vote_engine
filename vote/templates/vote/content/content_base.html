@@ -2,7 +2,7 @@
 
 {% block main %}
     <div class="panel">
-    {% block title %}<h1>Заявка на конкурс '{{ competition.title }}'</h1>{% endblock %}
+    {% block title %}{% endblock %}
     <form method="post" enctype="multipart/form-data" class="post-form">{% csrf_token %}
         <div class="container">
             {{ form.non_field_errors }}

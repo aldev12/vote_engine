@@ -7,7 +7,7 @@
                 {% endblock %}
         </div>
         <div class="col-sm-6" style="content-align: center">
-            <label ><h2 style="text-align: center">{{ participate.title }}</h2><p>{{ participate.comment }}</p></label>
+            <label ><h2 style="text-align: center">{{ participate.title }}</h2><p>{{ participate.comment|safe }}</p></label>
             <div style="align-content: right; text-align: right">
 
             <label><p>Голосов: {{ participate.participate_votes.count }}</p></label>

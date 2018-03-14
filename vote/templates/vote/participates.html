@@ -1,9 +1,11 @@
 {% extends "vote/participate_base.html" %}
-
+<script>window.CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/';</script>
     {% block add_participate %}
     <div class="jumbotron">
         <h2>{{ competition.type_str }}:&nbsp;{{ competition.title }}</h2>
-        <p>{{ competition.short_description }}</p>
+        <p>{{ competition.short_description|safe }}</p>
+        <p>Правила: {{ competition.rules|safe }}</p>
+
         <p>Автор:&nbsp;{{ competition.creator }}</p>
         <p>
         {% if vote_open and user.is_authenticated %}
@@ -46,7 +48,7 @@
 
                 </span>
             </div>
-                <p>{{ participate.comment|slice:":250" }}...</p>
+                <p>{{ participate.comment|safe|slice:":250" }}...</p>
                 <a>
                     <span class="badge pull-right">Голосов:&nbsp;{{ participate.participate_votes.count }}</span>
                 </a>

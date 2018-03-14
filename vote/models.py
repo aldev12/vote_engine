@@ -7,7 +7,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.contenttypes.fields import GenericRelation
 from hitcount.models import HitCountMixin, HitCount
-from ckeditor.fields import RichTextField as ckRichTextField
 
 COMPETITION_TYPE = (
     (1, 'Фотоконкурс'),
@@ -48,8 +47,8 @@ class Competition(Page, HitCountMixin):
     """Модель конкурса"""
     survey_date = models.DateTimeField('опрос с', default=timezone.now() + timezone.timedelta(days=5))
     comp_type = models.IntegerField('тип конкурса', default=1, choices=COMPETITION_TYPE)
-    rules = ckRichTextField('правила', max_length=2000)
-    short_description = ckRichTextField('краткое описание', max_length=500)
+    rules = RichTextField('правила', max_length=2000)
+    short_description = RichTextField('краткое описание', max_length=500)
     creator = models.ForeignKey(User, verbose_name='автор',
                                 related_name='competition_user',
                                 on_delete=models.CASCADE)
@@ -68,7 +67,7 @@ class Competition(Page, HitCountMixin):
 
 class Participate(Page):
     """Модель заявки на участие"""
-    comment = ckRichTextField('описание')
+    comment = RichTextField('описание')
     competition_id = models.ForeignKey('Competition', verbose_name='конкурс',
                                        related_name='competition_participates',
                                        on_delete=models.CASCADE)

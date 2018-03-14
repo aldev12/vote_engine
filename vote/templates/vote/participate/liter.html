@@ -2,7 +2,7 @@
 
 {% block main %}
     <div>
-            <label ><h2 style="text-align: center">{{ participate.title }}</h2><p>{{ participate.comment }}</p></label>
+            <label ><h2 style="text-align: center">{{ participate.title }}</h2><p>{{ participate.comment|safe }}</p></label>
         <div style="align-content: center; text-align: center">
             <a type="button" href="{{ STATIC_URL }}media/{{ participate.content }}">Скачать прикрепленный файл</a>
         </div>

@@ -1,15 +1,20 @@
 from django import forms
 from .models import Competition, Participate, Profile
-
+from ckeditor.widgets import CKEditorWidget
 
 
 class CompetitionForm(forms.ModelForm, forms.Field):
+    rules = forms.CharField(widget=CKEditorWidget())
+    short_description = forms.CharField(widget=CKEditorWidget())
+
     class Meta:
         model = Competition
         fields = ('title', 'comp_type', 'rules', 'short_description', 'expiry_date', 'survey_date')
 
 
 class ParticipateForm(forms.ModelForm):
+    comment = forms.CharField(widget=CKEditorWidget())
+
     class Meta:
         model = Participate
         fields = ('title', 'comment', 'content')
