@@ -1,4 +1,5 @@
 from .forms import CompetitionForm, ParticipateForm, UserRegistrationForm, ProfileForm
+from django.contrib.auth.forms import PasswordChangeForm
 from django import forms
 from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.utils import timezone
@@ -296,3 +297,19 @@ def register(request):
     else:
         form = UserRegistrationForm()
     return render(request, 'vote/registration/register.html', {'form': form})
+
+
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Важно!
+            messages.success(request, 'Ваш пароль успешно обновлен!')
+            return redirect('change_password')
+        else:
+            messages.error(request, 'Пожалуйста, исправьте ошибку!')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'accounts/change_password.html', {'form': form})
+

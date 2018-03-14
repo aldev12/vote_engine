@@ -22,9 +22,6 @@ urlpatterns = [
 
     url('^vote/(\d{1,9})$', views.vote, name='vote'),
 
-    # url('^log_in/$', views.log_in, name='log_in'),
-    url(r'^login/$', auth_views.login,
-        {'template_name': 'vote/registration/login.html'}, name='login'),
-    url(r'^logout/$', auth_views.logout, {'template_name': 'vote/registration/logout.html'}, name='logout'),
+    url(r'^change_password/$', views.change_password, name='change_password'),
     url(r'^register/', views.register, name='register'),
 ]

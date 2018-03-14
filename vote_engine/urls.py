@@ -41,6 +41,7 @@ urlpatterns += [
 
     url('^ru/accounts/profile/$', profile, name='profile_vote'),
     url("^", include("vote.urls")),
+    url('^', include('django.contrib.auth.urls')),
     url("^$", direct_to_template, {"template": "index.html"}, name="home"),
 
 

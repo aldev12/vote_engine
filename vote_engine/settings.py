@@ -219,6 +219,7 @@ TEMPLATES = [
         "DIRS": [
             os.path.join(PROJECT_ROOT, "templates"),
             os.path.join(PROJECT_ROOT, "vote", "templates"),
+            os.path.join(PROJECT_ROOT, "vote", "templates", "vote"),
         ],
         "APP_DIRS": True,
         "OPTIONS": {

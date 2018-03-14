@@ -7,3 +7,4 @@
 /static/media
 .idea/
 .hgignore
+/vote/migrations

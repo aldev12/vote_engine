@@ -4,8 +4,8 @@
 
 {% block main %}
     <form method="POST" class="register-form">
-        {% csrf_token %} {{ form.as_p }}
-
+        {% csrf_token %} 
+        {{ form.as_p }}
       <button>Создать</button>
       <p class="message">Уже зарегистрирован? <a href="/login/">Войти</a></p>
     </form>
