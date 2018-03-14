@@ -320,6 +320,16 @@ OPTIONAL_APPS = (
     PACKAGE_NAME_GRAPPELLI,
 )
 
+LOGIN_REDIRECT_URL = '/'
+
+# Ввести нужные параметры почтового сервиса
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'testsite_app'
+EMAIL_HOST_PASSWORD = 'pass'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'Fog Team <noreply@example.com>'
+
 ##################
 # LOCAL SETTINGS #
 ##################
