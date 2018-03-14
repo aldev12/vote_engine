@@ -1,0 +1,16 @@
+body {
+    padding-top: 56px;
+}
+
+h1 {
+    margin: 0.1em 0;
+    -webkit-margin-before: 0.1em;
+    -webkit-margin-after: 0.0em;
+    -webkit-margin-start: 0;
+    -webkit-margin-end: 0;
+    font-size: 25px;
+}
+
+table tr {
+    cursor: pointer;
+}

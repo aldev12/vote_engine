@@ -1,52 +1,39 @@
 {% extends "base.html" %}
 
+{% block css %}
+    <link href="/static/css/competitions.css" rel="stylesheet">
+{% endblock %}
+{% block meta_title %}Список конкурсов{% endblock %}
 
 {% block main %}
 
-{#<p class="pull-right">#}
-{#    {% if user.is_authenticated %}#}
-{#        <a href='{% url "competition_add" %}' type="button" class="btn btn-success btn-xs" data-toggle="offcanvas">#}
-{#            <span class="glyphicon glyphicon-plus" style="margin: 5px"></span>Добавить конкурс#}
-{#        </a>#}
-{#    {% endif %}#}
-{#</p>#}
-{##}
-{#<div class="jumbotron">#}
-{#    <H1>Конкурсы</H1>#}
-{#</div>#}
-
-{#{% for competition in competitions  %}#}
-{#    <div class="row">#}
-{#        <div class="col-6 col-sm-6 col-lg-4">#}
-{#        <h2>Heading</h2>#}
-{#        <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>#}
-{#        <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>#}
-{#        </div><!--/span-->#}
-{#    </div><!--/row-->#}
-{#{% endfor %}#}
-
-
-
     <div class="panel panel-default">
-        <div class="panel-heading">Конкурсы
+        <div class="panel-heading">
+        <div class="row">
+        <div class="col-lg-6">
+            <div class=""><h1>Наши конкурсы</h1></div>
+        </div>
+        <div class="col-lg-6">
             {% if user.is_authenticated %}
                 <div class="pull-right">
-                    <a href='{% url "competition_add" %}' type="button" class="btn btn-info btn-xs">
+                    <a href='{% url "competition_add" %}' type="button" class="btn btn-success">
                         <span class="glyphicon glyphicon-plus" ></span>&nbsp;Добавить конкурс
                     </a>
                 </div>
             {% endif %}
         </div>
-
+        </div>
+        </div>
+        <div class="panel-body">
         <table class="table table-hover">
-            <tr>
+            <thead>
                 <th>Название</th>
                 <th>Тип конкурса</th>
                 <th>Просмотров</th>
                 <th>Заявок</th>
                 <th>Голосов</th>
                 <th>Автор</th>
-            </tr>
+            </thead>
             {% for competition in competitions  %}
                 <tr onclick="table_click('{% url "participates_in_competition" %}?competition_id={{ competition.id }}')">
                     <td>
@@ -64,6 +51,7 @@
                 </tr>
             {% endfor %}
         </table>
+        </div>
     </div>
 
     {% block Page_menu %}

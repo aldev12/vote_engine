@@ -272,6 +272,7 @@ INSTALLED_APPS = (
     "mezzanine.twitter",
     "vote",
     "ckeditor",
+    "bootstrap3"
     # "mezzanine.accounts",
     # "mezzanine.mobile",
 )
@@ -321,6 +322,7 @@ OPTIONAL_APPS = (
 )
 
 LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 # Ввести нужные параметры почтового сервиса
 EMAIL_HOST = 'smtp.sendgrid.net'

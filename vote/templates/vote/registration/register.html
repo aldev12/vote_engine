@@ -1,12 +1,18 @@
 {% extends "base.html" %}
+{% load bootstrap3 %}
 
 {% block title %}Регистрация{% endblock %}
 
 {% block main %}
-    <form method="POST" class="register-form">
-        {% csrf_token %} 
-        {{ form.as_p }}
-      <button>Создать</button>
-      <p class="message">Уже зарегистрирован? <a href="/login/">Войти</a></p>
-    </form>
+    <div class="row">
+        <div class="col-lg-4">
+            <form method="POST" class="register-form">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                {% bootstrap_button "Создать" button_type="submit" button_class="btn-success" %}
+                <p class="message">Уже зарегистрирован? <a
+                        href="/login/">Войти</a></p>
+            </form>
+        </div>
+    </div>
 {% endblock %}
