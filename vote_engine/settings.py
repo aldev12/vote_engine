@@ -259,7 +259,6 @@ INSTALLED_APPS = (
     "django.contrib.sites",
     "django.contrib.sitemaps",
     "django.contrib.staticfiles",
-    "moderna",
     "hitcount",
     "mezzanine.boot",
     "mezzanine.conf",

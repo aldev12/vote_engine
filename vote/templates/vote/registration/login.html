@@ -2,29 +2,30 @@
 {% load bootstrap3 %}
 {% block main %}
 
-{% if form.errors %}
-<p>Имя пользователя и пароль не совпадают. Попробуйте еще!</p>
-{% endif %}
-
-{% if next %}
-    {% if user.is_authenticated %}
-    <p>Ваш аккаунт не имеет доступа к этой странице. Войдите с помощью другого аккаунта.</p>
-    {% else %}
-    <p>Пожалуйста, войдите, чтобы увидеть страницу.</p>
+    {% if form.errors %}
+        <p>Имя пользователя и пароль не совпадают. Попробуйте еще!</p>
     {% endif %}
-{% endif %}
+
+    {% if next %}
+        {% if user.is_authenticated %}
+            <p>Ваш аккаунт не имеет доступа к этой странице. Войдите с помощью
+                другого аккаунта.</p>
+        {% else %}
+            <p>Пожалуйста, войдите, чтобы увидеть страницу.</p>
+        {% endif %}
+    {% endif %}
 
     <div class="row">
-    <div class="col-lg-4">
-<form method="post" action="{% url 'login' %}">
-{% csrf_token %}
-    {% bootstrap_form form %}
-{% bootstrap_button "Войти" button_type="submit" button_class="btn-success" %}
-{#<input type="submit" value="Войти" />#}
-<input type="hidden" name="next" value="{{ next }}" />
-<p class="message">Не зарегистрирован? <a href="{% url 'register' %}">Создай аккаунт</a></p>
-</form>
+        <div class="col-lg-4">
+            <form method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                {% bootstrap_button "Войти" button_type="submit" button_class="btn-success" %}
+                <input type="hidden" name="next" value="{{ next }}"/>
+                <p class="message">Не зарегистрирован? <a
+                        href="{% url 'register' %}">Создай аккаунт</a></p>
+            </form>
 
-<p><a href="{% url 'password_reset' %}">Забыли пароль?</a></p>
+            <p><a href="{% url 'password_reset' %}">Забыли пароль?</a></p>
 
 {% endblock %}
