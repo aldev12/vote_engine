@@ -259,7 +259,6 @@ INSTALLED_APPS = (
     "django.contrib.sites",
     "django.contrib.sitemaps",
     "django.contrib.staticfiles",
-    "moderna",
     "hitcount",
     "mezzanine.boot",
     "mezzanine.conf",
@@ -272,7 +271,7 @@ INSTALLED_APPS = (
     "mezzanine.twitter",
     "vote",
     "ckeditor",
-    "bootstrap3",
+    "bootstrap3"
     # "mezzanine.accounts",
     # "mezzanine.mobile",
 )
