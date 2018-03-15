@@ -1,4 +1,4 @@
-from .forms import CompetitionForm, ParticipateForm, UserRegistrationForm, ProfileForm
+from .forms import CompetitionForm, ParticipateForm, UserRegistrationForm, ProfileForm, LiteralParticipateForm
 from django.contrib.auth.forms import PasswordChangeForm
 from django import forms
 from django.http import Http404, HttpResponseRedirect, HttpResponse
@@ -136,8 +136,9 @@ def about_participate(request, participate_id):
 def participate_add(request):
     competition_id = request.GET.get('competition_id', 0)
     competition = get_object_or_404(Competition, id=competition_id)
+    CustomForm = LiteralParticipateForm if competition.comp_type == 2 else ParticipateForm
     if request.method == "POST":
-        form = ParticipateForm(request.POST, request.FILES)
+        form = CustomForm(request.POST, request.FILES)
         if form.is_valid():
             participate = form.save(commit=False)
             participate.competition_id = competition
@@ -150,9 +151,7 @@ def participate_add(request):
                                  'Заявка %s создана, ожидайте проверки администратором' % competition.title)
             return redirect('competitions')
     else:
-        form = ParticipateForm()
-    if competition.comp_type == 2:
-        form.fields['content'].widget = forms.HiddenInput()
+        form = CustomForm()
     return render(request, "vote/participate_add.html", {'form': form, 'competition': competition})
 
 
@@ -161,10 +160,11 @@ def participate_edit(request):
     participate_id = request.GET.get('participate_id', 0)
     participate = get_object_or_404(Participate, id=participate_id)
     competition = get_object_or_404(Competition, id=participate.competition_id_id)
+    CustomForm = LiteralParticipateForm if competition.comp_type == 2 else ParticipateForm
     if request.user not in [participate.creator, competition.creator]:
         raise Http404
     if request.method == "POST":
-        form = ParticipateForm(request.POST, request.FILES)
+        form = CustomForm(request.POST, request.FILES)
         if form.is_valid():
             participate = form.save(commit=False)
             participate.competition_id = competition
@@ -183,7 +183,7 @@ def participate_edit(request):
             return redirect('profile_vote')
     else:
         participate = get_object_or_404(Participate, id=participate_id)
-        form = ParticipateForm(instance=participate)
+        form = CustomForm(instance=participate)
     return render(request, "vote/participate_edit.html", {'form': form, 'competition': competition})
 
 
