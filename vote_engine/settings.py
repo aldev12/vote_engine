@@ -271,7 +271,7 @@ INSTALLED_APPS = (
     "mezzanine.twitter",
     "vote",
     "ckeditor",
-    "bootstrap3"
+    "bootstrap3",
     # "mezzanine.accounts",
     # "mezzanine.mobile",
 )
