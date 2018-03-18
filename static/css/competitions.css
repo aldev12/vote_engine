@@ -14,3 +14,7 @@ h1 {
 table tr {
     cursor: pointer;
 }
+
+section table tr {
+    cursor: pointer;
+}
