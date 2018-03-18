@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 
+{% load bootstrap3 %}
 {% block main %}
 
 <div class="tabs">
@@ -13,7 +14,9 @@
     <label for="tab3" title="Мои заявки">Мои заявки</label>
     <section id="content-tab1">
         <form method="POST" class="register-form">
-        {% csrf_token %} {{ form.as_p }}
+        {% csrf_token %}
+
+            {% bootstrap_form form %}
         <button class="btn btn-default">Сохранить</button>
         </form>
     </section>

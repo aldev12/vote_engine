@@ -1,19 +1,37 @@
 {% extends "base.html" %}
 
 {% block main %}
-    <div>
-        <div class="col-sm-6">
-            {% block content_participate %}
-                {% endblock %}
-        </div>
-        <div class="col-sm-6" style="content-align: center">
-            <label ><h2 style="text-align: center">{{ participate.title }}</h2><p>{{ participate.comment|safe }}</p></label>
-            <div style="align-content: right; text-align: right">
+{#    <div>#}
+{#        <div>#}
+{#            {% block content_participate %}#}
+{#                {% endblock %}#}
+{#        </div>#}
+{#        <div style="content-align: center">#}
+{#            <label ><h2 style="text-align: center">{{ participate.title }}</h2><p>{{ participate.comment|safe }}</p></label>#}
+{#            <div style="align-content: right; text-align: right">#}
+{##}
+{#            <label><p>Голосов: {{ participate.participate_votes.count }}</p></label>#}
+{#                <br>#}
+{#            <label><p>Дата публикации: {{ participate.publish_date|date:"d.m.Y"  }}</p></label>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
 
-            <label><p>Голосов: {{ participate.participate_votes.count }}</p></label>
+    <div class="row">
+  <div >
+    <div class="thumbnail">
+       {% block content_participate %}
+                {% endblock %}
+      <div class="caption">
+        <h3>{{ participate.title }}</h3>
+        <p>{{ participate.comment|safe }}</p>
+        <label><p>Голосов: {{ participate.participate_votes.count }}</p></label>
                 <br>
-            <label><p>Дата публикации: {{ participate.publish_date|date:"d.m.Y"  }}</p></label>
-            </div>
-        </div>
+            <label><p>Дата публикации: {{ participate.publish_date|date:"d.m.Y"  }}</p></label> </div>
     </div>
+  </div>
+</div>
+
+
+
 {% endblock %}

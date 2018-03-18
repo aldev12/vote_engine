@@ -8,12 +8,10 @@ from django.dispatch import receiver
 from django.contrib.contenttypes.fields import GenericRelation
 from hitcount.models import HitCountMixin, HitCount
 
-COMPETITION_TYPE = (
-    (1, 'Фотоконкурс'),
-    (2, 'Литературный конкурс'),
-    (3, 'Видеоконкурс'),
-    (4, 'Аудиоконкурс'),
-)
+PHOTO = 1
+LITERAL = 2
+VIDEO = 3
+AUDIO = 4
 
 
 class Profile(models.Model):
@@ -23,12 +21,12 @@ class Profile(models.Model):
     location = models.CharField('город', max_length=30, blank=True)
     birth_date = models.DateField('дата рождения', null=True, blank=True)
 
+    def __str__(self):
+        return self.user.get_full_name()
+
     class Meta:
         verbose_name = 'Профиль'
         verbose_name_plural = 'Профили'
-
-    def __str__(self):
-        return self.user.get_full_name()
 
 
 # Сигналы на автообновление Profile после изменений в User (post_save)
@@ -45,36 +43,53 @@ def save_user_profile(sender, instance, **kwargs):
 
 class Competition(Page, HitCountMixin):
     """Модель конкурса"""
-    survey_date = models.DateTimeField('опрос с', default=timezone.now() + timezone.timedelta(days=5))
-    comp_type = models.IntegerField('тип конкурса', default=1, choices=COMPETITION_TYPE)
+
+    COMPETITION_TYPE = (
+        (PHOTO, 'Фотоконкурс'),
+        (LITERAL, 'Литературный конкурс'),
+        (VIDEO, 'Видеоконкурс'),
+        (AUDIO, 'Аудиоконкурс'),
+    )
+    survey_date = models.DateTimeField(
+        'опрос с',
+        default=timezone.now() + timezone.timedelta(days=5))
+    comp_type = models.IntegerField(
+        'тип конкурса',
+        default=1,
+        choices=COMPETITION_TYPE)
     rules = RichTextField('правила', max_length=2000)
     short_description = RichTextField('краткое описание', max_length=500)
-    creator = models.ForeignKey(User, verbose_name='автор',
-                                related_name='competition_user',
-                                on_delete=models.CASCADE)
+    creator = models.ForeignKey(
+        User,
+        verbose_name='автор',
+        related_name='competition_user',
+        on_delete=models.CASCADE)
     hit_count_generic = GenericRelation(
         HitCount, object_id_field='object_pk',
         related_query_name='hit_count_generic_relation')
+
+    @property
+    def type_str(self):
+        return dict(Competition.COMPETITION_TYPE)[self.comp_type]
 
     class Meta:
         verbose_name = 'конкурс'
         verbose_name_plural = 'конкурсы'
 
-    @property
-    def type_str(self):
-        return dict(COMPETITION_TYPE)[self.comp_type]
-
 
 class Participate(Page):
     """Модель заявки на участие"""
     comment = RichTextField('описание')
-    competition_id = models.ForeignKey('Competition', verbose_name='конкурс',
-                                       related_name='competition_participates',
-                                       on_delete=models.CASCADE)
+    competition_id = models.ForeignKey(
+        'Competition',
+        verbose_name='конкурс',
+        related_name='competition_participates',
+        on_delete=models.CASCADE)
     content = models.FileField('файл', upload_to='uploads/')
-    creator = models.ForeignKey(User, verbose_name='автор',
-                                related_name='user_participates',
-                                on_delete=models.CASCADE)
+    creator = models.ForeignKey(
+        User, verbose_name='автор',
+        related_name='user_participates',
+        on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'заявка на конкурс'
@@ -83,8 +98,16 @@ class Participate(Page):
 
 class Vote(models.Model):
     """Абстрактная модель 'Голос' разрешающая МtM между 'Пользователем' и 'Заявкой' """
-    user = models.ForeignKey(User, related_name='user_votes', verbose_name='пользователь', on_delete=models.CASCADE)
-    participate = models.ForeignKey('Participate', related_name='participate_votes', verbose_name='заявка')
+    user = models.ForeignKey(
+        User,
+        related_name='user_votes',
+        verbose_name='пользователь',
+        on_delete=models.CASCADE)
+
+    participate = models.ForeignKey(
+        'Participate',
+        related_name='participate_votes',
+        verbose_name='заявка')
 
     class Meta:
         verbose_name = 'Голос'

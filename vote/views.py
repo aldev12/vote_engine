@@ -4,14 +4,14 @@ from django import forms
 from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.utils import timezone
 from django.db import IntegrityError
-from django.db.models import Count, Q
+from django.db.models import Count
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from vote.models import Competition, Participate, Vote, Profile
+from vote.models import Competition, Participate, Vote, Profile, LITERAL
 from hitcount.views import HitCountDetailView
 from hitcount.models import HitCount
 from hitcount.views import HitCountMixin
@@ -32,10 +32,14 @@ class PostCountHitDetailView(HitCountDetailView):
 
 
 def competition_list(request):
-    competitions_list = Competition.objects.filter(status=2). \
-        annotate(count_vote=Count('competition_participates__participate_votes')). \
-        annotate(count_participate=Count('competition_participates', distinct=True)) # .\
-        # values('Participate_name', 'title', 'status', 'count_participate', 'count_vote')
+    competitions_list = Competition.objects.filter(
+        status=2
+    ).annotate(
+        count_vote=Count('competition_participates__participate_votes')
+    ). annotate(
+        count_participate=Count('competition_participates', distinct=True)
+    )
+    # . values('Participate_name', 'title', 'status', 'count_participate', 'count_vote')
     paginator = Paginator(competitions_list, CONTENT_COUNT_IN_PAGE)
     page = request.GET.get('page')
     try:
@@ -78,17 +82,21 @@ def competition_edit(request):
             competition.status = 0
             competition.publish_date = timezone.now()
             competition.creator = request.user
-            if Competition.objects.filter(id=competition_id).exclude(status=2).update(
-                    title=competition.title,
-                    comp_type=competition.comp_type,
-                    rules=competition.rules,
-                    short_description=competition.short_description,
-                    expiry_date=competition.expiry_date,
-                    survey_date=competition.survey_date,
-                    status=competition.status,
-                    publish_date=competition.publish_date):
+            update = Competition.objects.filter(id=competition_id).exclude(status=2).update(
+                title=competition.title,
+                comp_type=competition.comp_type,
+                rules=competition.rules,
+                short_description=competition.short_description,
+                expiry_date=competition.expiry_date,
+                survey_date=competition.survey_date,
+                status=competition.status,
+                publish_date=competition.publish_date)
+            if update:
                 messages.add_message(request, messages.SUCCESS,
                                      'Конкурс %s изменен, ожидайте проверки администратором' % competition.title)
+            else:
+                messages.add_message(request, messages.SUCCESS,
+                                     'При изменении конкурса %s произошла ошибка' % competition.title)
             return redirect('profile_vote')
     else:
         competition = get_object_or_404(Competition, id=competition_id)
@@ -112,11 +120,13 @@ def competition_delete(request, competition_id):
 def participate_delete(request, participate_id):
     participate = get_object_or_404(Participate, id=participate_id)
     if request.user in {participate.competition_id.creator, participate.creator} and participate.status != 2:
-            participate.delete()
-            messages.add_message(request, messages.SUCCESS, 'Заявка %s на конкурс %s удалена'
-                                 % (participate.title, participate.competition_id.title))
+        participate.delete()
+        messages.add_message(request, messages.SUCCESS,
+                             'Заявка %s на конкурс %s удалена'
+                             % (participate.title, participate.competition_id.title))
     else:
-        messages.add_message(request, messages.WARNING, 'Нет прав на удаление, либо заявка %s уже опубликована'
+        messages.add_message(request, messages.WARNING,
+                             'Нет прав на удаление, либо заявка %s уже опубликована'
                              % participate.title)
     return redirect('profile_vote')
 
@@ -136,7 +146,7 @@ def about_participate(request, participate_id):
 def participate_add(request):
     competition_id = request.GET.get('competition_id', 0)
     competition = get_object_or_404(Competition, id=competition_id)
-    CustomForm = LiteralParticipateForm if competition.comp_type == 2 else ParticipateForm
+    CustomForm = LiteralParticipateForm if competition.comp_type == LITERAL else ParticipateForm
     if request.method == "POST":
         form = CustomForm(request.POST, request.FILES)
         if form.is_valid():
@@ -160,7 +170,7 @@ def participate_edit(request):
     participate_id = request.GET.get('participate_id', 0)
     participate = get_object_or_404(Participate, id=participate_id)
     competition = get_object_or_404(Competition, id=participate.competition_id_id)
-    CustomForm = LiteralParticipateForm if competition.comp_type == 2 else ParticipateForm
+    CustomForm = LiteralParticipateForm if competition.comp_type == LITERAL else ParticipateForm
     if request.user not in [participate.creator, competition.creator]:
         raise Http404
     if request.method == "POST":
@@ -172,12 +182,13 @@ def participate_edit(request):
             participate.status = 0
             participate.publish_date = timezone.now()
             participate.creator = request.user
-            if Participate.objects.filter(id=participate_id).exclude(status=2).update(
-                    title=participate.title,
-                    comment=participate.comment,
-                    content=participate.content,
-                    status=participate.status,
-                    publish_date=participate.publish_date):
+            update = Participate.objects.filter(id=participate_id).exclude(status=2).update(
+                title=participate.title,
+                comment=participate.comment,
+                content=participate.content,
+                status=participate.status,
+                publish_date=participate.publish_date)
+            if update:
                 messages.add_message(request, messages.SUCCESS,
                                      'Заявка %s изменена, ожидайте проверки администратором' % competition.title)
             return redirect('profile_vote')
@@ -204,17 +215,19 @@ def vote(request, participate_id):
 def participates_in_competition(request):
     competition_id = request.GET.get('competition_id', 0)
     competition = get_object_or_404(Competition, id=competition_id)
-    try:
-        if competition.expiry_date > timezone.now() < competition.survey_date and competition.status == 2:
-            add_member = True
-        else:
-            add_member = False
-        if competition.expiry_date > timezone.now() > competition.survey_date and competition.status == 2:
-            vote_open = True
-        else:
-            vote_open = False
-    except TypeError:
-        add_member = vote_open = False
+
+    add_member = vote_open = False
+
+    if competition.status == 2:
+        exp_date = competition.expiry_date
+        surv_date = competition.survey_date
+
+        if exp_date and surv_date:
+            if exp_date > timezone.now() < surv_date:
+                add_member = True
+
+            if exp_date > timezone.now() > surv_date:
+                vote_open = True
 
     participates_list = competition.competition_participates.filter(status=2).all()
     paginator = Paginator(participates_list, CONTENT_COUNT_IN_PAGE)

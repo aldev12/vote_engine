@@ -29,9 +29,13 @@
 
         <div class="row">
     {% for participate in participates  %}
-            <div class="col-1 col-sm-6 col-lg-3 col-md-4 col-xs-12 panel panel-default" style="height: 260px">
+            <div class="col-1 col-sm-6 col-lg-3 col-md-4 col-xs-12 panel panel-default" style="height: 300px">
             <div class="input-group">
+                {% if participate.title|length < 25 %}
                 <h2>{{ participate.title }}</h2>
+                {% else %}
+                    <h2>{{ participate.title|slice:"22" }}...</h2>
+                {% endif %}
                 <span class="input-group-btn">
 
                     {% if vote_open and user.is_authenticated %}
@@ -48,7 +52,7 @@
 
                 </span>
             </div>
-                <p>{{ participate.comment|safe|slice:":250" }}...</p>
+                <p>{{ participate.comment|safe|slice:"250" }}...</p>
                 <a>
                     <span class="badge pull-right">Голосов:&nbsp;{{ participate.participate_votes.count }}</span>
                 </a>
