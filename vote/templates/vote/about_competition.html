@@ -1,20 +1,47 @@
 {% extends "base.html" %}
+{% block meta_title %}О конкурсе{% endblock %}
+{% load bootstrap3 %}
+{% block css %}
+    <link href="/static/css/competitions.css" rel="stylesheet">
+{% endblock %}
 
 {% block main %}
-    <div class="col-sm-6" style="align-content: right; text-align: center">
-    <label><h2>{{ competition.type_str }} {{ competition.title }}</h2></label>
-    </div>
-    <div class="col-sm-6" style="align-content: left; text-align: left">
-        <ul>
-        <li>Дата публикации: {{ competition.publish_date|date:"d.m.Y"  }}</li>
-        <li>Опрос с: {{ competition.expiry_date|date:"d.m.Y" }}</li>
-        <li>Результаты с: {{ competition.expiry_date|date:"d.m.Y" }}</li>
-        </ul>
-    </div>
-    <div>
-    <label><h3>Правила</h3></br><h4>{{ competition.rules|safe }}</h4></label>
-    </div>
-    <div>
-        <label><h3>Описание</h3></br><h4>{{ competition.short_description }}</h4></label>
+    <div class="row">
+        <div class="col-lg-6 col-md-6 text-right">
+            {{ competition.type_str }}
+            <h1>{{ competition.title }}</h1>
+        </div>
+        <div class="col-lg-6 col-md-6 text-left">
+            <ul>
+                <li>Дата публикации: {{ competition.publish_date|date:"d.m.Y" }}</li>
+                <li>Голосование с: {{ competition.survey_date|date:"d.m.Y" }}</li>
+                <li>Результаты с: {{ competition.expiry_date|date:"d.m.Y" }}</li>
+            </ul>
+            <div class="row">
+                <div class="col-lg-5 col-lg-offset-1 col-md-5 col-md-offset-1">
+                    <p><a href="/participate/?competition_id={{ competition.id }}"
+                          class="btn btn-success" role="button">
+                        {% bootstrap_icon "hand-right" %} Голосовать
+                    </a></p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-5 col-lg-offset-1 col-md-5 col-md-offset-1">
+                    <p><a href="/participate_add/?competition_id={{ competition.id }}"
+                          class="btn btn-success" role="button">
+                        {% bootstrap_icon "thumbs-up" %} Участвовать!
+                    </a></p>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h3>Правила:</h3>
+            <h4>{{ competition.rules | safe }}</h4>
+        </div>
+        <div>
+            <h3>Описание:</h3>
+            <h4>{{ competition.short_description }}</h4>
+        </div>
+
     </div>
 {% endblock %}

@@ -40,7 +40,6 @@ def competition_list(request):
     ). annotate(
         count_participate=Count('competition_participates', distinct=True)
     )
-    # . values('Participate_name', 'title', 'status', 'count_participate', 'count_vote')
     paginator = Paginator(competitions_list, CONTENT_COUNT_IN_PAGE)
     page = request.GET.get('page')
     try:
@@ -310,16 +309,15 @@ def profile(request):
         else:
             messages.add_message(request, messages.ERROR,
                                  'Проверьте корректность данных!')
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/accounts/profile')
     else:
         user_form = UserForm(instance=request.user)
         profile_form = ProfileForm(instance=request.user.profile)
         competitions = Competition.objects.filter(creator=request.user).all()
         participates = Participate.objects.filter(creator=request.user).all()
-        # context = {'user_form': user_form, 'profile_form': profile_form,
-        #        'participates': participates, 'competitions': competitions}
-    return render(request, "accounts/profile.html", {'user_form': user_form, 'profile_form': profile_form,
-               'participates': participates, 'competitions': competitions})
+        context = {'user_form': user_form, 'profile_form': profile_form,
+               'participates': participates, 'competitions': competitions}
+    return render(request, "accounts/profile.html", context)
 
 
 def register(request):

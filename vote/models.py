@@ -51,7 +51,7 @@ class Competition(Page, HitCountMixin):
     )
 
     survey_date = models.DateTimeField(
-        'опрос с',
+        'голосование с',
         default=timezone.now() + timezone.timedelta(days=5))
     comp_type = models.IntegerField(
         'тип конкурса',

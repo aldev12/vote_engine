@@ -10,10 +10,10 @@
     <div class="panel panel-default">
         <div class="panel-heading">
         <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-6 col-md-6">
             <div class=""><h1>Наши конкурсы</h1></div>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-6 col-md-6">
             {% if user.is_authenticated %}
                 <div class="pull-right">
                     <a href='{% url "competition_add" %}' type="button" class="btn btn-success">
@@ -35,13 +35,9 @@
                 <th>Автор</th>
             </thead>
             {% for competition in competitions  %}
-                <tr onclick="table_click('{% url "participates_in_competition" %}?competition_id={{ competition.id }}')">
+                <tr class="pointer" onclick="document.location='/competition/{{ competition.id }}';">
                     <td>
-{#                        <div>#}
-{#                            <a href='{% url "participates_in_competition" %}?competition_id={{ competition.id }}'>#}
-                                <p class="text-info"><strong>{{ competition.title }}</strong></p>
-{#                            </a>#}
-{#                        </div>#}
+                        <p class="text-info"><strong>{{ competition.title }}</strong></p>
                     </td>
                     <td>{{ competition.type_str }}</td>
                     <td> <span class="badge"> {{ competition.hit_count.hits }} </span></td>

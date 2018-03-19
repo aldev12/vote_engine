@@ -42,12 +42,16 @@
 
         <section id="content-tab2">
             <table class="table table-hover">
+            <thead>
+            <tr>
                 <th>Тип конкурса</th>
                 <th>Конкурс</th>
                 <th>Статус</th>
-
+            </tr>
+            </thead>
+            <tbody>
                 {% for competition in competitions %}
-                    <tr onclick="table_click('{% url "participate_manage" %}?competition_id={{ competition.id }}')">
+                    <tr class="pointer" onclick="table_click('{% url "participate_manage" %}?competition_id={{ competition.id }}')">
                         <td>
                             {{ competition.type_str }}
                         </td>
@@ -66,16 +70,22 @@
                         </td>
                     </tr>
                 {% endfor %}
+            </tbody>
             </table>
         </section>
 
         <section id="content-tab3">
-            <table class="table ">
+            <table class="table table-hover">
+            <thead>
+            <tr>
                 <th>Конкурс</th>
                 <th>Заявка</th>
                 <th>Статус</th>
+            </tr>
+            </thead>
+            <tbody>
                 {% for participate in participates %}
-                    <tr>
+                    <tr class="pointer">
                         <td>
                             {{ participate.parent }}
                         </td>
@@ -94,6 +104,7 @@
                         </td>
                     </tr>
                 {% endfor %}
+            </tbody>
             </table>
         </section>
     </div>

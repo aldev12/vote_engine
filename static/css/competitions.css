@@ -1,5 +1,6 @@
 body {
     padding-top: 56px;
+    padding-bottom: 56px;
 }
 
 h1 {
@@ -11,10 +12,14 @@ h1 {
     font-size: 25px;
 }
 
-table tr {
-    cursor: pointer;
-}
+/*table tr {*/
+    /*cursor: pointer;*/
+/*}*/
 
-section table tr {
+/*section table tr {*/
+    /*cursor: pointer;*/
+/*}*/
+
+.pointer {
     cursor: pointer;
 }
