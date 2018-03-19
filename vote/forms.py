@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils import timezone
-
+from django.contrib.auth.models import User
 from .models import Competition, Participate, Profile
 from ckeditor.widgets import CKEditorWidget
 from django.forms.extras import SelectDateWidget
@@ -25,7 +25,7 @@ class CompetitionForm(forms.ModelForm, forms.Field):
         expiry_date = cd.get("expiry_date")
         survey_date = cd.get("survey_date")
         if expiry_date <= survey_date:
-            raise ValidationError("Дата оконачния онкурса должна быть больше даты начала голосавания")
+            raise ValidationError("Дата оконачния конкурса должна быть больше даты начала голосования")
         return cd
 
 
@@ -43,6 +43,12 @@ class LiteralParticipateForm(forms.ModelForm):
     class Meta:
         model = Participate
         fields = ('title', 'comment')
+
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email',)
 
 
 class ProfileForm(forms.ModelForm):

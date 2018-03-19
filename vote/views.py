@@ -1,9 +1,9 @@
-from .forms import CompetitionForm, ParticipateForm, UserRegistrationForm, ProfileForm, LiteralParticipateForm
+from .forms import CompetitionForm, ParticipateForm, UserRegistrationForm, UserForm, ProfileForm, LiteralParticipateForm
 from django.contrib.auth.forms import PasswordChangeForm
 from django import forms
 from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.utils import timezone
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
 from django.db.models import Count
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -284,22 +284,42 @@ def participate_manage(request):
 
 
 @login_required
+@transaction.atomic
 def profile(request):
     if request.method == "POST":
-        form = ProfileForm(request.POST)
-        if form.is_valid():
-            profile = Profile.objects.get(user=request.user)
-            profile_temp = form.save(commit=False)
-            profile.location = profile_temp.location
-            profile.phone = profile_temp.phone
-            profile.birth_date = profile_temp.birth_date
-            profile.save()
-            messages.add_message(request, messages.SUCCESS, 'Изменения успешно сохранены')
-    form = ProfileForm(instance=Profile.objects.get(user=request.user))
-    competitions = Competition.objects.filter(creator=request.user).all()
-    participates = Participate.objects.filter(creator=request.user).all()
-    return render(request, "accounts/profile.html", {'form': form, 'participates': participates,
-                                                     'competitions': competitions})
+        user_form = UserForm(request.POST)
+        profile_form = ProfileForm(request.POST)
+        if user_form.is_valid() and profile_form.is_valid():
+            user = request.user
+
+            user_temp = user_form.save(commit=False)
+            profile_temp = profile_form.save(commit=False)
+
+            user.first_name = user_temp.first_name
+            user.last_name = user_temp.last_name
+            user.email = user_temp.email
+
+            user.profile.location = profile_temp.location
+            user.profile.phone = profile_temp.phone
+            user.profile.birth_date = profile_temp.birth_date
+            user.save()
+
+            messages.add_message(request, messages.SUCCESS,
+                                 'Изменения успешно сохранены')
+            return HttpResponseRedirect('/accounts/profile')
+        else:
+            messages.add_message(request, messages.ERROR,
+                                 'Проверьте корректность данных!')
+            return HttpResponseRedirect('/')
+    else:
+        user_form = UserForm(instance=request.user)
+        profile_form = ProfileForm(instance=request.user.profile)
+        competitions = Competition.objects.filter(creator=request.user).all()
+        participates = Participate.objects.filter(creator=request.user).all()
+        # context = {'user_form': user_form, 'profile_form': profile_form,
+        #        'participates': participates, 'competitions': competitions}
+    return render(request, "accounts/profile.html", {'user_form': user_form, 'profile_form': profile_form,
+               'participates': participates, 'competitions': competitions})
 
 
 def register(request):
