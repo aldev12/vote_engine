@@ -32,6 +32,7 @@ class PostCountHitDetailView(HitCountDetailView):
 
 
 def competition_list(request):
+    """Все конкурсы в статусе 'опубликован'"""
     competitions_list = Competition.objects.filter(
         status=2
     ).annotate(
@@ -53,6 +54,7 @@ def competition_list(request):
 
 @login_required
 def competition_add(request):
+    """Создание конкурса"""
     if request.method == "POST":
         form = CompetitionForm(request.POST)
         if form.is_valid():
@@ -71,6 +73,7 @@ def competition_add(request):
 
 @login_required
 def competition_edit(request):
+    """Редактирование конкурса"""
     competition_id = request.GET.get('competition_id', 0)
     competition = get_object_or_404(Competition, id=competition_id)
     if request.user != competition.creator:
@@ -106,6 +109,7 @@ def competition_edit(request):
 
 @login_required
 def competition_delete(request, competition_id):
+    """Удаление конкурса, если у него статус - не опубликован"""
     competition = get_object_or_404(Competition, id=competition_id)
     if competition.creator == request.user and competition.status != 2:
         competition.delete()
@@ -118,6 +122,7 @@ def competition_delete(request, competition_id):
 
 @login_required
 def participate_delete(request, participate_id):
+    """Удаление заявки на конкурс, если у нее статус - не опубликована"""
     participate = get_object_or_404(Participate, id=participate_id)
     if request.user in {participate.competition_id.creator, participate.creator} and participate.status != 2:
         participate.delete()
@@ -132,11 +137,13 @@ def participate_delete(request, participate_id):
 
 
 def about_competition(request, competition_id):
+    """Информация о конкурсе"""
     competition = get_object_or_404(Competition, id=competition_id)
     return render(request, "vote/about_competition.html", {'competition': competition})
 
 
 def about_participate(request, participate_id):
+    """Информация о заявке"""
     participate = get_object_or_404(Participate, id=participate_id)
     return render(request, PARTICIPATE_VIEW[participate.competition_id.comp_type],
                   {'participate': participate, 'competition': participate.competition_id})
@@ -144,6 +151,7 @@ def about_participate(request, participate_id):
 
 @login_required
 def participate_add(request):
+    """Создать заявку на участие в конкурсе"""
     competition_id = request.GET.get('competition_id', 0)
     competition = get_object_or_404(Competition, id=competition_id)
     CustomForm = LiteralParticipateForm if competition.comp_type == LITERAL else ParticipateForm
@@ -167,6 +175,7 @@ def participate_add(request):
 
 @login_required
 def participate_edit(request):
+    """Редактрировать завяку"""
     participate_id = request.GET.get('participate_id', 0)
     participate = get_object_or_404(Participate, id=participate_id)
     competition = get_object_or_404(Competition, id=participate.competition_id_id)
@@ -200,6 +209,7 @@ def participate_edit(request):
 
 @login_required
 def vote(request, participate_id):
+    """Отдать голос за участника, если еще не голосовал"""
     if request.is_ajax():
         participate = get_object_or_404(Participate, id=participate_id)
         try:
@@ -213,6 +223,8 @@ def vote(request, participate_id):
 
 
 def participates_in_competition(request):
+    """Все опубликованные заявки на участие в конкурсе,
+    с id конкурса равным competition_id"""
     competition_id = request.GET.get('competition_id', 0)
     competition = get_object_or_404(Competition, id=competition_id)
 
@@ -250,6 +262,7 @@ def participates_in_competition(request):
 
 @login_required
 def participate_manage(request):
+    """Все заявки в конкурсе, созданном текущим пользователем"""
     competition_id = request.GET.get('competition_id', 0)
     competition = get_object_or_404(Competition, id=competition_id)
     if competition.creator != request.user:

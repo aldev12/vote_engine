@@ -43,13 +43,13 @@ def save_user_profile(sender, instance, **kwargs):
 
 class Competition(Page, HitCountMixin):
     """Модель конкурса"""
-
     COMPETITION_TYPE = (
         (PHOTO, 'Фотоконкурс'),
         (LITERAL, 'Литературный конкурс'),
         (VIDEO, 'Видеоконкурс'),
         (AUDIO, 'Аудиоконкурс'),
     )
+
     survey_date = models.DateTimeField(
         'опрос с',
         default=timezone.now() + timezone.timedelta(days=5))
