@@ -22,6 +22,7 @@ urlpatterns = [
 
     url('^vote/(\d{1,9})$', views.vote, name='vote'),
 
+    url('^profile/$', views.profile, name='profile'),
     url(r'^change_password/$', views.change_password, name='change_password'),
     url(r'^register/', views.register, name='register'),
 ]

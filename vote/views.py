@@ -254,9 +254,10 @@ def participates_in_competition(request):
     HitCountMixin.hit_count(request, hit_count)
 
     competition_form = CompetitionForm(instance=competition)
-    return render(request, "vote/participates.html", {'participates': participates, 'add_member': add_member,
-                                                      'competition': competition,
-                                                      'competition_form': competition_form, 'vote_open': vote_open})
+    context = {'participates': participates, 'add_member': add_member,
+               'competition': competition, 'competition_form': competition_form,
+               'vote_open': vote_open}
+    return render(request, "vote/participates.html", context)
 
 
 @login_required
@@ -305,11 +306,11 @@ def profile(request):
 
             messages.add_message(request, messages.SUCCESS,
                                  'Изменения успешно сохранены')
-            return HttpResponseRedirect('/accounts/profile')
+            return redirect('profile')
         else:
             messages.add_message(request, messages.ERROR,
                                  'Проверьте корректность данных!')
-            return HttpResponseRedirect('/accounts/profile')
+            return redirect('profile')
     else:
         user_form = UserForm(instance=request.user)
         profile_form = ProfileForm(instance=request.user.profile)

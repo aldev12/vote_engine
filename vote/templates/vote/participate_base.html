@@ -6,30 +6,6 @@
     {% endblock %}
 
     {% block table_participates %}
-
-{#    <table class="table_vote">#}
-{#    <caption>Участники конкурса"{{ competition.title }}"</caption>#}
-{#    <tr><th>Название</th><th>Количество голосов</th><th></th></tr>#}
-{#    {% for participate in participates %}#}
-{#        <tr >#}
-{#            <td onclick="table_click('{{ participate.id }}')">#}
-{#                    <a href='{% url 'about_participate' participate.id %}'>{{ participate.title }}</a>#}
-{#            </td>#}
-{#            <td onclick="table_click('{{ participate.id }}')">#}
-{#                    {{ participate.participate_votes.count }}#}
-{#            </td>#}
-{#            <td>#}
-{#            {% if vote_open and user.is_authenticated %}#}
-{#                <input type="submit" onclick="vote({{ participate.id }})" class="btn-default" id="vote" value="Проголосовать" />#}
-{#            {% else %}#}
-{#                {% if not vote_open and not add_member %}#}
-{#                    <a>Конкурс завершен</a>#}
-{#                {% endif %}#}
-{#            {% endif %}#}
-{#            </td>#}
-{#        </tr>#}
-{#    {% endfor %}#}
-{#    </table>#}
     {% endblock %}
 
     {% block Page_menu %}

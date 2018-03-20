@@ -1,64 +1,85 @@
 {% extends "vote/participate_base.html" %}
+{% load bootstrap3 %}
+{% block meta_title %}О конкурсе{% endblock %}
+{% block css %}
+    <link href="/static/css/competitions.css" rel="stylesheet">
+{% endblock %}
 <script>window.CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/';</script>
     {% block add_participate %}
-    <div class="jumbotron">
-        <h2>{{ competition.type_str }}:&nbsp;{{ competition.title }}</h2>
-        <p>{{ competition.short_description|safe }}</p>
-        <p>Правила: {{ competition.rules|safe }}</p>
-
-        <p>Автор:&nbsp;{{ competition.creator }}</p>
-        <p>
-        {% if vote_open and user.is_authenticated %}
-            <a href='{% url "participate_add" %}?competition_id={{ competition.id }}' type="button" class="btn btn-info btn-mini" data-toggle="offcanvas">
-{#            <span class="glyphicon glyphicon-plus"></span>&nbsp;#}
-            Принять участие в конкурсе
-            </a>
-        {% else %}
-            {% if not vote_open and not add_member %}
-                <p>Конкурс завершен</p>
-            {% endif %}
-        {% endif %}
-
-
-        </p>
+    <div class="row">
+        <div class="col-lg-6 col-md-6">
+            <div class="text-right">
+                {{ competition.type_str }}
+                <h1>{{ competition.title }}</h1>
+            </div>
+            <div>
+                <h3>Правила:</h3>
+                <h4>{{ competition.rules | safe }}</h4>
+            </div>
+            <div>
+                <h3>Описание:</h3>
+                <h4>{{ competition.short_description | safe }}</h4>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6 text-left">
+            <ul>
+                <li>Дата публикации: {{ competition.publish_date|date:"d.m.Y" }}</li>
+                <li>Голосование с: {{ competition.survey_date|date:"d.m.Y" }}</li>
+                <li>Результаты с: {{ competition.expiry_date|date:"d.m.Y" }}</li>
+            </ul>
+            <div class="row">
+                <div class="col-lg-11 col-lg-offset-1 col-md-11 col-md-offset-1">
+                    {% if add_member %}
+                        <p><a href="/participate_add/?competition_id={{ competition.id }}"
+                          class="btn btn-success" role="button">
+                        {% bootstrap_icon "thumbs-up" %} Участвовать!
+                        </a></p>
+                    {% else %}
+                        <p><button class="btn btn-default" disabled type="button">
+                            <span class="glyphicon glyphicon-lock"></span>
+                        </button>
+                            <b>Прием заявок завершен.</b>
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <hr>
+        </div>
     </div>
     {% endblock %}
 
-
 {% block table_participates %}
-
-        <div class="row">
+    <div class="row">
     {% for participate in participates  %}
-            <div class="col-1 col-sm-6 col-lg-3 col-md-4 col-xs-12 panel panel-default" style="height: 300px">
+            <div class="col-1 col-sm-6 col-lg-3 col-md-4 col-xs-12 panel panel-default" style="height: 300px;">
             <div class="input-group">
                 {% if participate.title|length < 25 %}
-                <h2>{{ participate.title }}</h2>
+                    <h2>{{ participate.title }}</h2>
                 {% else %}
                     <h2>{{ participate.title|slice:"22" }}...</h2>
                 {% endif %}
-                <span class="input-group-btn">
-
+                <div class="input-group-btn">
                     {% if vote_open and user.is_authenticated %}
-                        <button class="btn btn-default" type="button" onclick="vote({{ participate.id }})">
+                        <button class="btn btn-default" type="button" onclick="vote({{ participate.id }});">
                         <span class="glyphicon glyphicon-thumbs-up"></span>
                         </button>
                     {% else %}
-                        {% if not vote_open and not add_member %}
-                            <button class="btn btn-default" disabled type="button">
+                        <button class="btn btn-default" disabled type="button">
                             <span class="glyphicon glyphicon-lock"></span>
-                            </button>
-                        {% endif %}
+                        </button>
                     {% endif %}
-
-                </span>
+                </div>
             </div>
                 <p>{{ participate.comment|safe|slice:"250" }}...</p>
                 <a>
                     <span class="badge pull-right">Голосов:&nbsp;{{ participate.participate_votes.count }}</span>
                 </a>
             <p><a class="btn btn-default" href='{% url 'about_participate' participate.id %}' role="button">Подробнее &raquo;</a></p>
-            </div><!--/span-->
+            </div>
     {% endfor %}
-
-        </div><!--/row-->
+    </div>
 {% endblock %}

@@ -40,8 +40,7 @@
         </div>
         <div>
             <h3>Описание:</h3>
-            <h4>{{ competition.short_description }}</h4>
+            <h4>{{ competition.short_description | safe}}</h4>
         </div>
-
     </div>
 {% endblock %}

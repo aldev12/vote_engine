@@ -35,7 +35,7 @@
                 <th>Автор</th>
             </thead>
             {% for competition in competitions  %}
-                <tr class="pointer" onclick="document.location='/competition/{{ competition.id }}';">
+                <tr class="pointer" onclick="document.location='/participate/?competition_id={{ competition.id }}';">
                     <td>
                         <p class="text-info"><strong>{{ competition.title }}</strong></p>
                     </td>
