@@ -74,7 +74,7 @@
                     {% endif %}
                 </div>
             </div>
-                <p>{{ participate.comment|safe|slice:"250" }}...</p>
+                <p style="min-height: 170px">{{ participate.comment|safe|slice:"250" }}...</p>
                 <a>
                     <span class="badge pull-right">Голосов:&nbsp;{{ participate.participate_votes.count }}</span>
                 </a>
