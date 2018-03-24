@@ -137,8 +137,23 @@ def about_competition(request, competition_id):
 def about_participate(request, participate_id):
     """Информация о заявке"""
     participate = get_object_or_404(Participate, id=participate_id)
+
+    add_member = vote_open = False
+
+    if participate.competition_id.status == 2:
+        exp_date = participate.competition_id.expiry_date
+        surv_date = participate.competition_id.survey_date
+
+        if exp_date and surv_date:
+            if exp_date > timezone.now() < surv_date:
+                add_member = True
+
+            if exp_date > timezone.now() > surv_date:
+                vote_open = True
+
     return render(request, PARTICIPATE_VIEW[participate.competition_id.comp_type],
-                  {'participate': participate, 'competition': participate.competition_id})
+                  {'participate': participate, 'competition': participate.competition_id,
+                   'add_member': add_member, 'vote_open': vote_open})
 
 
 @login_required
@@ -206,7 +221,7 @@ def participate_edit(request):
             if update:
                 messages.add_message(request, messages.SUCCESS,
                                      'Заявка %s изменена, ожидайте проверки администратором' % competition.title)
-            return redirect('profile_vote')
+            return redirect('profile')
     else:
         participate = get_object_or_404(Participate, id=participate_id)
         form = CustomForm(instance=participate)

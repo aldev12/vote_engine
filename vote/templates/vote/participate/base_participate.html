@@ -1,5 +1,15 @@
 {% extends "base.html" %}
 
+{% load bootstrap3 %}
+{% block css %}
+    <link href="/static/css/competitions.css" rel="stylesheet">
+    <link href="/static/css/notifIt.css" rel="stylesheet">
+    <link href="/static/css/video.css" rel="stylesheet">
+{% endblock %}
+{% block js %}
+    <script src="/static/js/notifIt.min.js"></script>
+{% endblock %}
+
 {% block main %}
     <div class="row">
         <div >
@@ -9,7 +19,21 @@
                     {% endblock %}
                 </div>
                 <div class="caption">
+                    <div class="input-group">
                     <h3>{{ participate.title }}</h3>
+
+                        <div class="input-group-btn">
+                            {% if vote_open and user.is_authenticated %}
+                                <button class="btn btn-default" type="button" onclick="vote({{ participate.id }});">
+                                <span class="glyphicon glyphicon-thumbs-up"></span>
+                                </button>
+                            {% else %}
+                                <button class="btn btn-default" disabled type="button">
+                                    <span class="glyphicon glyphicon-lock"></span>
+                                </button>
+                            {% endif %}
+                        </div>
+                    </div>
                     <p>{{ participate.comment|safe }}</p>
                     <label><p>Голосов: {{ participate.participate_votes.count }}</p></label>
                     <br>
