@@ -59,12 +59,12 @@
 {% block table_participates %}
     <div class="row">
     {% for participate in participates  %}
-            <div class="col-1 col-sm-6 col-lg-3 col-md-4 col-xs-12 panel panel-default" style="height: 300px;">
-            <div class="input-group">
+            <div class="col-1 col-sm-6 col-lg-3 col-md-4 col-xs-12 panel panel-default" style="height: 320px;">
+            <div class="input-group" style="height: 95px">
                 {% if participate.title|length < 25 %}
                     <h2>{{ participate.title }}</h2>
                 {% else %}
-                    <h2>{{ participate.title|slice:"22" }}...</h2>
+                    <h2>{{ participate.title|slice:"21" }}...</h2>
                 {% endif %}
                 <div class="input-group-btn">
                     {% if vote_open and user.is_authenticated %}
@@ -78,7 +78,19 @@
                     {% endif %}
                 </div>
             </div>
-                <p style="min-height: 170px">{{ participate.comment|safe|slice:"250" }}...</p>
+                {% if competition.comp_type == 1 %}
+                        <img src="{{ STATIC_URL }}media/{{ participate.content }}" style="padding-bottom: 5px" width='280px' height='170px'/>
+                {% elif competition.comp_type == 3 %}
+                    <iframe width="280px" height="170px" src="{{ participate.content }}" allowfullscreen></iframe>
+                {% elif competition.comp_type == 4 %}
+                    <audio name='audio' controls width='100%' height='100%'>
+                    <source src="{{ STATIC_URL }}media/{{ participate.content }}" type="audio/mp3"></source>
+                    </audio>
+                {% else %}
+                    <div style="height: 170px">
+                        <p >{{ participate.comment|slice:"250"|safe }}...</p>
+                    </div>
+                {% endif %}
                 <a>
                     <span class="badge pull-right">Голосов:&nbsp;{{ participate.participate_votes.count }}</span>
                 </a>

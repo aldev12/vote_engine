@@ -1,4 +1,5 @@
-from .forms import CompetitionForm, ParticipateForm, UserRegistrationForm, UserForm, ProfileForm, LiteralParticipateForm
+from .forms import CompetitionForm, ParticipateForm, UserRegistrationForm, UserForm
+from .forms import ProfileForm, LiteralParticipateForm, VideoParticipateForm
 from django.contrib.auth.forms import PasswordChangeForm
 from django import forms
 from django.http import Http404, HttpResponseRedirect, HttpResponse
@@ -11,7 +12,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from vote.models import Competition, Participate, Vote, Profile, LITERAL
+from vote.models import Competition, Participate, Vote, Profile, LITERAL, VIDEO
 from hitcount.views import HitCountDetailView
 from hitcount.models import HitCount
 from hitcount.views import HitCountMixin
@@ -153,7 +154,14 @@ def participate_add(request):
     """Создать заявку на участие в конкурсе"""
     competition_id = request.GET.get('competition_id', 0)
     competition = get_object_or_404(Competition, id=competition_id)
-    CustomForm = LiteralParticipateForm if competition.comp_type == LITERAL else ParticipateForm
+
+    if competition.comp_type == LITERAL:
+        CustomForm = LiteralParticipateForm
+    elif competition.comp_type == VIDEO:
+        CustomForm = VideoParticipateForm
+    else:
+        CustomForm = ParticipateForm
+
     if request.method == "POST":
         form = CustomForm(request.POST, request.FILES)
         if form.is_valid():
@@ -178,7 +186,14 @@ def participate_edit(request):
     participate_id = request.GET.get('participate_id', 0)
     participate = get_object_or_404(Participate, id=participate_id)
     competition = get_object_or_404(Competition, id=participate.competition_id_id)
-    CustomForm = LiteralParticipateForm if competition.comp_type == LITERAL else ParticipateForm
+
+    if competition.comp_type == LITERAL:
+        CustomForm = LiteralParticipateForm
+    elif competition.comp_type == VIDEO:
+        CustomForm = VideoParticipateForm
+    else:
+        CustomForm = ParticipateForm
+
     if request.user not in [participate.creator, competition.creator]:
         raise Http404
     if request.method == "POST":

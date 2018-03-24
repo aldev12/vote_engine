@@ -1,3 +1,4 @@
+import re
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils import timezone
@@ -43,6 +44,28 @@ class LiteralParticipateForm(forms.ModelForm):
     class Meta:
         model = Participate
         fields = ('title', 'comment')
+
+
+class VideoParticipateForm(forms.ModelForm):
+    comment = forms.CharField(label='Описание', widget=CKEditorWidget())
+    content = forms.CharField(label='Ссылка на видео с youtube')
+
+    class Meta:
+        model = Participate
+        fields = ('title', 'comment', 'content')
+
+    def clean(self):
+        form_data = self.cleaned_data
+        video_link = form_data['content']
+        if video_link:
+            reg_exp = '^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*'
+            match = re.match(reg_exp, video_link)
+            if match and len(match.group(2)) == 11:
+                form_data['content'] = 'https://www.youtube.com/embed/%s' % match.group(2)
+                return form_data
+        self._errors["content"] = "Не корректная ссылка"
+        del form_data['content']
+        return form_data
 
 
 class UserForm(forms.ModelForm):
