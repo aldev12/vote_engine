@@ -215,9 +215,9 @@ def vote(request, participate_id):
             Vote.objects.create(user=request.user,
                                 participate=participate)
         except IntegrityError:
-            message = 'Вы уже голосовали за %s' % participate.title
+            message = 'DONE'
         else:
-            message = 'Вы проголосовали за %s' % participate.title
+            message = 'OK'
         return HttpResponse(message)
 
 
