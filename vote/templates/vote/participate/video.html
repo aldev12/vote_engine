@@ -1,6 +1,15 @@
 {% extends "vote/participate/base_participate.html" %}
 
+{% block css %}
+    <link href="/static/css/video.css" rel="stylesheet">
+{% endblock %}
+
 {% block content_participate %}
-            <iframe  style="width:300px; height: 180px; " src="{{ participate.content }}" allowfullscreen>
+    <div class="video-container">
+            <iframe width="853" height="480"
+                    frameborder="0"
+                    src="{{ participate.content }}"
+                    allowfullscreen>
             </iframe>
+    </div>
 {% endblock %}

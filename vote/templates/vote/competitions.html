@@ -64,6 +64,7 @@
                         <thead>
                         <th>Название</th>
                         <th>Тип конкурса</th>
+                        <th>Статус</th>
                         <th>Просмотров</th>
                         <th>Заявок</th>
                         <th>Голосов</th>
@@ -74,6 +75,7 @@
                                 onclick="document.location='/participate/?competition_id={{ competition.id }}';">
                                 <td><p class="text-info"><strong>{{ competition.title }}</strong></p></td>
                                 <td>{{ competition.type_str }}</td>
+                                <td>{{ competition.status_str }}</td>
                                 <td><span class="badge"> {{ competition.hit_count.hits }} </span></td>
                                 <td><span class="badge"> {{ competition.count_participate }} </span></td>
                                 <td><span class="badge"> {{ competition.count_vote }} </span></td>

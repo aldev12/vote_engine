@@ -72,6 +72,16 @@ class Competition(Page, HitCountMixin):
     def type_str(self):
         return dict(Competition.COMPETITION_TYPE)[self.comp_type]
 
+    @property
+    def status_str(self):
+        status = "Завершен"
+        if self.expiry_date > timezone.now():
+            if timezone.now() < self.survey_date:
+                status = "Привем завок"
+            else:
+                status = "Идет голосавание"
+        return status
+
     class Meta:
         verbose_name = 'конкурс'
         verbose_name_plural = 'конкурсы'
