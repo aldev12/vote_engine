@@ -34,21 +34,13 @@ class PostCountHitDetailView(HitCountDetailView):
 
 def competition_list(request):
     """Все конкурсы в статусе 'опубликован'"""
-    competitions_list = Competition.objects.filter(
+    competitions = Competition.objects.filter(
         status=2
     ).annotate(
         count_vote=Count('competition_participates__participate_votes')
     ). annotate(
         count_participate=Count('competition_participates', distinct=True)
     )
-    paginator = Paginator(competitions_list, CONTENT_COUNT_IN_PAGE)
-    page = request.GET.get('page')
-    try:
-        competitions = paginator.page(page)
-    except PageNotAnInteger:
-        competitions = paginator.page(1)
-    except EmptyPage:
-        competitions = page.page(paginator.num_pages)
     return render(request, "vote/competitions.html", {'competitions': competitions})
 
 
