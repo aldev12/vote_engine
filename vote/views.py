@@ -315,7 +315,7 @@ def profile(request):
                                  'Изменения успешно сохранены')
             return redirect('profile')
         else:
-            messages.add_message(request, messages.ERROR,
+            messages.add_message(request, messages.WARNING,
                                  'Проверьте корректность данных!')
             return redirect('profile')
     else:
@@ -345,7 +345,7 @@ def register(request):
                 return HttpResponseRedirect('/')
             else:
                 raise forms.ValidationError(
-                    'Кажется, пользователь стаким именем или почтой уже существует!')
+                    'Кажется, пользователь с таким именем или почтой уже существует!')
     else:
         form = UserRegistrationForm()
     return render(request, 'vote/registration/register.html', {'form': form})

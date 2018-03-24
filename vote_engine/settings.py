@@ -27,6 +27,7 @@ from django.utils.translation import ugettext_lazy as _
 # )
 
 SITE_TITLE = "Конкурсы"
+ADMIN_SITE_TITLE = "Конкурсы"
 
 ADMIN_MENU_ORDER = (
     ("Content", ("pages.Page", "blog.BlogPost", "generic.ThreadedComment", (_("Media Library"), "media-library"),)),
@@ -144,6 +145,7 @@ SITE_ID = 1
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
 USE_I18N = True
+USE_L10N = True
 
 AUTHENTICATION_BACKENDS = ("mezzanine.core.auth_backends.MezzanineBackend",)
 
