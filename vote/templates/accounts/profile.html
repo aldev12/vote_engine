@@ -67,7 +67,9 @@ $(document).ready(function () {
                             {{ competition.type_str }}
                         </td>
                         <td>
-                            {{ competition.title }}
+                            <a onclick="document.location='/participate/?competition_id={{ competition.id }}';">
+                                {{ competition.title }}
+                            </a>
                         </td>
                         <td>
                             {% if competition.status == 1 %}
@@ -100,7 +102,9 @@ $(document).ready(function () {
                             {{ participate.parent }}
                         </td>
                         <td>
+                            <a href='{% url 'about_participate' participate.id %}'>
                             {{ participate.title }}
+                            </a>
                         </td>
                         <td>
                             {% if participate.status == 1 %}
