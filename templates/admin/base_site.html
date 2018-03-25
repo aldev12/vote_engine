@@ -1,0 +1,12 @@
+{% overextends "admin/base_site.html" %}
+{% load mezzanine_tags i18n %}
+
+{% block extrahead %}
+{{ block.super }}
+<script>
+        jQuery(function ($) {
+            var adminTitleIcon = 'Мамочки';
+            $('div#header div.admin-title').html(adminTitleIcon);
+        });
+        </script>
+{% endblock %}
