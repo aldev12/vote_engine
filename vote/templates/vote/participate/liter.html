@@ -1,12 +1,30 @@
 {% extends "base.html" %}
-
+{% block css %}
+    <link href="/static/css/competitions.css" rel="stylesheet">
+    <link href="/static/css/notifIt.css" rel="stylesheet">
+{% endblock %}
+{% block js %}
+    <script src="/static/js/notifIt.min.js"></script>
+{% endblock %}
 {% block main %}
-    <div>
-            <label ><h2 style="text-align: center">{{ participate.title }}</h2><p>{{ participate.comment|safe }}</p></label>
-            <div style="align-content: right; text-align: right">
+    <div class="col-lg-10 col-md-10 col-lg-offset-1 col-md-offset-1">
+        <h2 style="text-align: center">{{ participate.title }}</h2>
+        <p>{{ participate.comment|safe }}</p>
+        <div style="align-content: right; text-align: right">
+            {% if vote_open and user.is_authenticated %}
+                        <button class="btn btn-success" type="button"
+                                onclick="vote({{ participate.id }});">
+                            <span class="glyphicon glyphicon-thumbs-up"></span>
+                            Голосовать!
+                        </button>
+                    {% else %}
+                        <button class="btn btn-default" disabled type="button">
+                            <span class="glyphicon glyphicon-lock"></span>
+                        </button>
+                    {% endif %}
             <label><p>Голосов: {{ participate.participate_votes.count }}</p></label>
                 <br>
             <label><p>Дата публикации: {{ participate.publish_date|date:"d.m.Y"  }}</p></label>
-            </div>
+        </div>
     </div>
 {% endblock %}

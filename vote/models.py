@@ -77,9 +77,9 @@ class Competition(Page, HitCountMixin):
         status = "Завершен"
         if self.expiry_date > timezone.now():
             if timezone.now() < self.survey_date:
-                status = "Привем завок"
+                status = "Прием заявок"
             else:
-                status = "Идет голосавание"
+                status = "Идет голосование"
         return status
 
     class Meta:
