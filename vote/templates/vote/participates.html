@@ -44,13 +44,19 @@
                     {% if add_member %}
                         <p><a href="/participate_add/?competition_id={{ competition.id }}"
                           class="btn btn-success" role="button">
-                        {% bootstrap_icon "thumbs-up" %} Участвовать!
+                        {% bootstrap_icon "hand-right" %} Участвовать!
                         </a></p>
-                    {% else %}
+                    {% elif vote_open %}
                         <p><button class="btn btn-default" disabled type="button">
                             <span class="glyphicon glyphicon-lock"></span>
                         </button>
-                            <b>Прием заявок завершен.</b>
+                            <b>Прием заявок завершен. Голосуй! {% bootstrap_icon "thumbs-up" %}</b>
+                        </p>
+                    {% else  %}
+                        <p><button class="btn btn-default" disabled type="button">
+                            <span class="glyphicon glyphicon-lock"></span>
+                        </button>
+                            <b>Конкурс завершен!</b>
                         </p>
                     {% endif %}
                 </div>

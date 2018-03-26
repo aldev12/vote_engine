@@ -42,9 +42,10 @@
                             Голосовать!
                         </button>
                     {% else %}
-                        <button class="btn btn-default" disabled type="button">
+                        <button title="Вы не вошли" class="btn btn-default" disabled type="button">
                             <span class="glyphicon glyphicon-lock"></span>
                         </button>
+                        <small><a title="Войти" href="{% url "login" %}">{% bootstrap_icon "log-in" %}</a></small>
                     {% endif %}
                 </h3>
             </div>

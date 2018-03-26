@@ -145,10 +145,10 @@ def about_participate(request, participate_id):
         surv_date = participate.competition_id.survey_date
 
         if exp_date and surv_date:
-            if exp_date > timezone.now() < surv_date:
+            if timezone.now() < surv_date < exp_date:
                 add_member = True
 
-            if exp_date > timezone.now() > surv_date:
+            if surv_date < timezone.now() < exp_date:
                 vote_open = True
 
     return render(request, PARTICIPATE_VIEW[participate.competition_id.comp_type],

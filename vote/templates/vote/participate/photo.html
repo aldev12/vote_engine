@@ -1,5 +1,5 @@
 {% extends "vote/participate/base_participate.html" %}
-
+{% block meta_title %}Фото{% endblock %}
 {% block content_participate %}
     <div class="col-lg-10 col-md-10 col-lg-offset-1 col-md-offset-1" align="center">
         <img src="{{ STATIC_URL }}media/{{ participate.content }}" style="max-width: 100%; height: auto;"/>
