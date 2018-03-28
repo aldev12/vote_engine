@@ -4,7 +4,7 @@ from django.contrib.auth import views as auth_views
 from mezzanine.pages import views as pages_view
 
 urlpatterns = [
-    # url(r'^$', pages_view.page, {'slug': 'competition'}, name='home'),
+    url("^admin/pages/competition/(\d{1,9})$", views.admin_competition, name='admin_competition'),
 
     url('^$', views.competition_list, name='competitions'),
     url('^competition/(?P<competition_id>[0-9]+)$', views.about_competition, name='about_competition'),

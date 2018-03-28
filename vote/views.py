@@ -11,7 +11,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from vote.models import Competition, Participate, Vote, Profile, LITERAL, VIDEO
 from hitcount.views import HitCountDetailView
 from hitcount.models import HitCount
@@ -417,3 +417,8 @@ def change_password(request):
         form = PasswordChangeForm(request.user)
     return render(request, 'accounts/change_password.html', {'form': form})
 
+
+@user_passes_test(lambda u: u.is_superuser)
+def admin_competition(request, type):
+    competitions = Competition.objects.filter(comp_type=type)
+    return render(request, 'vote/admin/page.html', {'competitions': competitions})

@@ -1,0 +1,126 @@
+{% extends "admin/base_site.html" %}
+
+{% load i18n mezzanine_tags staticfiles %}
+
+{% block extrahead %}
+<style>
+
+    #changelist .actions {padding:7px;}
+    #changelist .actions label {background:none; padding:0; margin:0;}
+</style>
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "/grappelli/css/base.css"  %}" />
+
+    <link rel="stylesheet" href="{% static "mezzanine/css/admin/page_tree.css" %}">
+    <link rel="stylesheet" href="{% static "mezzanine/css/admin/global.css" %}">
+    <link rel="stylesheet" href="{% static "grappelli/css/changelist.css" %}">
+<!--[if IE 7]><style>.dashboard #content {padding-top: 80px;}</style><![endif]-->
+
+{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+{% block bodyclass %}change-list{% endblock %}
+
+{% block breadcrumbs %}<div class="breadcrumbs">{% trans "Home" %}</div>{% endblock %}
+
+{% block content_title %}<h1>{% trans "Dashboard" %}</h1>{% endblock %}
+
+{% block content %}
+    <!--Content -->
+    <div id="content-main">
+
+    <script type="text/javascript">
+jQuery(function($) {
+    $('.addlist').change(function() {
+        var addUrl = this[this.selectedIndex].value;
+        if (addUrl) {
+            location.href = addUrl;
+            this.selectedIndex = 0;
+        }
+    });
+});
+
+
+</script>
+
+
+    <div id="addlist-primary">
+        <select class="addlist">
+            <option value="">Добавить ...</option>
+                <option value="/ru/admin/pages/richtextpage/add/">Текстовая страница</option>
+                <option value="/ru/admin/galleries/gallery/add/">Галерея</option>
+                <option value="/ru/admin/pages/link/add/">Ссылка</option>
+                <option value="/ru/admin/forms/form/add/">Форма</option>
+                <option value="/ru/admin/vote/participate/add/">Заявка на конкурс</option>
+                <option value="/ru/admin/vote/competition/add/">Конкурс</option>
+        </select>
+    </div>
+
+    <div id="tree">
+        <ol class="ui-sortable">
+            {% for competition in competitions %}
+            <li id="ordering_{{ competition.id }}" class="mjs-nestedSortable-branch mjs-nestedSortable-collapsed">
+
+                    <div class="row1">
+                        <a href="#" class="tree-toggle" id="page-{{ competition.id }}" style="visibility: visible">
+                            <span class="icon open" style="display: none">+</span>
+                            <span class="icon close" style="display: block">-</span>
+                        </a>
+                        <a href="/ru/admin/pages/page/{{ competition.id }}/delete/?fromtree" class="delete grappelli-delete"></a>
+                        <a href="/ru/admin/pages/page/{{ competition.id }}/delete/?fromtree" class="delete"></a>
+                        <a href="/ru/admin/pages/page/{{ competition.id }}/change/" class="changelink">{{ competition.title }}</a>
+                        <span class="ordering">
+                            <img src="/static/grappelli/img/admin/arrow-up.gif">
+                            <img src="/static/grappelli/img/admin/arrow-down.gif">
+                        </span>
+                    </div>
+                    <br style="clear:both;">
+            <ol class="display: none">
+                {% for participate in competition.competition_participates.all %}
+                    <li id="ordering_{{ participate.id }}" class="mjs-nestedSortable-leaf">
+                    <div class="row1">
+                        <a href="#" class="tree-toggle" id="page-{{ participate.id }}" style="visibility: hidden">
+                            <span class="icon open">+</span>
+                            <span class="icon close">-</span>
+                        </a>
+                        <a href="/ru/admin/pages/page/{{ participate.id }}/delete/?fromtree" class="delete grappelli-delete"></a>
+                        <a href="/ru/admin/pages/page/{{ participate.id }}/change/" class="changelink">{{ participate.title }}</a>
+                        <span class="ordering">
+                            <img src="/static/grappelli/img/admin/arrow-up.gif">
+                            <img src="/static/grappelli/img/admin/arrow-down.gif">
+                        </span>
+                    </div>
+                    <br style="clear:both;">
+                    </li>
+                {% endfor %}
+
+            </ol>
+
+            </li>
+
+            {% endfor %}
+        </ol>
+
+    </div>
+
+    </div>
+
+    <script type="text/javascript" src="{% static "mezzanine/js/admin/ajax_csrf.js" %}"></script>
+    <script type="text/javascript" src="{% static "mezzanine/js/admin/collapse_backport.js" %}"></script>
+    <script type="text/javascript" src="{% static "mezzanine/js/admin/jquery.mjs.nestedSortable.js" %}"></script>
+    <script type="text/javascript" src="{% static "mezzanine/js/admin/navigation.js" %}"></script>
+    <script type="text/javascript" src="{% static "mezzanine/js/admin/page_tree.js" %}"></script>
+    <script type="text/javascript" src="{% static "mezzanine/js/jquery-ui-1.8.24.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "admin/js/admin/RelatedObjectLookups.js" %}"></script>
+    <script type="text/javascript" src="{% static "admin/js/actions.js" %}"></script>
+    <script type="text/javascript" src="{% static "admin/js/core.js" %}"></script>
+    <script type="text/javascript" src="{% static "admin/js/jquery.init.js" %}"></script>
+    <script type="text/javascript" src="{% static "admin/js/prepopulate.js" %}"></script>
+    <script type="text/javascript" src="{% static "admin/js/urlify.js" %}"></script>
+    <script type="text/javascript" src="{% static "admin/js/vendor/xregexp/xregexp.js" %}"></script>
+    <script type="text/javascript" src="{% static "admin/js/vendor/jquery/jquery.js" %}"></script>
+    <script type="text/javascript" src="{% static "grappelli/js/admin/Changelist.js" %}"></script>
+
+{% endblock %}
+
+
