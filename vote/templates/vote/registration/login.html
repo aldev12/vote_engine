@@ -24,7 +24,7 @@
                 {% bootstrap_button "Войти" button_type="submit" button_class="btn-success" %}
                 <input type="hidden" name="next" value="{{ next }}"/>
                 <p class="message">Не зарегистрирован? <a
-                        href="{% url 'register' %}">Создай аккаунт</a></p>
+                        href="{% url 'signup' %}">Создай аккаунт</a></p>
             </form>
 
             <p><a href="{% url 'password_reset' %}">Забыли пароль?</a></p>

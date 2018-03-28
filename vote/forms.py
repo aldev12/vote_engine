@@ -3,6 +3,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 from .models import Competition, Participate, Profile
 from ckeditor.widgets import CKEditorWidget
 from django.forms.extras import SelectDateWidget
@@ -85,20 +86,10 @@ class ProfileForm(forms.ModelForm):
         fields = ('phone', 'location', 'birth_date')
 
 
-class UserRegistrationForm(forms.Form):
-    username = forms.CharField(
-        required=True,
-        label='Имя пользователя',
-        max_length=32
-    )
-    email = forms.CharField(
-        required=True,
-        label='Email',
-        max_length=32,
-    )
-    password = forms.CharField(
-        required=True,
-        label='Пароль',
-        max_length=32,
-        widget=forms.PasswordInput()
-    )
+class SignupForm(UserCreationForm):
+    email = forms.EmailField(max_length=200, help_text='Обязательное поле')
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password1', 'password2')
+

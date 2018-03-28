@@ -272,7 +272,6 @@ INSTALLED_APPS = (
     "django.contrib.sites",
     "django.contrib.sitemaps",
     "django.contrib.staticfiles",
-    "moderna",
     "hitcount",
     "mezzanine.boot",
     "mezzanine.conf",
@@ -338,11 +337,12 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 PROFILE = '/accounts/profile/'
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # Ввести нужные параметры почтового сервиса
-EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'testsite_app'
-EMAIL_HOST_PASSWORD = 'pass'
+EMAIL_HOST_USER = 'fogteam@gmail.com'
+EMAIL_HOST_PASSWORD = 'fogpass'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'Fog Team <noreply@example.com>'
 

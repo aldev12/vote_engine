@@ -1,12 +1,12 @@
-from .forms import CompetitionForm, ParticipateForm, UserRegistrationForm, UserForm
+from .forms import CompetitionForm, ParticipateForm, SignupForm, UserForm
 from .forms import ProfileForm, LiteralParticipateForm, VideoParticipateForm
 from django.contrib.auth.forms import PasswordChangeForm
-from django import forms
 from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.utils import timezone
 from django.db import IntegrityError, transaction
 from django.db.models import Count
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, update_session_auth_hash
@@ -16,6 +16,11 @@ from vote.models import Competition, Participate, Vote, Profile, LITERAL, VIDEO
 from hitcount.views import HitCountDetailView
 from hitcount.models import HitCount
 from hitcount.views import HitCountMixin
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.template.loader import render_to_string
+from .tokens import account_activation_token
+from django.core.mail import EmailMessage
 
 CONTENT_COUNT_IN_PAGE = 5
 
@@ -343,27 +348,52 @@ def profile(request):
     return render(request, "accounts/profile.html", context)
 
 
-def register(request):
+def signup(request):
     if request.method == 'POST':
-        form = UserRegistrationForm(request.POST)
+        form = SignupForm(request.POST)
         if form.is_valid():
-            user_obj = form.cleaned_data
-            username = user_obj['username']
-            email = user_obj['email']
-            password = user_obj['password']
-            if not (User.objects.filter(
-                    username=username).exists() or User.objects.filter(
-                    email=email).exists()):
-                User.objects.create_user(username, email, password)
-                user = authenticate(username=username, password=password)
-                login(request, user)
-                return HttpResponseRedirect('/')
-            else:
-                raise forms.ValidationError(
-                    'Кажется, пользователь с таким именем или почтой уже существует!')
+            user = form.save(commit=False)
+            user.is_active = False
+            user.save()
+            current_site = get_current_site(request)
+            mail_subject = 'Активация аккаунта на сайте Конкурсы'
+            message = render_to_string('registration/account_activation_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': account_activation_token.make_token(user),
+            })
+            to_email = form.cleaned_data.get('email')
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
+            messages.add_message(request, messages.SUCCESS,
+                                'На Ваш email отправлено письмо! '
+                                'Перейдите по ссылке и Ваш аккаунт активируется.')
+            return redirect("/")
     else:
-        form = UserRegistrationForm()
-    return render(request, 'vote/registration/register.html', {'form': form})
+        form = SignupForm()
+    return render(request, 'vote/registration/signup.html', {'form': form})
+
+
+def activate(request, uidb64, token):
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        login(request, user)
+        messages.add_message(request, messages.SUCCESS,
+                             'Аккаунт активирован! Теперь Вы можете войти.')
+        redirect("/")
+    else:
+        messages.add_message(request, messages.WARNING,
+                             'Ваша ссылка активации недействительна!')
+        redirect("/")
 
 
 def change_password(request):
@@ -375,7 +405,7 @@ def change_password(request):
             messages.success(request, 'Ваш пароль успешно обновлен!')
             return redirect('change_password')
         else:
-            messages.error(request, 'Пожалуйста, исправьте ошибку!')
+            pass
     else:
         form = PasswordChangeForm(request.user)
     return render(request, 'accounts/change_password.html', {'form': form})
