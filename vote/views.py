@@ -277,13 +277,20 @@ def participates_in_competition(request):
     except EmptyPage:
         participates = page.page(paginator.num_pages)
 
+    winners = ''
+    if competition.expiry_date < timezone.now():
+        winners = participates_list.annotate(
+            participate_vote=Count('participate_votes', distinct=True)
+        ).order_by('-participate_vote', 'publish_date')[:3]
+
     hit_count = HitCount.objects.get_for_object(competition)
     HitCountMixin.hit_count(request, hit_count)
 
     competition_form = CompetitionForm(instance=competition)
     context = {'participates': participates, 'add_member': add_member,
                'competition': competition, 'competition_form': competition_form,
-               'vote_open': vote_open}
+               'vote_open': vote_open,
+               'winners': winners}
     return render(request, "vote/participates.html", context)
 
 
