@@ -2,15 +2,14 @@
 {% load bootstrap3 %}
 {% block meta_title %}О конкурсе{% endblock %}
 {% block css %}
-
     <link href="/static/css/competitions.css" rel="stylesheet">
-
     <link href="/static/css/notifIt.css" rel="stylesheet">
     <link href="/static/css/winners.css" rel="stylesheet">
-
 {% endblock %}
 {% block js %}
     <script src="/static/js/notifIt.min.js"></script>
+
+    {% if competition.comp_type == 4 %}
     <script>
         var audio = $("#sound")[0];
         $("#container").mouseenter(function () {
@@ -19,7 +18,10 @@
             audio.pause();
         });
     </script>
+    {% endif %}
+
 {% endblock %}
+
 <script>window.CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/';</script>
     {% block add_participate %}
     <div class="row">
@@ -30,11 +32,11 @@
             </div>
             <div>
                 <h3>Правила:</h3>
-                <h4>{{ competition.rules | safe }}</h4>
+                <h4>{{ competition.rules|safe }}</h4>
             </div>
             <div>
                 <h3>Описание:</h3>
-                <h4>{{ competition.short_description | safe }}</h4>
+                <h4>{{ competition.short_description|safe }}</h4>
             </div>
         </div>
         <div class="col-lg-6 col-md-6 text-left">
@@ -50,34 +52,42 @@
                           class="btn btn-success" role="button">
                         {% bootstrap_icon "thumbs-up" %} Участвовать!
                         </a></p>
-                    {% else %}
+                    {% elif vote_open %}
                         <p><button class="btn btn-default" disabled type="button">
                             <span class="glyphicon glyphicon-lock"></span>
                         </button>
-                            <b>Прием заявок завершен.</b>
+                            <b>Прием заявок завершен. Голосуй! {% bootstrap_icon "thumbs-up" %}</b>
                         </p>
-                    {% endif %}
-
-                {% if competition.status_str == 'Завершен' %}
-                <div class="panel">
-                    {% for winner in winners  %}
-                        <div class="{% cycle 'first' 'second' 'third' %} panel panel-default">
-                            <div class="row" style="align-content: center; text-align: center; padding: 10px" >
-                                        <h2>{% cycle '1-место' '2-место' '3-место' %}: {{ winner.creator }}</h2>
-                                        <h4>{{ winner.title }}</h4>
-                                        <span class="badge">Голосов:&nbsp;{{ winner.participate_votes.count }}</span>
-
-                                        <a class="btn btn-default"
-                                              href='{% url 'about_participate' winner.id %}'
-                                              role="button">Подробнее &raquo;</a>
-                            </div>
+                    {% else  %}
+                        <p><button class="btn btn-default" disabled type="button">
+                            <span class="glyphicon glyphicon-lock"></span>
+                        </button>
+                            <b>Конкурс завершен! Наши победители:</b>
+                        </p>
+                        <div class="">
+                            {% for winner in winners %}
+                                <div class="box" onclick="document.location='/participate/{{ winner.id }}';">
+                                    <div class="ribbon">
+                                        <span class="{% cycle 'golden' 'silver' 'bronze' %}">{% cycle '1 место' '2 место' '3 место' %}</span>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-8 col-md-8">
+                                        <div>
+                                            <span class="win-title">{{ winner.title }}</span>
+                                            <p><span style="padding: 5px;">Автор: <b>{{ winner.creator }}</b></span></p>
+                                        </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3">
+                                            <div class="row" style="height: 45px;"></div>
+                                            <div class="row">
+                                                <span class="badge pull-right">Голосов:&nbsp;{{ winner.participate_votes.count }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
                         </div>
-                    {% endfor %}
-                </div>
-
-
-
-                {% endif %}
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -131,10 +141,6 @@
                                         allowfullscreen></iframe>
                             </div>
                         {% elif competition.comp_type == 4 %}
-                            {% comment %}<audio name='audio' controls width='100%' height='100%'>
-                                <source src="{{ STATIC_URL }}media/{{ participate.content }}"
-                                        type="audio/mp3">
-                            </audio>{% endcomment %}
                             <div id="container">
                                 <div id="disc"></div>
                             </div>
