@@ -107,11 +107,13 @@
             <div class="row">
                 <div class="col-lg-12 col-md-12">
                     <div class="input-group" style="">
-                        {% if participate.title|length < 25 %}
-                            <h2>{{ participate.title }}</h2>
+                        <h2 style="height: 64.44px">
+                            {% if participate.title|length < 25 %}
+                            {{ participate.title }}
                         {% else %}
-                            <h2>{{ participate.title|slice:"21" }}...</h2>
+                            {{ participate.title|slice:"21" }}...
                         {% endif %}
+                        </h2>
                         <div class="input-group-btn">
                             {% if vote_open and user.is_authenticated %}
                                 <button class="btn btn-default" type="button"
