@@ -29,6 +29,30 @@
     <!--Content -->
     <div id="content-main">
 
+
+    <script type="text/javascript" src="{% static "admin/js/admin/RelatedObjectLookups.js" %}"></script>
+    <script type="text/javascript" src="{% static "admin/js/actions.js" %}"></script>
+    <script type="text/javascript" src="{% static "admin/js/core.js" %}"></script>
+    <script type="text/javascript" src="{% static "admin/js/jquery.init.js" %}"></script>
+    <script type="text/javascript" src="{% static "admin/js/prepopulate.js" %}"></script>
+    <script type="text/javascript" src="{% static "admin/js/urlify.js" %}"></script>
+    <script type="text/javascript" src="{% static "admin/js/vendor/xregexp/xregexp.js" %}"></script>
+    <script type="text/javascript" src="{% static "admin/js/vendor/jquery/jquery.js" %}"></script>
+    <script type="text/javascript" src="{% static "mezzanine/js/admin/ajax_csrf.js" %}"></script>
+    <script type="text/javascript" src="{% static "mezzanine/js/admin/collapse_backport.js" %}"></script>
+    <script type="text/javascript" src="{% static "mezzanine/js/admin/jquery.mjs.nestedSortable.js" %}"></script>
+    <script type="text/javascript" src="{% static "mezzanine/js/admin/navigation.js" %}"></script>
+    <script type="text/javascript" src="{% static "mezzanine/js/admin/page_tree.js" %}"></script>
+    <script type="text/javascript" src="{% static "mezzanine/js/jquery-ui-1.8.24.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "grappelli/js/admin/Changelist.js" %}"></script>
+
+
+
+
+
+
+
+
     <script type="text/javascript">
 jQuery(function($) {
     $('.addlist').change(function() {
@@ -63,8 +87,8 @@ jQuery(function($) {
 
                     <div class="row1">
                         <a href="#" class="tree-toggle" id="page-{{ competition.id }}" style="visibility: visible">
-                            <span class="icon open" style="display: none">+</span>
-                            <span class="icon close" style="display: block">-</span>
+                            <span class="icon open" style="display: block">+</span>
+                            <span class="icon close" style="display: none">-</span>
                         </a>
                         <a href="/ru/admin/pages/page/{{ competition.id }}/delete/?fromtree" class="delete grappelli-delete"></a>
                         <a href="/ru/admin/pages/page/{{ competition.id }}/delete/?fromtree" class="delete"></a>
@@ -104,22 +128,6 @@ jQuery(function($) {
     </div>
 
     </div>
-
-    <script type="text/javascript" src="{% static "mezzanine/js/admin/ajax_csrf.js" %}"></script>
-    <script type="text/javascript" src="{% static "mezzanine/js/admin/collapse_backport.js" %}"></script>
-    <script type="text/javascript" src="{% static "mezzanine/js/admin/jquery.mjs.nestedSortable.js" %}"></script>
-    <script type="text/javascript" src="{% static "mezzanine/js/admin/navigation.js" %}"></script>
-    <script type="text/javascript" src="{% static "mezzanine/js/admin/page_tree.js" %}"></script>
-    <script type="text/javascript" src="{% static "mezzanine/js/jquery-ui-1.8.24.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "admin/js/admin/RelatedObjectLookups.js" %}"></script>
-    <script type="text/javascript" src="{% static "admin/js/actions.js" %}"></script>
-    <script type="text/javascript" src="{% static "admin/js/core.js" %}"></script>
-    <script type="text/javascript" src="{% static "admin/js/jquery.init.js" %}"></script>
-    <script type="text/javascript" src="{% static "admin/js/prepopulate.js" %}"></script>
-    <script type="text/javascript" src="{% static "admin/js/urlify.js" %}"></script>
-    <script type="text/javascript" src="{% static "admin/js/vendor/xregexp/xregexp.js" %}"></script>
-    <script type="text/javascript" src="{% static "admin/js/vendor/jquery/jquery.js" %}"></script>
-    <script type="text/javascript" src="{% static "grappelli/js/admin/Changelist.js" %}"></script>
 
 {% endblock %}
 
