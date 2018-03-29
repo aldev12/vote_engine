@@ -10,24 +10,36 @@
 
             var a = document.createElement('a');
             var li = document.createElement('li');
+            var ul = document.getElementsByClassName('dropdown-menu-menu');
             li.appendChild(a);
 
             a.href = '{% url 'admin_competition' 1 %}';
             a.text = 'Фотоконкурсы';
-            $('div#container div#side-panel div.dropdown-menu ul li ul.dropdown-menu-menu').append(li);
+            ul[0].appendChild(li);
+
+            a = document.createElement('a');
+            li = document.createElement('li');
+            li.appendChild(a);
 
             a.href = '{% url 'admin_competition' 2 %}';
             a.text = 'Литературные конкурсы';
-            $('div#container div#side-panel div.dropdown-menu ul li ul.dropdown-menu-menu').append(li);
+            ul[0].appendChild(li);
+
+            a = document.createElement('a');
+            li = document.createElement('li');
+            li.appendChild(a);
 
             a.href = '{% url 'admin_competition' 3 %}';
             a.text = 'Видеоконкурсы';
-            $('div#container div#side-panel div.dropdown-menu ul li ul.dropdown-menu-menu').append(li);
+            ul[0].appendChild(li);
+
+            a = document.createElement('a');
+            li = document.createElement('li');
+            li.appendChild(a);
 
             a.href = '{% url 'admin_competition' 4 %}';
             a.text = 'Аудиоконкурсы';
-            $('div#container div#side-panel div.dropdown-menu ul li ul.dropdown-menu-menu').append(li);
-
+            ul[0].appendChild(li);
 
         });
         </script>
