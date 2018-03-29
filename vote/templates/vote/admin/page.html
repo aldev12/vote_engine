@@ -90,8 +90,11 @@ jQuery(function($) {
                             <span class="icon open" style="display: block">+</span>
                             <span class="icon close" style="display: none">-</span>
                         </a>
-                        <a href="/ru/admin/pages/page/{{ competition.id }}/delete/?fromtree" class="delete grappelli-delete"></a>
-                        <a href="/ru/admin/pages/page/{{ competition.id }}/delete/?fromtree" class="delete"></a>
+                        <a style="padding-left: 5px" href="/ru/admin/pages/page/{{ competition.id }}/delete/?fromtree" class="delete grappelli-delete">
+                            <img src="/static/grappelli/img/icons/icon-inline_item_tools-deletelink.png">
+
+                        </a>
+{#                        <a href="/ru/admin/pages/page/{{ competition.id }}/delete/?fromtree" class="delete"></a>#}
                         <a href="/ru/admin/pages/page/{{ competition.id }}/change/" class="changelink">{{ competition.title }}</a>
                         <span class="ordering">
                             <img src="/static/grappelli/img/admin/arrow-up.gif">
@@ -107,7 +110,9 @@ jQuery(function($) {
                             <span class="icon open">+</span>
                             <span class="icon close">-</span>
                         </a>
-                        <a href="/ru/admin/pages/page/{{ participate.id }}/delete/?fromtree" class="delete grappelli-delete"></a>
+                        <a style="padding-left: 5px"  href="/ru/admin/pages/page/{{ participate.id }}/delete/?fromtree" class="delete grappelli-delete">
+                            <img src="/static/grappelli/img/icons/icon-inline_item_tools-deletelink.png">
+                        </a>
                         <a href="/ru/admin/pages/page/{{ participate.id }}/change/" class="changelink">{{ participate.title }}</a>
                         <span class="ordering">
                             <img src="/static/grappelli/img/admin/arrow-up.gif">
