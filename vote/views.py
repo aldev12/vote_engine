@@ -165,10 +165,19 @@ def about_participate(request, participate_id):
 
 
 def photo_handler(photo_file_url):
-    size = (260, 260)
+    thumb_size = (260, 260)
     image = Image.open("{0}/{1}".format(settings.MEDIA_ROOT, photo_file_url))
     save_path = "{0}/thumbs/{1}".format(settings.MEDIA_ROOT, photo_file_url)
-    image.thumbnail(size, Image.ANTIALIAS)
+    width = image.size[0]
+    height = image.size[1]
+
+    if width > height:
+        counting_point = (width - height)/2
+        image = image.crop((counting_point, 0, counting_point + height, height))
+    else:
+        counting_point = (height - width)/2
+        image = image.crop((0, counting_point, width, counting_point + width))
+    image.thumbnail(thumb_size, Image.ANTIALIAS)
     image.save(save_path, 'JPEG')
 
 
