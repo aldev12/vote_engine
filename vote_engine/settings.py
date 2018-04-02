@@ -284,7 +284,6 @@ INSTALLED_APPS = (
     "vote",
     "ckeditor",
     "bootstrap3",
-    "imagekit",
     # "mezzanine.accounts",
     # "mezzanine.mobile",
 )
