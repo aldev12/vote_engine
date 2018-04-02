@@ -165,6 +165,7 @@ def about_participate(request, participate_id):
 
 
 def photo_handler(photo_file_url):
+    """Создает миниатюру загружаемого фото сразу при подаче заявки"""
     thumb_size = (260, 260)
     image = Image.open("{0}/{1}".format(settings.MEDIA_ROOT, photo_file_url))
     save_path = "{0}/thumbs/{1}".format(settings.MEDIA_ROOT, photo_file_url)
@@ -204,7 +205,7 @@ def participate_add(request):
             participate.publish_date = timezone.now()
             participate.creator = request.user
             participate.save()
-            if request.FILES['content'].name.split(".")[-1] in ['jpeg', 'jpg', 'JPEG', 'JPG']:
+            if request.FILES['content'].name.split(".")[-1].lower() in ['jpeg', 'jpg']:
                 photo_handler("{0}".format(participate.content))
             messages.add_message(request, messages.SUCCESS,
                                  'Заявка на %s создана, ожидайте проверки администратором' % (competition.title,))

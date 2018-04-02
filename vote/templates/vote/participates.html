@@ -12,7 +12,7 @@
     {% if competition.comp_type == 4 %}
     <script>
         var audio = $("#sound")[0];
-        $("#container").mouseenter(function () {
+        $("#vinyl_container").mouseenter(function () {
             audio.play();
         }).mouseleave(function () {
             audio.pause();
@@ -141,8 +141,8 @@
                                         allowfullscreen></iframe>
                             </div>
                         {% elif competition.comp_type == 4 %}
-                            <div id="container">
-                                <div id="disc"></div>
+                            <div id="vinyl_container">
+                                <div id="vinyl"></div>
                             </div>
                             <audio id="sound"
                                    src="{{ STATIC_URL }}media/{{ participate.content }}"

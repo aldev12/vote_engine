@@ -41,7 +41,7 @@ h1 {
   display: none;
 }
 
-#container {
+#vinyl_container {
   height: 180px;
   width: 180px;
   background-color: rgba(255,255,255,0.8);
@@ -52,7 +52,8 @@ h1 {
   margin-bottom: 12px;
   opacity: 0.8;
 }
-#container:before {
+
+#vinyl_container:before {
   content: "\f001";
   font-family: FontAwesome;
   font-size: 70px;
@@ -64,11 +65,13 @@ h1 {
   line-height: 180px;
   left: 60px;
 }
-#container:hover #disc {
+
+#vinyl_container:hover #vinyl {
   margin-left: 110px;
   transform: rotate(360deg);
 }
-#disc {
+
+#vinyl {
   position: absolute;
   height: 140px;
   width: 140px;
@@ -134,4 +137,29 @@ h1 {
   0 0 0 47px #333 inset,
   0 0 0 62px #AF2A10 inset,
   0 0 10px 78px rgba(0, 0, 0, 0.5) inset;
+}
+
+#static_vinyl_container {
+  height: 180px;
+  width: 180px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 24px;
+  position: relative;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, .15);
+  transition: .5s linear;
+  margin-bottom: 12px;
+  opacity: 0.8;
+}
+
+#static_vinyl_container:before {
+  content: "\f001";
+  font-family: FontAwesome;
+  font-size: 70px;
+  background: -webkit-linear-gradient(50deg, #FD9F85 50%, #E837C2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #FF7E24;
+  position: absolute;
+  line-height: 180px;
+  left: 60px;
 }

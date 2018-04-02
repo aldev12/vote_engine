@@ -2,8 +2,8 @@
 {% block meta_title %}Аудио{% endblock %}
 {% block content_participate %}
     <div class="col-lg-8 col-md-8 col-lg-offset-2 col-md-offset-2" align="center">
-        <div id="container">
-            <div id="disc"></div>
+        <div id="static_vinyl_container">
+            <div id="vinyl"></div>
         </div>
         <audio src="{{ STATIC_URL }}media/{{ participate.content }}"
                preload="metadata" controls></audio>
