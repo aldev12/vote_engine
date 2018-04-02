@@ -281,10 +281,10 @@ INSTALLED_APPS = (
     "mezzanine.blog",
     "mezzanine.forms",
     "mezzanine.galleries",
-    #"mezzanine.twitter",
     "vote",
     "ckeditor",
     "bootstrap3",
+    "imagekit",
     # "mezzanine.accounts",
     # "mezzanine.mobile",
 )

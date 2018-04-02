@@ -21,6 +21,9 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
+from PIL import Image
+from django.conf import settings
+
 
 CONTENT_COUNT_IN_PAGE = 5
 
@@ -161,6 +164,14 @@ def about_participate(request, participate_id):
                    'add_member': add_member, 'vote_open': vote_open})
 
 
+def photo_handler(photo_file_url):
+    size = (260, 260)
+    image = Image.open("{0}/{1}".format(settings.MEDIA_ROOT, photo_file_url))
+    save_path = "{0}/thumbs/{1}".format(settings.MEDIA_ROOT, photo_file_url)
+    image.thumbnail(size, Image.ANTIALIAS)
+    image.save(save_path, 'JPEG')
+
+
 @login_required
 def participate_add(request):
     """Создать заявку на участие в конкурсе"""
@@ -184,8 +195,10 @@ def participate_add(request):
             participate.publish_date = timezone.now()
             participate.creator = request.user
             participate.save()
+            if request.FILES['content'].name.split(".")[-1] in ['jpeg', 'jpg', 'JPEG', 'JPG']:
+                photo_handler("{0}".format(participate.content))
             messages.add_message(request, messages.SUCCESS,
-                                 'Заявка %s создана, ожидайте проверки администратором' % competition.title)
+                                 'Заявка на %s создана, ожидайте проверки администратором' % (competition.title,))
             return redirect('competitions')
     else:
         form = CustomForm()
@@ -194,7 +207,7 @@ def participate_add(request):
 
 @login_required
 def participate_edit(request):
-    """Редактрировать завяку"""
+    """Редактировать заявку"""
     participate_id = request.GET.get('participate_id', 0)
     participate = get_object_or_404(Participate, id=participate_id)
     competition = get_object_or_404(Competition, id=participate.competition_id_id)
