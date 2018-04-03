@@ -205,8 +205,12 @@ def participate_add(request):
             participate.publish_date = timezone.now()
             participate.creator = request.user
             participate.save()
-            if request.FILES['content_file'].name.split(".")[-1].lower() in ['jpeg', 'jpg']:
-                photo_handler("{0}".format(participate.content_file))
+
+            if request.FILES:
+                check_photo_ext = request.FILES['content_file'].name.split(".")[-1].lower() in ['jpeg', 'jpg']
+                if check_photo_ext:
+                    photo_handler(participate.content)
+
             messages.add_message(request, messages.SUCCESS,
                                  'Заявка на %s создана, ожидайте проверки администратором' % (competition.title,))
             return redirect('competitions')
