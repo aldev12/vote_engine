@@ -44,7 +44,7 @@ class ParticipateForm(forms.ModelForm):
 
 
 class LiteralParticipateForm(forms.ModelForm):
-    comment = forms.CharField(label='Контент', widget=CKEditorWidget())
+    comment = forms.CharField(label='Текст', widget=CKEditorWidget())
 
     class Meta:
         model = Participate
