@@ -95,7 +95,7 @@ class Participate(Page):
         verbose_name='конкурс',
         related_name='competition_participates',
         on_delete=models.CASCADE)
-    content = models.FileField('файл', upload_to='uploads/')
+    content_file = models.FileField('файл', upload_to='uploads/', blank=True, null=True)
     creator = models.ForeignKey(
         User, verbose_name='автор',
         related_name='user_participates',

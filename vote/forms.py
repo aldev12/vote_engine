@@ -12,7 +12,10 @@ from django.forms.extras import SelectDateWidget
 class CompetitionForm(forms.ModelForm, forms.Field):
     rules = forms.CharField(label='Правила', widget=CKEditorWidget())
     short_description = forms.CharField(label='Краткое описание', widget=CKEditorWidget())
-    expiry_date = forms.DateField(label="Дата окончания", widget=SelectDateWidget(), required=True)
+    expiry_date = forms.DateField(label="Дата окончания",
+                                  widget=SelectDateWidget(),
+                                  required=True,
+                                  initial=timezone.now() + timezone.timedelta(days=30))
     survey_date = forms.DateField(label="Голосование с",
                                   widget=SelectDateWidget(),
                                   required=True,
@@ -33,10 +36,11 @@ class CompetitionForm(forms.ModelForm, forms.Field):
 
 class ParticipateForm(forms.ModelForm):
     comment = forms.CharField(label='Описание', widget=CKEditorWidget())
+    content_file = forms.FileField(label='Файл')
 
     class Meta:
         model = Participate
-        fields = ('title', 'comment', 'content')
+        fields = ('title', 'comment', 'content_file')
 
 
 class LiteralParticipateForm(forms.ModelForm):
@@ -49,28 +53,28 @@ class LiteralParticipateForm(forms.ModelForm):
 
 class VideoParticipateForm(forms.ModelForm):
     comment = forms.CharField(label='Описание', widget=CKEditorWidget())
-    content = forms.CharField(label='Ссылка на видео с youtube')
+    content_file = forms.CharField(label='Ссылка на видео с youtube')
 
     class Meta:
         model = Participate
-        fields = ('title', 'comment', 'content')
+        fields = ('title', 'comment', 'content_file')
 
     def clean(self):
         form_data = self.cleaned_data
-        video_link = form_data['content']
+        video_link = form_data['content_file']
         if video_link:
             reg_exp = '^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*'
             match = re.match(reg_exp, video_link)
             if match and len(match.group(2)) == 11:
-                form_data['content'] = 'https://www.youtube.com/embed/%s' % match.group(2)
+                form_data['content_file'] = 'https://www.youtube.com/embed/%s' % match.group(2)
                 return form_data
             else:
                 link = video_link.split('=')
                 if len(link) > 1 and len(link[1]) == 11:
-                    form_data['content'] = 'https://www.youtube.com/embed/%s' % link
+                    form_data['content_file'] = 'https://www.youtube.com/embed/%s' % link
                     return form_data
-        self._errors["content"] = "Не корректная ссылка"
-        del form_data['content']
+        self._errors["content_file"] = "Не корректная ссылка"
+        del form_data['content_file']
         return form_data
 
 

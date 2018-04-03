@@ -205,8 +205,8 @@ def participate_add(request):
             participate.publish_date = timezone.now()
             participate.creator = request.user
             participate.save()
-            if request.FILES['content'].name.split(".")[-1].lower() in ['jpeg', 'jpg']:
-                photo_handler("{0}".format(participate.content))
+            if request.FILES['content_file'].name.split(".")[-1].lower() in ['jpeg', 'jpg']:
+                photo_handler("{0}".format(participate.content_file))
             messages.add_message(request, messages.SUCCESS,
                                  'Заявка на %s создана, ожидайте проверки администратором' % (competition.title,))
             return redirect('competitions')
@@ -243,7 +243,7 @@ def participate_edit(request):
             update = Participate.objects.filter(id=participate_id).exclude(status=2).update(
                 title=participate.title,
                 comment=participate.comment,
-                content=participate.content,
+                content_file=participate.content_file,
                 status=participate.status,
                 publish_date=participate.publish_date)
             if update:
