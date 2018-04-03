@@ -36,7 +36,7 @@ class CompetitionForm(forms.ModelForm, forms.Field):
 
 class ParticipateForm(forms.ModelForm):
     comment = forms.CharField(label='Описание', widget=CKEditorWidget())
-    content_file = forms.FileField(label='Файл')
+    content_file = forms.FileField(label='Файл', help_text='Возможные расширения: ".jpg", ".jpeg", ".mp3", ".ogg", ".wav"')
 
     class Meta:
         model = Participate
