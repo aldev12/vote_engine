@@ -5,9 +5,14 @@
     <link href="/static/css/competitions.css" rel="stylesheet">
     <link href="/static/css/notifIt.css" rel="stylesheet">
     <link href="/static/css/video.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.plyr.io/2.0.15/plyr.css">
 {% endblock %}
 {% block js %}
+    <script src="https://cdn.plyr.io/2.0.15/plyr.js"></script>
     <script src="/static/js/notifIt.min.js"></script>
+    <script>
+        plyr.setup("#plyr-audio");
+    </script>
 {% endblock %}
 
 {% block main %}
@@ -16,9 +21,8 @@
         {% endblock %}
     </div>
     <div class="row">
-        <div class="col-lg-3 col-md-3"></div>
-        <div class="col-lg-3 col-md-3">
-            <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3"></div>
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
                 <div class="caption">
                     <h3>{{ participate.title }}</h3>
                     <p>{{ participate.comment|safe }}</p>
@@ -30,10 +34,9 @@
                         публикации: {{ participate.publish_date|date:"d.m.Y" }}</p>
                     </label>
                 </div>
-            </div>
         </div>
-        <div class="col-lg-3 col-md-3">
-            <div class="row pull-right">
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+            <div class="pull-right">
                 <h3>
                     {% if vote_open and user.is_authenticated %}
                         <button class="btn btn-success" type="button"
