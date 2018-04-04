@@ -7,7 +7,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.contenttypes.fields import GenericRelation
 from hitcount.models import HitCountMixin, HitCount
-from .validators import validate_file_extension
 
 PHOTO = 1
 LITERAL = 2
@@ -96,7 +95,10 @@ class Participate(Page):
         verbose_name='конкурс',
         related_name='competition_participates',
         on_delete=models.CASCADE)
-    content_file = models.FileField('файл', upload_to='uploads/%Y/%m/%d/', blank=True, null=True, validators=[validate_file_extension])
+    content_file = models.FileField('файл',
+                                    upload_to='uploads/%Y/%m/%d/',
+                                    blank=True,
+                                    null=True)
     creator = models.ForeignKey(
         User, verbose_name='автор',
         related_name='user_participates',

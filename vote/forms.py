@@ -7,6 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import Competition, Participate, Profile
 from ckeditor.widgets import CKEditorWidget
 from django.forms.extras import SelectDateWidget
+from .validators import validate_photo_file_extension, validate_audio_file_extension
 
 
 class CompetitionForm(forms.ModelForm, forms.Field):
@@ -34,9 +35,22 @@ class CompetitionForm(forms.ModelForm, forms.Field):
         return cd
 
 
-class ParticipateForm(forms.ModelForm):
+class PhotoParticipateForm(forms.ModelForm):
     comment = forms.CharField(label='Описание', widget=CKEditorWidget())
-    content_file = forms.FileField(label='Файл', help_text='Возможные расширения: ".jpg", ".jpeg", ".mp3", ".ogg", ".wav"')
+    content_file = forms.FileField(label='Файл',
+                                   validators=[validate_photo_file_extension],
+                                   help_text='Возможные расширения: ".jpg", ".jpeg"')
+
+    class Meta:
+        model = Participate
+        fields = ('title', 'comment', 'content_file')
+
+
+class AudioParticipateForm(forms.ModelForm):
+    comment = forms.CharField(label='Описание', widget=CKEditorWidget())
+    content_file = forms.FileField(label='Файл',
+                                   validators=[validate_audio_file_extension],
+                                   help_text='Возможные расширения:".mp3", ".ogg", ".wav"')
 
     class Meta:
         model = Participate

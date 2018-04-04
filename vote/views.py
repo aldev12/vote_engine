@@ -1,4 +1,4 @@
-from .forms import CompetitionForm, ParticipateForm, SignupForm, UserForm
+from .forms import CompetitionForm, AudioParticipateForm, PhotoParticipateForm, SignupForm, UserForm
 from .forms import ProfileForm, LiteralParticipateForm, VideoParticipateForm
 from django.contrib.auth.forms import PasswordChangeForm
 from django.http import Http404, HttpResponseRedirect, HttpResponse
@@ -12,7 +12,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, user_passes_test
-from vote.models import Competition, Participate, Vote, Profile, LITERAL, VIDEO
+from vote.models import Competition, Participate, Vote, Profile, LITERAL, VIDEO, PHOTO, AUDIO
 from hitcount.views import HitCountDetailView
 from hitcount.models import HitCount
 from hitcount.views import HitCountMixin
@@ -192,8 +192,10 @@ def participate_add(request):
         CustomForm = LiteralParticipateForm
     elif competition.comp_type == VIDEO:
         CustomForm = VideoParticipateForm
+    elif competition.comp_type == AUDIO:
+        CustomForm = AudioParticipateForm
     else:
-        CustomForm = ParticipateForm
+        CustomForm = PhotoParticipateForm
 
     if request.method == "POST":
         form = CustomForm(request.POST, request.FILES)
@@ -230,8 +232,10 @@ def participate_edit(request):
         CustomForm = LiteralParticipateForm
     elif competition.comp_type == VIDEO:
         CustomForm = VideoParticipateForm
+    elif competition.comp_type == AUDIO:
+        CustomForm = AudioParticipateForm
     else:
-        CustomForm = ParticipateForm
+        CustomForm = PhotoParticipateForm
 
     if request.user not in [participate.creator, competition.creator]:
         raise Http404
