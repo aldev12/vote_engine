@@ -1,6 +1,5 @@
 {% extends "vote/participate_base.html" %}
 
-
 {% block table_participates %}
 
 <table class="table table-hover">
@@ -10,7 +9,6 @@
     <tr  onclick="table_click('{% url "participate_edit" %}?participate_id={{ participate.id }}')">
         <td>
             <p class="text-info"><strong>{{ participate.title }}</strong></p>
-{#            <a href = '{% url "participate_edit" %}?participate_id={{ participate.id }}'>{{ participate.title }}</a>#}
         </td>
         <td>
             {{ participate.participate_votes.count }}

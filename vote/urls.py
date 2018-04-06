@@ -1,7 +1,6 @@
 from django.conf.urls import url
+
 from . import views
-from django.contrib.auth import views as auth_views
-from mezzanine.pages import views as pages_view
 
 urlpatterns = [
     url("^admin/pages/competition/(\d{1,9})$", views.admin_competition, name='admin_competition'),

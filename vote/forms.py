@@ -1,12 +1,14 @@
 import re
-from django import forms
-from django.core.exceptions import ValidationError
-from django.utils import timezone
-from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
-from .models import Competition, Participate, Profile
+
 from ckeditor.widgets import CKEditorWidget
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.forms.extras import SelectDateWidget
+from django.utils import timezone
+
+from .models import Competition, Participate, Profile
 from .validators import validate_photo_file_extension, validate_audio_file_extension
 
 

@@ -1,17 +1,12 @@
-from django.db import models, IntegrityError
-from mezzanine.pages.models import Page, RichText
-from mezzanine.core.fields import RichTextField
-from django.utils import timezone
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.fields import GenericRelation
+from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.contrib.contenttypes.fields import GenericRelation
+from django.utils import timezone
 from hitcount.models import HitCountMixin, HitCount
-
-PHOTO = 1
-LITERAL = 2
-VIDEO = 3
-AUDIO = 4
+from mezzanine.core.fields import RichTextField
+from mezzanine.pages.models import Page, RichText
 
 
 class Profile(models.Model):
@@ -43,6 +38,10 @@ def save_user_profile(sender, instance, **kwargs):
 
 class Competition(Page, HitCountMixin):
     """Модель конкурса"""
+    PHOTO = 1
+    LITERAL = 2
+    VIDEO = 3
+    AUDIO = 4
     COMPETITION_TYPE = (
         (PHOTO, 'Фотоконкурс'),
         (LITERAL, 'Литературный конкурс'),
@@ -55,7 +54,7 @@ class Competition(Page, HitCountMixin):
         default=timezone.now() + timezone.timedelta(days=5))
     comp_type = models.IntegerField(
         'тип конкурса',
-        default=1,
+        default=PHOTO,
         choices=COMPETITION_TYPE)
     rules = RichTextField('правила', max_length=2000)
     short_description = RichTextField('краткое описание', max_length=500)

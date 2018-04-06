@@ -46,13 +46,6 @@
     <script type="text/javascript" src="{% static "mezzanine/js/jquery-ui-1.8.24.min.js" %}"></script>
     <script type="text/javascript" src="{% static "grappelli/js/admin/Changelist.js" %}"></script>
 
-
-
-
-
-
-
-
     <script type="text/javascript">
 jQuery(function($) {
     $('.addlist').change(function() {
@@ -64,9 +57,7 @@ jQuery(function($) {
     });
 });
 
-
 </script>
-
 
     <div id="addlist-primary">
         <select class="addlist">
@@ -94,7 +85,6 @@ jQuery(function($) {
                             <img src="/static/grappelli/img/icons/icon-inline_item_tools-deletelink.png">
 
                         </a>
-{#                        <a href="/ru/admin/pages/page/{{ competition.id }}/delete/?fromtree" class="delete"></a>#}
                         <a href="/ru/admin/pages/page/{{ competition.id }}/change/" class="changelink">{{ competition.title }}</a>
                         <span class="ordering">
                             <img src="/static/grappelli/img/admin/arrow-up.gif">
@@ -122,18 +112,12 @@ jQuery(function($) {
                     <br style="clear:both;">
                     </li>
                 {% endfor %}
-
             </ol>
-
             </li>
-
             {% endfor %}
         </ol>
-
     </div>
-
     </div>
-
 {% endblock %}
 
 

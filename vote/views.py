@@ -1,29 +1,29 @@
-from .forms import CompetitionForm, AudioParticipateForm, PhotoParticipateForm, SignupForm, UserForm
-from .forms import ProfileForm, LiteralParticipateForm, VideoParticipateForm
-from django.contrib.auth.forms import PasswordChangeForm
-from django.http import Http404, HttpResponseRedirect, HttpResponse
-from django.utils import timezone
-from django.db import IntegrityError, transaction
-from django.db.models import Count
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.sites.shortcuts import get_current_site
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.contrib import messages
-from django.contrib.auth import authenticate, login, update_session_auth_hash
-from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required, user_passes_test
-from vote.models import Competition, Participate, Vote, Profile, LITERAL, VIDEO, PHOTO, AUDIO
-from hitcount.views import HitCountDetailView
-from hitcount.models import HitCount
-from hitcount.views import HitCountMixin
-from django.utils.encoding import force_bytes, force_text
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.template.loader import render_to_string
-from .tokens import account_activation_token
-from django.core.mail import EmailMessage
 from PIL import Image
 from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth import login, update_session_auth_hash
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.models import User
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import EmailMessage
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db import IntegrityError, transaction
+from django.db.models import Count
+from django.http import Http404, HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.template.loader import render_to_string
+from django.utils import timezone
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from hitcount.models import HitCount
+from hitcount.views import HitCountDetailView
+from hitcount.views import HitCountMixin
 
+from vote.models import Competition, Participate, Vote
+from .forms import CompetitionForm, AudioParticipateForm, PhotoParticipateForm, SignupForm, UserForm
+from .forms import ProfileForm, LiteralParticipateForm, VideoParticipateForm
+from .tokens import account_activation_token
 
 CONTENT_COUNT_IN_PAGE = 5
 
@@ -46,7 +46,7 @@ def competition_list(request):
         status=2
     ).annotate(
         count_vote=Count('competition_participates__participate_votes')
-    ). annotate(
+    ).annotate(
         count_participate=Count('competition_participates', distinct=True)
     )
     return render(request, "vote/competitions.html", {'competitions': competitions})
@@ -173,10 +173,10 @@ def photo_handler(photo_file_url):
     height = image.size[1]
 
     if width > height:
-        counting_point = (width - height)/2
+        counting_point = (width - height) / 2
         image = image.crop((counting_point, 0, counting_point + height, height))
     else:
-        counting_point = (height - width)/2
+        counting_point = (height - width) / 2
         image = image.crop((0, counting_point, width, counting_point + width))
     image.thumbnail(thumb_size, Image.ANTIALIAS)
     image.save(save_path, 'JPEG')
@@ -188,11 +188,11 @@ def participate_add(request):
     competition_id = request.GET.get('competition_id', 0)
     competition = get_object_or_404(Competition, id=competition_id)
 
-    if competition.comp_type == LITERAL:
+    if competition.comp_type == Competition.LITERAL:
         CustomForm = LiteralParticipateForm
-    elif competition.comp_type == VIDEO:
+    elif competition.comp_type == Competition.VIDEO:
         CustomForm = VideoParticipateForm
-    elif competition.comp_type == AUDIO:
+    elif competition.comp_type == Competition.AUDIO:
         CustomForm = AudioParticipateForm
     else:
         CustomForm = PhotoParticipateForm
@@ -228,11 +228,11 @@ def participate_edit(request):
     participate = get_object_or_404(Participate, id=participate_id)
     competition = get_object_or_404(Competition, id=participate.competition_id_id)
 
-    if competition.comp_type == LITERAL:
+    if competition.comp_type == Competition.LITERAL:
         CustomForm = LiteralParticipateForm
-    elif competition.comp_type == VIDEO:
+    elif competition.comp_type == Competition.VIDEO:
         CustomForm = VideoParticipateForm
-    elif competition.comp_type == AUDIO:
+    elif competition.comp_type == Competition.AUDIO:
         CustomForm = AudioParticipateForm
     else:
         CustomForm = PhotoParticipateForm
@@ -382,7 +382,7 @@ def profile(request):
         competitions = Competition.objects.filter(creator=request.user).all()
         participates = Participate.objects.filter(creator=request.user).all()
         context = {'user_form': user_form, 'profile_form': profile_form,
-               'participates': participates, 'competitions': competitions}
+                   'participates': participates, 'competitions': competitions}
     return render(request, "accounts/profile.html", context)
 
 
@@ -407,8 +407,8 @@ def signup(request):
             )
             email.send()
             messages.add_message(request, messages.SUCCESS,
-                                'На Ваш email отправлено письмо! '
-                                'Перейдите по ссылке и Ваш аккаунт активируется.')
+                                 'На Ваш email отправлено письмо! '
+                                 'Перейдите по ссылке и Ваш аккаунт активируется.')
             return redirect("/")
     else:
         form = SignupForm()

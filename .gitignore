@@ -8,3 +8,4 @@
 .idea/
 .hgignore
 #/vote/migrations
+local_settings.py
