@@ -4,6 +4,25 @@
 {% block meta_title %}{% endblock %}
 {% block css %}
     <link href="/static/css/competitions.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/bootstrap-datepicker3.min.css"/>
+{% endblock %}
+{% block js %}
+    <script src="/static/js/bootstrap-datepicker.min.js"></script>
+    <script src="/static/js/bootstrap-datepicker.ru.min.js"></script>
+    <script>
+    $(document).ready(function(){
+        $('#id_expiry_date').datepicker({
+            format: 'dd.mm.yyyy',
+            startDate: '-3d',
+            language: 'ru'
+        });
+        $('#id_survey_date').datepicker({
+            format: 'dd.mm.yyyy',
+            startDate: '-3d',
+            language: 'ru'
+        });
+    });
+    </script>
 {% endblock %}
 
 {% block main %}
@@ -18,32 +37,10 @@
         </div>
         <div class="panel-body">
             <div class="row">
-                <div class="col-lg-6 col-md-6">
-                    <form method="post" enctype="multipart/form-data" class="post-form">
+                <div class="col-lg-8 col-md-8">
+                    <form method="post" enctype="multipart/form-data" class="form-horizontal">
                         {% csrf_token %}
-                            {{ form.non_field_errors }}
-                            <table class="table">
-                                {% for field in form %}
-                                    <tr>
-                                        <td>
-                                            <div class="fieldWrapper">
-                                                <label for="{{ field.id_for_label }}">{{ field.label_tag }}</label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="fieldWrapper" >
-                                                {{ field }}
-{#                                                <p class="text-danger">{{ field.errors }}</p>#}
-                                                {% for error in field.errors %}
-                                                    <div class="alert alert-danger" style="margin-top: 10px">
-                                                        <strong>{{ error|escape }}</strong>
-                                                    </div>
-                                                {% endfor %}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </table>
+                            {% bootstrap_form form layout="horizontal"%}
                             {% bootstrap_button "Сохранить" button_type="submit" button_class="btn btn-success" %}
                             <div class="pull-right">
                                 {% block delete_button %}

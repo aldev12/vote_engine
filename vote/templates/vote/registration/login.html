@@ -3,10 +3,6 @@
 {% block meta_title %}Логин{% endblock %}
 {% block main %}
 
-    {% if form.errors %}
-        <p>Имя пользователя и пароль не совпадают. Попробуйте еще!</p>
-    {% endif %}
-
     {% if next %}
         {% if user.is_authenticated %}
             <p>Ваш аккаунт не имеет доступа к этой странице. Войдите с помощью
@@ -16,17 +12,16 @@
         {% endif %}
     {% endif %}
 
-    <div class="row">
-        <div class="col-lg-4">
+    <div class="container">
+        <div class="form- center-block" style="max-width: 400px; width: 100%;">
             <form method="post" action="{% url 'login' %}">
                 {% csrf_token %}
                 {% bootstrap_form form %}
                 {% bootstrap_button "Войти" button_type="submit" button_class="btn-success" %}
                 <input type="hidden" name="next" value="{{ next }}"/>
-                <p class="message">Не зарегистрирован? <a
-                        href="{% url 'signup' %}">Создай аккаунт</a></p>
+                <p class="message">Не зарегистрирован?
+                    <a href="{% url 'signup' %}">Создай аккаунт</a></p>
             </form>
-
             <p><a href="{% url 'password_reset' %}">Забыли пароль?</a></p>
         </div>
     </div>

@@ -5,9 +5,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.forms.extras import SelectDateWidget
 from django.utils import timezone
-
 from .models import Competition, Participate, Profile
 from .validators import validate_photo_file_extension, validate_audio_file_extension
 
@@ -16,11 +14,9 @@ class CompetitionForm(forms.ModelForm, forms.Field):
     rules = forms.CharField(label='Правила', widget=CKEditorWidget())
     short_description = forms.CharField(label='Краткое описание', widget=CKEditorWidget())
     expiry_date = forms.DateField(label="Дата окончания",
-                                  widget=SelectDateWidget(),
                                   required=True,
                                   initial=timezone.now() + timezone.timedelta(days=30))
     survey_date = forms.DateField(label="Голосование с",
-                                  widget=SelectDateWidget(),
                                   required=True,
                                   initial=timezone.now() + timezone.timedelta(days=5))
 
