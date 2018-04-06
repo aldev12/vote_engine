@@ -163,3 +163,7 @@ h1 {
   line-height: 180px;
   left: 60px;
 }
+
+.django-ckeditor-widget {
+  width: 100%;
+}
