@@ -5,10 +5,10 @@
     <link href="/static/css/competitions.css" rel="stylesheet">
     <link href="/static/css/notifIt.css" rel="stylesheet">
     <link href="/static/css/video.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.plyr.io/2.0.15/plyr.css">
+    <link rel="stylesheet" href="/static/css/plyr.css">
 {% endblock %}
 {% block js %}
-    <script src="https://cdn.plyr.io/2.0.15/plyr.js"></script>
+    <script src="/static/js/plyr.js"></script>
     <script src="/static/js/notifIt.min.js"></script>
     <script>
         plyr.setup("#plyr-audio");
@@ -21,8 +21,8 @@
         {% endblock %}
     </div>
     <div class="row">
-        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3"></div>
-        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+        <div class="center-block" style="max-width: 748px; width: 100%;">
+            <div class="col-lg-8 col-md-8 col-sm-8">
                 <div class="caption">
                     <h3>{{ participate.title }}</h3>
                     <p>{{ participate.comment|safe }}</p>
@@ -34,27 +34,28 @@
                         публикации: {{ participate.publish_date|date:"d.m.Y" }}</p>
                     </label>
                 </div>
-        </div>
-        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-            <div class="pull-right">
-                <h3>
-                    {% if vote_open and user.is_authenticated %}
-                        <button class="btn btn-success" type="button"
-                                onclick="vote({{ participate.id }});">
-                            <span class="glyphicon glyphicon-thumbs-up"></span>
-                            Голосовать!
-                        </button>
-                    {% elif vote_open and not user.is_authenticated %}
-                        <button title="Вы не вошли" class="btn btn-default" disabled type="button">
-                            <span class="glyphicon glyphicon-lock"></span>
-                        </button>
-                        <small><a title="Войти" href="{% url "login" %}">{% bootstrap_icon "log-in" %}</a></small>
-                    {% else %}
-                        <button title="Голосовать нельзя" class="btn btn-default" disabled type="button">
-                            <span class="glyphicon glyphicon-lock"></span>
-                        </button>
-                    {% endif %}
-                </h3>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4">
+                <div class="pull-right">
+                    <h3>
+                        {% if vote_open and user.is_authenticated %}
+                            <button class="btn btn-success" type="button"
+                                    onclick="vote({{ participate.id }});">
+                                <span class="glyphicon glyphicon-thumbs-up"></span>
+                                Голосовать!
+                            </button>
+                        {% elif vote_open and not user.is_authenticated %}
+                            <button title="Вы не вошли" class="btn btn-default" disabled type="button">
+                                <span class="glyphicon glyphicon-lock"></span>
+                            </button>
+                            <small><a title="Войти" href="{% url "login" %}">{% bootstrap_icon "log-in" %}</a></small>
+                        {% else %}
+                            <button title="Голосовать нельзя" class="btn btn-default" disabled type="button">
+                                <span class="glyphicon glyphicon-lock"></span>
+                            </button>
+                        {% endif %}
+                    </h3>
+                </div>
             </div>
         </div>
     </div>

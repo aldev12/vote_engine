@@ -308,7 +308,7 @@ def participates_in_competition(request):
     except EmptyPage:
         participates = page.page(paginator.num_pages)
 
-    winners = ''
+    winners = []
     if competition.expiry_date < timezone.now():
         winners = participates_list.annotate(
             participate_vote=Count('participate_votes', distinct=True)

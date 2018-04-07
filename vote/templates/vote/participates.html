@@ -23,7 +23,7 @@
 {% endblock %}
 
 <script>window.CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/';</script>
-    {% block add_participate %}
+{% block add_participate %}
     <div class="row">
         <div class="col-lg-6 col-md-6">
             <div class="text-right">
@@ -45,49 +45,51 @@
                 <li>Голосование с: {{ competition.survey_date|date:"d.m.Y" }}</li>
                 <li>Результаты с: {{ competition.expiry_date|date:"d.m.Y" }}</li>
             </ul>
-                <div style="margin-left: 15px;">
-                    {% if add_member %}
-                        <p><a href="/participate_add/?competition_id={{ competition.id }}"
+            <div style="margin-left: 15px;">
+                {% if add_member %}
+                    <p><a href="/participate_add/?competition_id={{ competition.id }}"
                           class="btn btn-success" role="button">
                         {% bootstrap_icon "hand-right" %} Участвовать!
-                        </a></p>
-                    {% elif vote_open %}
-                        <p><button class="btn btn-default" disabled type="button">
+                    </a></p>
+                {% elif vote_open %}
+                    <p>
+                        <button class="btn btn-default" disabled type="button">
                             <span class="glyphicon glyphicon-lock"></span>
                         </button>
-                            <b>Прием заявок завершен. Голосуй! {% bootstrap_icon "thumbs-up" %}</b>
-                        </p>
-                    {% else  %}
-                        <p><button class="btn btn-default" disabled type="button">
+                        <b>Прием заявок завершен. Голосуй! {% bootstrap_icon "thumbs-up" %}</b>
+                    </p>
+                {% else %}
+                    <p>
+                        <button class="btn btn-default" disabled type="button">
                             <span class="glyphicon glyphicon-lock"></span>
                         </button>
-                            <b>Конкурс завершен! Наши победители:</b>
-                        </p>
-                        <div class="">
-                            {% for winner in winners %}
-                                <div class="box" onclick="document.location='/participate/{{ winner.id }}';">
-                                    <div class="ribbon">
-                                        <span class="{% cycle 'golden' 'silver' 'bronze' %}">{% cycle '1 место' '2 место' '3 место' %}</span>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                        <b>Конкурс завершен! Наши победители:</b>
+                    </p>
+                    <div class="">
+                        {% for winner in winners %}
+                            <div class="box" onclick="document.location='/participate/{{ winner.id }}';">
+                                <div class="ribbon">
+                                    <span class="{% cycle 'golden' 'silver' 'bronze' %}">{% cycle '1 место' '2 место' '3 место' %}</span>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
                                         <div>
                                             <span class="win-title">{{ winner.title }}</span>
                                             <p><span style="padding: 5px;">Автор: <b>{{ winner.creator }}</b></span></p>
                                         </div>
-                                        </div>
-                                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                            <div class="row" style="height: 45px;"></div>
-                                            <div class="row">
-                                                <span class="badge pull-right">Голосов:&nbsp;{{ winner.participate_votes.count }}</span>
-                                            </div>
+                                    </div>
+                                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <div class="row" style="height: 45px;"></div>
+                                        <div class="row">
+                                            <span class="badge pull-right">Голосов:&nbsp;{{ winner.participate_votes.count }}</span>
                                         </div>
                                     </div>
                                 </div>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
         </div>
     </div>
     <div class="row">
@@ -100,7 +102,7 @@
 {% block table_participates %}
     <div class="row">
     {% for participate in participates  %}
-        <div class="col-1 col-sm-6 col-lg-3 col-md-4 col-xs-12 panel panel-default"
+        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 panel panel-default"
              style="">
             <div class="row">
                 <div class="col-lg-12 col-md-12">
