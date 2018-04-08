@@ -12,6 +12,11 @@ $(document).ready(function () {
     var hash = window.location.hash;
     hash && $('ul.nav-tabs a[href="' + hash + '"]').tab('show');
 });
+
+$(window).on('hashchange', function() {
+    var hash = window.location.hash;
+    hash && $('ul.nav-tabs a[href="' + hash + '"]').tab('show');
+});
 </script>
 {% endblock %}
 

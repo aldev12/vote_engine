@@ -44,10 +44,10 @@
             <ul class="nav navbar-nav navbar-right">
                 {% if user.is_authenticated %}
                     <li>
-                        <a href="../profile#tab2">Мои конкурсы</a>
+                        <a href="{% url "profile" %}#tab2">Мои конкурсы</a>
                     </li>
                     <li>
-                        <a href="../profile#tab3">Мои заявки</a>
+                        <a href="{% url "profile" %}#tab3">Мои заявки</a>
                     </li>
                     <li>
                         <a href="{% url "profile" %}">{{ user.get_username }} {% bootstrap_icon "user" %}</a>
