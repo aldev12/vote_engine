@@ -1,3 +1,4 @@
+import os
 from PIL import Image
 from django.conf import settings
 from django.contrib import messages
@@ -169,6 +170,9 @@ def photo_handler(photo_file_url):
     thumb_size = (260, 260)
     image = Image.open("{0}/{1}".format(settings.MEDIA_ROOT, photo_file_url))
     save_path = "{0}/thumbs/{1}".format(settings.MEDIA_ROOT, photo_file_url)
+    save_dir = os.path.dirname(save_path)  # Директория для сохранения миниатюры
+    if not os.path.exists(save_dir):  # Создать, если не существует
+        os.makedirs(save_dir)
     width = image.size[0]
     height = image.size[1]
 
@@ -211,7 +215,7 @@ def participate_add(request):
             if request.FILES:
                 check_photo_ext = request.FILES['content_file'].name.split(".")[-1].lower() in ['jpeg', 'jpg']
                 if check_photo_ext:
-                    photo_handler(participate.content)
+                    photo_handler(participate.content_file)
 
             messages.add_message(request, messages.SUCCESS,
                                  'Заявка на %s создана, ожидайте проверки администратором' % (competition.title,))
@@ -427,11 +431,11 @@ def activate(request, uidb64, token):
         login(request, user)
         messages.add_message(request, messages.SUCCESS,
                              'Аккаунт активирован! Теперь Вы можете войти.')
-        redirect("/")
+        return redirect("/")
     else:
         messages.add_message(request, messages.WARNING,
                              'Ваша ссылка активации недействительна!')
-        redirect("/")
+        return redirect("/")
 
 
 def change_password(request):
