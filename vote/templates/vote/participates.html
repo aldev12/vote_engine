@@ -11,12 +11,13 @@
 
     {% if competition.comp_type == 4 %}
     <script>
-        var audio = $("#sound")[0];
-        $("#vinyl_container").mouseenter(function () {
-            audio.play();
-        }).mouseleave(function () {
-            audio.pause();
-        });
+        function play_func(node) {
+            $(node).find('audio')[0].play();
+        }
+
+        function pause_func(node) {
+            $(node).find('audio')[0].pause();
+        }2
     </script>
     {% endif %}
 
@@ -107,13 +108,13 @@
             <div class="row">
                 <div class="col-lg-12 col-md-12">
                     <div class="input-group" style="">
-                        <h2>
+                        <h3>
                             {% if participate.title|length < 25 %}
                             {{ participate.title }}
                         {% else %}
                             {{ participate.title|slice:"21" }}...
                         {% endif %}
-                        </h2>
+                        </h3>
                         <div class="input-group-btn">
                             {% if vote_open and user.is_authenticated %}
                                 <button class="btn btn-default" type="button"
@@ -143,12 +144,12 @@
                                         allowfullscreen></iframe>
                             </div>
                         {% elif competition.comp_type == 4 %}
-                            <div id="vinyl_container">
+                            <div id="vinyl_container" onmouseenter="play_func(this);" onmouseleave="pause_func(this);">
                                 <div id="vinyl"></div>
-                            </div>
                             <audio id="sound"
                                    src="{{ STATIC_URL }}media/{{ participate.content_file }}"
                                    preload="metadata" controls></audio>
+                            </div>
                         {% else %}
                             <div style="min-height: 170px">
                                 <p>{{ participate.comment|slice:"250"|safe }}...</p>
