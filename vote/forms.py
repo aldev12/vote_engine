@@ -85,7 +85,7 @@ class VideoParticipateForm(forms.ModelForm):
                 if len(link) > 1 and len(link[1]) == 11:
                     form_data['content_file'] = 'https://www.youtube.com/embed/%s' % link
                     return form_data
-        self._errors["content_file"] = "Не корректная ссылка"
+        self._errors["content_file"] = ["Некорректная ссылка"]
         del form_data['content_file']
         return form_data
 
