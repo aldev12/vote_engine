@@ -106,7 +106,7 @@
             <div class="row">
                 <div class="col-lg-12 col-md-12">
                     <div class="input-group" style="">
-                    <div title="{{ participate.title }}" class="preview_title">
+                    <div title="{{ participate.title }}" class="preview-title">
                         <h3>
                             {{ participate.title }}
                         </h3>
@@ -140,7 +140,7 @@
                                         allowfullscreen></iframe>
                             </div>
                         {% elif competition.comp_type == 4 %}
-                            <div id="vinyl_container" onmouseenter="play_func(this);" onmouseleave="pause_func(this);">
+                            <div id="vinyl-container" onmouseenter="play_func(this);" onmouseleave="pause_func(this);">
                                 <div id="vinyl"></div>
                             <audio id="sound"
                                    src="{{ STATIC_URL }}media/{{ participate.content_file }}"
