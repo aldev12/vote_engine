@@ -37,6 +37,14 @@ PARTICIPATE_VIEW = {
 }
 
 
+PARTICIPATE_FORMS = {
+    Competition.PHOTO: PhotoParticipateForm,
+    Competition.LITERAL: LiteralParticipateForm,
+    Competition.VIDEO: VideoParticipateForm,
+    Competition.AUDIO: AudioParticipateForm
+}
+
+
 class PostCountHitDetailView(HitCountDetailView):
     model = Competition
     count_hit = True
@@ -44,8 +52,7 @@ class PostCountHitDetailView(HitCountDetailView):
 
 def competition_list(request):
     """Все конкурсы в статусе 'опубликован'"""
-    competitions = Competition.objects.filter(
-        status=2
+    competitions = Competition.objects.published(
     ).annotate(
         count_vote=Count('competition_participates__participate_votes')
     ).annotate(
@@ -193,14 +200,7 @@ def participate_add(request):
     competition_id = request.GET.get('competition_id', 0)
     competition = get_object_or_404(Competition, id=competition_id)
 
-    if competition.comp_type == Competition.LITERAL:
-        CustomForm = LiteralParticipateForm
-    elif competition.comp_type == Competition.VIDEO:
-        CustomForm = VideoParticipateForm
-    elif competition.comp_type == Competition.AUDIO:
-        CustomForm = AudioParticipateForm
-    else:
-        CustomForm = PhotoParticipateForm
+    CustomForm = PARTICIPATE_FORMS[competition.comp_type]
 
     if request.method == "POST":
         form = CustomForm(request.POST, request.FILES)
@@ -233,14 +233,7 @@ def participate_edit(request):
     participate = get_object_or_404(Participate, id=participate_id)
     competition = get_object_or_404(Competition, id=participate.competition_id_id)
 
-    if competition.comp_type == Competition.LITERAL:
-        CustomForm = LiteralParticipateForm
-    elif competition.comp_type == Competition.VIDEO:
-        CustomForm = VideoParticipateForm
-    elif competition.comp_type == Competition.AUDIO:
-        CustomForm = AudioParticipateForm
-    else:
-        CustomForm = PhotoParticipateForm
+    CustomForm = PARTICIPATE_FORMS[competition.comp_type]
 
     if request.user not in [participate.creator, competition.creator]:
         raise Http404
