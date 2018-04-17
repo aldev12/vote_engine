@@ -1,9 +1,5 @@
-# This file is exec'd from settings.py, so it has access to and can
-# modify all the variables in settings.py.
-
 DEBUG = True
 
-# Make these unique, and don't share it with anybody.
 SECRET_KEY = ")z$s-rmjsj3d1wwvi19-sw2za=0y5ev5o7mx4p_jf=vb&e2ei*"
 NEVERCACHE_KEY = "tlop^c*r&saap**gg4w%29=&$k*#f)e&rxo=p-0cn^_)ccd=_y"
 
@@ -23,16 +19,6 @@ DATABASES = {
         "PORT": "",
     }
 }
-
-###################
-# DEPLOY SETTINGS #
-###################
-
-# Domains for public site
-# ALLOWED_HOSTS = [""]
-
-# These settings are used by the default fabfile.py provided.
-# Check fabfile.py for defaults.
 
 FABRIC = {
     "LOCALE": "ru_RU.UTF-8",  # Should end with ".UTF-8"
