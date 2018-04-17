@@ -16,12 +16,13 @@ class Profile(models.Model):
     location = models.CharField('город', max_length=30, blank=True)
     birth_date = models.DateField('дата рождения', null=True, blank=True)
 
-    def __str__(self):
-        return self.user.get_full_name()
-
     class Meta:
         verbose_name = 'Профиль'
         verbose_name_plural = 'Профили'
+
+    def __str__(self):
+        return self.user.get_full_name()
+
 
 
 # Сигналы на автообновление Profile после изменений в User (post_save)
@@ -67,6 +68,10 @@ class Competition(Page, HitCountMixin):
         HitCount, object_id_field='object_pk',
         related_query_name='hit_count_generic_relation')
 
+    class Meta:
+        verbose_name = 'конкурс'
+        verbose_name_plural = 'конкурсы'
+
     @property
     def type_str(self):
         return dict(Competition.COMPETITION_TYPE)[self.comp_type]
@@ -80,10 +85,6 @@ class Competition(Page, HitCountMixin):
             else:
                 status = "Идет голосование"
         return status
-
-    class Meta:
-        verbose_name = 'конкурс'
-        verbose_name_plural = 'конкурсы'
 
 
 class Participate(Page):
