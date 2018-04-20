@@ -11,7 +11,7 @@ from .models import Competition, Participate, Profile
 from .validators import validate_photo_file_extension, validate_audio_file_extension
 
 
-class CompetitionForm(forms.ModelForm, forms.Field):
+class CompetitionForm(forms.ModelForm):
     rules = forms.CharField(label='Правила', widget=CKEditorWidget())
     short_description = forms.CharField(label='Краткое описание', widget=CKEditorWidget())
     expiry_date = forms.DateField(label="Дата окончания",
