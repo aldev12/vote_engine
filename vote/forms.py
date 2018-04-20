@@ -73,6 +73,7 @@ class VideoParticipateForm(forms.ModelForm):
         fields = ('title', 'comment', 'content_file')
 
     def clean(self):
+        super(VideoParticipateForm, self).clean()
         form_data = self.cleaned_data
         video_link = form_data['content_file']
         if video_link:
@@ -80,14 +81,13 @@ class VideoParticipateForm(forms.ModelForm):
             match = re.match(reg_exp, video_link)
             if match and len(match.group(2)) == 11:
                 form_data['content_file'] = 'https://www.youtube.com/embed/%s' % match.group(2)
-                return form_data
             else:
                 link = video_link.split('=')
                 if len(link) > 1 and len(link[1]) == 11:
                     form_data['content_file'] = 'https://www.youtube.com/embed/%s' % link
-                    return form_data
-        self._errors["content_file"] = ["Некорректная ссылка"]
-        del form_data['content_file']
+        if video_link == form_data['content_file']:
+            self._errors["content_file"] = ["Некорректная ссылка"]
+            del form_data['content_file']
         return form_data
 
 
