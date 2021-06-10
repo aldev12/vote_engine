@@ -2,7 +2,7 @@ beautifulsoup4==4.6.0
 bleach==2.1.2
 certifi==2018.1.18
 chardet==3.0.4
-Django==1.10.8
+Django==2.2.24
 django-annoying==0.10.4
 django-appconf==1.0.2
 django-bootstrap3==9.1.0
